@@ -1,10 +1,4 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  ManyToOne,
-  Relation,
-} from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Blog } from '../blogs/blog.entity';
 
 @Entity()
@@ -24,7 +18,8 @@ export class Post {
   @Column()
   createdAt: Date;
 
-  @Column()
+  // @Column()
   @ManyToOne(() => Blog, (blog) => blog.id)
-  blogId: Relation<Blog>;
+  // blogId: Relation<Blog>;
+  blog: Blog;
 }

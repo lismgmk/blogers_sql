@@ -1,10 +1,9 @@
 import {
-  Entity,
   Column,
-  PrimaryGeneratedColumn,
-  OneToMany,
+  Entity,
   JoinColumn,
-  Relation,
+  OneToMany,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Post } from '../posts/post.entity';
 
@@ -17,12 +16,13 @@ export class Blog {
   name: string;
 
   @Column()
-  youtubeUrl: string;
+  youtube: string;
 
   @Column()
   createdAt: Date;
 
-  @OneToMany(() => Post, (post) => post.blogId)
+  @OneToMany(() => Post, (post) => post.blog)
   @JoinColumn()
-  postId: Relation<Post[]>;
+  // postId: Relation<Post[]>;
+  postId: Post[];
 }

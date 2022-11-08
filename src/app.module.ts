@@ -2,18 +2,19 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Blog } from './modules/blogs/blog.entity';
 import { BlogsModule } from './modules/blogs/blogs.module';
+import { Post } from './modules/posts/post.entity';
 
 @Module({
   imports: [
     BlogsModule,
     TypeOrmModule.forRoot({
-      type: 'mysql',
+      type: 'postgres',
       host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: 'root',
-      database: 'test',
-      entities: [Blog],
+      port: 5432,
+      username: 'postgres',
+      password: 'postgres',
+      database: 'blog_sql-db',
+      entities: [Blog, Post],
       synchronize: true,
       autoLoadEntities: true,
     }),
