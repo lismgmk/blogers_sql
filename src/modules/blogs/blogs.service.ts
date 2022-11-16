@@ -68,4 +68,29 @@ WHERE id= $1
     const blog = await this.dataSource.query(queryComand, [id]);
     return blog[0];
   }
+
+  async changeBlogClearQuery(dto: CreateBlogDto & { id: string }) {
+    const queryComand = `
+   UPDATE blog
+SET name = $1, youtube = $2
+WHERE id = $3;
+    `;
+    await this.dataSource.query(queryComand, [
+      dto.name,
+      dto.youtubeUrl,
+      dto.id,
+    ]);
+
+    return;
+  }
+
+  async deleteBlogByIdClearQuery(id: string) {
+    const queryComand = `
+   DELETE FROM blog
+WHERE id = $1;
+    `;
+    await this.dataSource.query(queryComand, [id]);
+
+    return;
+  }
 }

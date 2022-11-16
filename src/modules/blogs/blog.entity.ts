@@ -23,6 +23,5 @@ export class Blog {
 
   @OneToMany(() => Post, (post) => post.blog)
   @JoinColumn()
-  // postId: Relation<Post[]>;
   postId: Post[];
 }

@@ -1,5 +1,6 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Blog } from '../blogs/blog.entity';
+import { User } from '../users/user.entity';
 
 @Entity()
 export class Post {
@@ -20,6 +21,9 @@ export class Post {
 
   // @Column()
   @ManyToOne(() => Blog, (blog) => blog.id)
-  // blogId: Relation<Blog>;
   blog: Blog;
+
+  // @Column()
+  @ManyToOne(() => User, (user) => user.id)
+  user: User;
 }

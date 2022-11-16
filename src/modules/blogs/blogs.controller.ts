@@ -61,33 +61,31 @@ export class BlogsController {
     return await this.blogsService.getBlogByIdClearQuery(blogId);
   }
 
-  // @Put(':id')
-  // @HttpCode(204)
-  // @UseGuards(AuthGuard('basic'))
-  // @UseFilters(new MongoExceptionFilter())
-  // @UseFilters(new ValidationBodyExceptionFilter())
-  // async changeBlog(
-  //   @Param('id', ParamIdValidationPipe)
-  //   blogId: string,
-  //   @Body(new CustomValidationPipe()) createBlogDto: CreateBlogDto,
-  // ) {
-  //   return await this.blogsService.changeBlog({
-  //     id: blogId,
-  //     ...createBlogDto,
-  //   });
-  // }
+  @Put(':id')
+  @HttpCode(204)
+  @UseGuards(AuthGuard('basic'))
+  @UseFilters(new ValidationBodyExceptionFilter())
+  async changeBlog(
+    @Param('id')
+    blogId: string,
+    @Body(new CustomValidationPipe()) createBlogDto: CreateBlogDto,
+  ) {
+    return await this.blogsService.changeBlogClearQuery({
+      id: blogId,
+      ...createBlogDto,
+    });
+  }
 
-  // @Delete(':id')
-  // @HttpCode(204)
-  // @UseGuards(AuthGuard('basic'))
-  // @UseFilters(new MongoExceptionFilter())
-  // @UsePipes(new ValidationPipe({ transform: true }))
-  // async deleteBlog(
-  //   @Param('id', ParamIdValidationPipe)
-  //   blogId: string,
-  // ) {
-  //   return await this.blogsService.deleteBlogById(blogId);
-  // }
+  @Delete(':id')
+  @HttpCode(204)
+  @UseGuards(AuthGuard('basic'))
+  @UsePipes(new ValidationPipe({ transform: true }))
+  async deleteBlog(
+    @Param('id')
+    blogId: string,
+  ) {
+    return await this.blogsService.deleteBlogByIdClearQuery(blogId);
+  }
 
   // @Get(':blogId/posts')
   // @HttpCode(200)

@@ -4,6 +4,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Blog } from './modules/blogs/blog.entity';
 import { BlogsModule } from './modules/blogs/blogs.module';
 import { Post } from './modules/posts/post.entity';
+import { PostsModule } from './modules/posts/posts.module';
+import { UsersModule } from './modules/users/users.module';
+import { LikesModule } from './modules/likes/likes.module';
+import { JwtPassModule } from './modules/common-services/jwt-pass-custom/jwt-pass.module';
 
 @Module({
   imports: [
@@ -24,6 +28,10 @@ import { Post } from './modules/posts/post.entity';
       }),
       inject: [ConfigService],
     }),
+    PostsModule,
+    UsersModule,
+    LikesModule,
+    JwtPassModule,
   ],
   controllers: [],
   providers: [],

@@ -1,0 +1,55 @@
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  Ip,
+  Param,
+  Post,
+  Query,
+  UseFilters,
+  UseGuards,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { ValidationBodyExceptionFilter } from '../../exceptions/validation-body-exception-filter';
+import { CustomValidationPipe } from '../../pipes/validation.pipe';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UsersService } from './users.service';
+
+@Controller('users')
+export class UsersController {
+  constructor(private readonly usersService: UsersService) {}
+
+  @Post()
+  @UseGuards(AuthGuard('basic'))
+  @UseFilters(new ValidationBodyExceptionFilter())
+  async createUser(
+    @Ip() userIp: string,
+    @Body(new CustomValidationPipe()) createUserDto: CreateUserDto,
+  ) {
+    const confirmationCode = new Date().toISOString();
+    return await this.usersService.createUserClearQuery({
+      ...createUserDto,
+      userIp,
+      confirmationCode,
+    });
+  }
+
+  //   @Delete(':id')
+  //   @HttpCode(204)
+  //   @UseGuards(AuthGuard('basic'))
+  //   @UsePipes(new ValidationPipe({ transform: true }))
+  //   async deleteUser(@Param() id: IdParamDTO) {
+  //     return await this.usersService.deleteUserById(id.id);
+  //   }
+
+  //   @Get()
+  //   @HttpCode(200)
+  //   @UsePipes(new ValidationPipe({ transform: true }))
+  //   async getAllUsers(@Query() queryParams: GetAllUsersQueryDto) {
+  //     return await this.usersService.getAllUsers(queryParams);
+  //   }
+}
