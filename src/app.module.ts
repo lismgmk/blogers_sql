@@ -8,6 +8,9 @@ import { PostsModule } from './modules/posts/posts.module';
 import { UsersModule } from './modules/users/users.module';
 import { LikesModule } from './modules/likes/likes.module';
 import { JwtPassModule } from './modules/common-services/jwt-pass-custom/jwt-pass.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { BlackListModule } from './modules/black-list/black-list.module';
+import { DevicesModule } from './modules/devices/devices.module';
 
 @Module({
   imports: [
@@ -32,6 +35,9 @@ import { JwtPassModule } from './modules/common-services/jwt-pass-custom/jwt-pas
     UsersModule,
     LikesModule,
     JwtPassModule,
+    AuthModule,
+    BlackListModule,
+    DevicesModule,
   ],
   controllers: [],
   providers: [],

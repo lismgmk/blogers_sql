@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
+import { paginationBuilder } from '../../helpers/pagination-builder';
 import { JwtPassService } from '../common-services/jwt-pass-custom/jwt-pass.service';
+import { GetAllUsersQueryDto } from './dto/get-all-user-query.dto';
 import { ICreatedUserDto } from './dto/user-interfaces.dto';
 
 @Injectable()
@@ -20,6 +22,33 @@ WHERE id= $1
     return user[0];
   }
 
+  async getUserByNameClearQuery(name: string) {
+    const queryComand = `
+    SELECT * FROM public.user
+WHERE name= $1
+    `;
+    const user = await this.dataSource.query(queryComand, [name]);
+    return user[0];
+  }
+
+  async getUserByEmailClearQuery(email: string) {
+    const queryComand = `
+    SELECT * FROM public.user
+WHERE email= $1
+    `;
+    const user = await this.dataSource.query(queryComand, [email]);
+    return user[0];
+  }
+
+  async getUserByConfirmationCodeClearQuery(code: Date) {
+    const queryComand = `
+    SELECT * FROM public.user
+WHERE confirmationCode= $1
+    `;
+    const user = await this.dataSource.query(queryComand, [code]);
+    return user[0];
+  }
+
   async createUserClearQuery(dto: ICreatedUserDto) {
     const hashPassword = await this.jwtPassService.createPassBcrypt(
       dto.password,
@@ -33,56 +62,115 @@ WHERE id= $1
       dto.login,
       dto.email,
       hashPassword,
-      null,
+      dto.confirmationCode || null,
       true,
     ]);
     return;
   }
 
-  //   async deleteUserById(id: string) {
-  //     return this.userModel.findByIdAndDelete(id);
-  //   }
+  async deleteUserByIdClearQuery(id: string) {
+    const queryComand = `
+   DELETE FROM user
+WHERE id = $1;
+    `;
+    await this.dataSource.query(queryComand, [id]);
+    return;
+  }
 
-  //   async getAllUsers(
-  //     queryParams: GetAllUsersQueryDto,
-  //   ): Promise<IPaginationResponse<IUser>> {
-  //     const loginPart = new RegExp(queryParams.searchLoginTerm);
-  //     const emailPart = new RegExp(queryParams.searchEmailTerm);
+  async getAllUsersClearQuery(dto: GetAllUsersQueryDto) {
+    const offset =
+      dto.pageNumber === 1 ? 0 : (dto.pageNumber - 1) * dto.pageSize;
+    const allRows = await this.dataSource.query(
+      `SELECT  COUNT("id")  FROM  public.user WHERE name like $1 and email like $2`,
+      [`%${dto.searchLoginTerm}%`, `%${dto.searchEmailTerm}%`],
+    );
 
-  //     const filter = {
-  //       'accountData.userName': loginPart,
-  //       'accountData.email': emailPart,
-  //     };
+    const allUsersQuery = await this.dataSource.query(
+      `
+      SELECT id, name, "email", "createdAt", "passwordHash", "confirmationCode", "isConfirmed"
+FROM public.user
+WHERE name like $1 and email like $2
+ORDER BY $3
+LIMIT $4 OFFSET $5
+`,
+      [
+        `%${dto.searchLoginTerm}%`,
+        `%${dto.searchEmailTerm}%`,
+        `${dto.sortBy} ${dto.sortDirection}`,
+        dto.pageSize,
+        offset,
+      ],
+    );
+    return {
+      ...paginationBuilder({
+        totalCount: Number(allRows[0].count),
+        pageSize: dto.pageSize,
+        pageNumber: dto.pageNumber,
+      }),
+      items: allUsersQuery,
+    };
+  }
 
-  //     const allUsers: IUser[] = (
-  //       await this.userModel
-  //         .find(filter)
-  //         .sort({ [queryParams.sortBy]: queryParams.sortDirection })
-  //         .skip(
-  //           queryParams.pageNumber > 0
-  //             ? (queryParams.pageNumber - 1) * queryParams.pageSize
-  //             : 0,
-  //         )
-  //         .limit(queryParams.pageSize)
-  //         .lean()
-  //     ).map((i) => {
-  //       return {
-  //         id: i._id,
-  //         login: i.accountData.userName,
-  //         createdAt: i.accountData.createdAt,
-  //         email: i.accountData.email,
-  //       };
-  //     });
+  async changeUserConfirmCodeClearQuery(dto: {
+    id: string;
+    confirmationCode: string;
+  }) {
+    const queryComand = `
+   UPDATE user
+SET "confirmationCode" = $1
+WHERE id = $2;
+    `;
+    await this.dataSource.query(queryComand, [dto.confirmationCode, dto.id]);
 
-  //     const totalCount = await this.userModel.countDocuments().exec();
-  //     const paginationParams: paramsDto = {
-  //       totalCount: totalCount,
-  //       pageSize: queryParams.pageSize,
-  //       pageNumber: queryParams.pageNumber,
-  //     };
-  //     return {
-  //       ...paginationBuilder(paginationParams),
-  //       items: allUsers,
-  //     };
-  //   }
+    return;
+  }
+
+  async changeUserStatusConfirmCodeClearQuery(dto: {
+    id: string;
+    confirmationCode: string;
+    isConfirmed: boolean;
+  }) {
+    const queryComand = `
+   UPDATE user
+SET "confirmationCode" = $1, "isConfirmed" = $2 
+WHERE id = $3;
+    `;
+    await this.dataSource.query(queryComand, [
+      dto.confirmationCode,
+      dto.id,
+      dto.isConfirmed,
+    ]);
+
+    return;
+  }
+
+  async changeAdmitStateClearQuery(dto: {
+    id: number;
+    passwordHash: string;
+    isConfirmed: boolean;
+  }) {
+    const queryComand = `
+   UPDATE user
+SET "passwordHash" = $1, "isConfirmed" = $2 
+WHERE id = $3;
+    `;
+    await this.dataSource.query(queryComand, [
+      dto.passwordHash,
+      dto.isConfirmed,
+      dto.id,
+    ]);
+
+    return;
+  }
+
+  async changeConfirmClearQuery(dto: { id: number; isConfirmed: boolean }) {
+    const queryComand = `
+   UPDATE user
+SET  "isConfirmed" = $1 
+WHERE id = $2;
+    `;
+    await this.dataSource.query(queryComand, [dto.isConfirmed, dto.id]);
+
+    return;
+  }
 }
