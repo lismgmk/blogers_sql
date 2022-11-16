@@ -11,7 +11,7 @@ export enum SortDirection {
 export class PaginationQueryDto {
   @IsEnum(SortDirection, { message: INCORRECT_TYPE_VALIDATION_ERROR })
   @IsOptional()
-  readonly sortDirection: keyof typeof SortDirection;
+  readonly sortDirection: keyof typeof SortDirection = 'ASC';
 
   @IsInt()
   @Transform(({ value }) => toNumber(value, { default: 1 }))

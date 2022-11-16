@@ -14,6 +14,8 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { ValidationBodyExceptionFilter } from '../../exceptions/validation-body-exception-filter';
+import { CustomValidationPipe } from '../../pipes/validation.pipe';
 
 import { BlogsService } from './blogs.service';
 import { CreateBlogDto } from './dto/create-blog.dto';
@@ -37,28 +39,27 @@ export class BlogsController {
     )
     queryParams: GetAllBlogsQueryDto,
   ) {
-    return await this.blogsService.getAllBlogs(queryParams);
+    return await this.blogsService.getAllBlogsClearQuery(queryParams);
   }
 
-  // @Post()
-  // @UseGuards(AuthGuard('basic'))
-  // @UseFilters(new ValidationBodyExceptionFilter())
-  // async createUser(
-  //   @Body(new CustomValidationPipe()) createBlogDto: CreateBlogDto,
-  // ) {
-  //   return await this.blogsService.createBlog(createBlogDto);
-  // }
+  @Post()
+  @UseGuards(AuthGuard('basic'))
+  @UseFilters(new ValidationBodyExceptionFilter())
+  async createUser(
+    @Body(new CustomValidationPipe()) createBlogDto: CreateBlogDto,
+  ) {
+    return await this.blogsService.createBlogClearQuery(createBlogDto);
+  }
 
-  // @Get(':id')
-  // @HttpCode(200)
-  // @UseFilters(new MongoExceptionFilter())
-  // @UsePipes(new ValidationPipe({ transform: true }))
-  // async getBloggerById(
-  //   @Param('id', ParamIdValidationPipe)
-  //   blogId: string,
-  // ) {
-  //   return await this.blogsService.getBlogById(blogId);
-  // }
+  @Get(':id')
+  @HttpCode(200)
+  @UsePipes(new ValidationPipe({ transform: true }))
+  async getBloggerById(
+    @Param('id')
+    blogId: string,
+  ) {
+    return await this.blogsService.getBlogByIdClearQuery(blogId);
+  }
 
   // @Put(':id')
   // @HttpCode(204)

@@ -10,7 +10,7 @@ export enum SortByField {
 
 export class GetAllBlogsQueryDto extends PaginationQueryDto {
   @IsOptional()
-  readonly searchNameTerm: string;
+  readonly searchNameTerm: string = '';
 
   @IsEnum(SortByField, { message: INCORRECT_TYPE_VALIDATION_ERROR })
   @IsOptional()

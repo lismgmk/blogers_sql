@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { INCORRECT_TYPE_VALIDATION_ERROR } from '@app/consts/ad-validation-const';
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
+import { paginationBuilder } from './../../helpers/pagination-builder';
 import { Blog } from './blog.entity';
+import { CreateBlogDto } from './dto/create-blog.dto';
 import { GetAllBlogsQueryDto } from './dto/get-all-blogs-query.dto';
-import { validateHeaderValue } from 'http';
 
 @Injectable()
 export class BlogsService {
@@ -14,66 +14,58 @@ export class BlogsService {
     @InjectDataSource() protected dataSource: DataSource,
   ) {}
 
-  async getAllBlogs(dto: GetAllBlogsQueryDto) {
-    return this.dataSource.query(
-      `
-      SELECT id, name, youtube, "createdAt",
- (SELECT COUNT("id")  FROM  public.blog) as "totalPage"
-FROM public.blog
-ORDER BY "id"
-LIMIT $1 OFFSET 0
-`,
-      [`${dto.pageSize}`],
+  async getAllBlogsClearQuery(dto: GetAllBlogsQueryDto) {
+    const offset =
+      dto.pageNumber === 1 ? 0 : (dto.pageNumber - 1) * dto.pageSize;
+    // CEILING((SELECT  COUNT("id")  FROM  public.blog ) / $3) as "totalRows"
+    const allRows = await this.dataSource.query(
+      `SELECT  COUNT("id")  FROM  public.blog WHERE name like $1`,
+      [`%${dto.searchNameTerm}%`],
     );
-    // "pagesCount": 0,
-    //   "page": 0,
-    //   "pageSize": 0,
-    //   "totalCount": 0,
+
+    const allBlogsQuery = await this.dataSource.query(
+      `
+      SELECT id, name, youtube, "createdAt"
+FROM public.blog
+WHERE name like $1
+ORDER BY $2
+LIMIT $3 OFFSET $4
+`,
+      [
+        `%${dto.searchNameTerm}%`,
+        `${dto.sortBy} ${dto.sortDirection}`,
+        dto.pageSize,
+        offset,
+      ],
+    );
+    return {
+      ...paginationBuilder({
+        totalCount: Number(allRows[0].count),
+        pageSize: dto.pageSize,
+        pageNumber: dto.pageNumber,
+      }),
+      items: allBlogsQuery,
+    };
+  }
+
+  async createBlogClearQuery(dto: CreateBlogDto) {
     try {
-      const allBlogs = await this.blogsRepository
-        .createQueryBuilder('blog')
-        .orderBy('blog.' + dto.sortBy, dto.sortDirection)
-        .skip(dto.pageNumber > 0 ? (dto.pageNumber - 1) * dto.pageSize : 0)
-        .take(dto.pageSize)
-        .setParameters({ name: dto.searchNameTerm })
-        .getMany();
-      return allBlogs;
+      return this.dataSource.query(
+        `INSERT INTO public.blog(
+	 name, youtube, "createdAt")
+	VALUES ( $1, $2, now());`,
+        [dto.name, dto.youtubeUrl],
+      );
     } catch (e) {
       console.log(e);
     }
-
-    // const allBlogs: IBlog[] = (
-    //   await this.blogsModel
-    //     .find(filter)
-    //     .sort({ [queryParams.sortBy]: queryParams.sortDirection })
-    //     .skip(
-    //       queryParams.pageNumber > 0
-    //         ? (queryParams.pageNumber - 1) * queryParams.pageSize
-    //         : 0,
-    //     )
-    //     .limit(queryParams.pageSize)
-    //     .lean()
-    // ).map((i) => {
-    //   return {
-    //     id: i._id,
-    //     name: i.name,
-    //     createdAt: i.createdAt,
-    //     youtubeUrl: i.youtubeUrl,
-    //   };
-    // });
-
-    // const totalCount = await this.blogsModel.countDocuments().exec();
-    // const paginationParams: paramsDto = {
-    //   totalCount: totalCount,
-    //   pageSize: queryParams.pageSize,
-    //   pageNumber: queryParams.pageNumber,
-    // };
-    // return {
-    //   ...paginationBuilder(paginationParams),
-    //   items: allBlogs,
-    // };
-
-    // this.blogsRepository.find();
-    // return INCORRECT_TYPE_VALIDATION_ERROR;
+  }
+  async getBlogByIdClearQuery(id: string) {
+    const queryComand = `
+    SELECT * FROM public.blog
+WHERE id= $1
+    `;
+    const blog = await this.dataSource.query(queryComand, [id]);
+    return blog[0];
   }
 }
