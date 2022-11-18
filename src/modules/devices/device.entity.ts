@@ -10,7 +10,7 @@ import { User } from '../users/user.entity';
 
 @Entity()
 export class Device {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: number;
 
   @Column()
@@ -22,12 +22,9 @@ export class Device {
   @Column()
   createdAt: Date;
 
-  @Column()
-  expireddAt: Date;
+  @Column({ type: 'timestamptz' })
+  expiredAt: Date;
 
   @ManyToMany(() => User, (user) => user.id)
   user: User[];
-
-  @OneToMany(() => BlackList, (list) => list.device)
-  list: BlackList[];
 }

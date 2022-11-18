@@ -46,6 +46,7 @@ export class AuthService {
       password: dto.password,
       userIp: dto.userIp,
       confirmationCode,
+      isConfirmed: false,
     };
     await this.mailService.sendUserConfirmation(
       { email: dto.email, name: dto.login },
@@ -61,7 +62,7 @@ export class AuthService {
     }
     const confirmationCode = new Date().toISOString();
     await this.mailService.sendUserConfirmation(
-      { email, name: currentUser.accountData.userName },
+      { email, name: currentUser.name },
       confirmationCode,
     );
     await this.usersService.changeUserConfirmCodeClearQuery({

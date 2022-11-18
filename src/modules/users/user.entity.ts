@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  JoinTable,
   ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -10,7 +11,7 @@ import { Post } from '../posts/post.entity';
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: number;
 
   @Column()
@@ -37,5 +38,6 @@ export class User {
   postId: Post[];
 
   @ManyToMany(() => Device, (device) => device.id)
+  @JoinTable()
   device: Device[];
 }

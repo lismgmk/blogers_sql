@@ -7,26 +7,22 @@ import { IBlackListParam } from './dto/black-list.interfaces';
 export class BlackListService {
   constructor(@InjectDataSource() protected dataSource: DataSource) {}
 
-  async addTokenClearQuery(dto: IBlackListParam) {
+  async addTokenClearQuery(token: string) {
     const queryComand = `
-  INSERT INTO public."blacklist"(
-	"tokenValue", "user", "device")
-	VALUES ($1, $2, $3);
+  INSERT INTO public."black_list"(
+	"tokenValue")
+	VALUES ($1);
     `;
-    await this.dataSource.query(queryComand, [
-      dto.tokenValue,
-      dto.userId,
-      dto.deviceId,
-    ]);
+    await this.dataSource.query(queryComand, [token]);
     return;
   }
 
   async getTokenClearQuery(token: string) {
     const queryComand = `
-    SELECT * FROM public.blacklist
+    SELECT * FROM public."black_list"
 WHERE "tokenValue"= $1
     `;
     const result = await this.dataSource.query(queryComand, [token]);
-    return result[0];
+    return result;
   }
 }

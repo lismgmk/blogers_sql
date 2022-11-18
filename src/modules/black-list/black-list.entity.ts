@@ -4,15 +4,9 @@ import { User } from '../users/user.entity';
 
 @Entity()
 export class BlackList {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: number;
 
   @Column()
   tokenValue: string;
-
-  @ManyToOne(() => User, (user) => user.id)
-  user: User[];
-
-  @ManyToOne(() => Device, (device) => device.name)
-  device: Device[];
 }

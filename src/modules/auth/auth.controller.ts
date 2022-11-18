@@ -14,6 +14,7 @@ import { SkipThrottle } from '@nestjs/throttler';
 import { Response } from 'express';
 import { DeviceName } from '../../decorators/device-name.decorator';
 import { GetDeviceId } from '../../decorators/get-device-id.decorator';
+import { GetUserId } from '../../decorators/get-user-id.decorator';
 import { GetUser } from '../../decorators/get-user.decorator';
 import { PuerRefresgToken } from '../../decorators/puer-refresh-token.decorator';
 import { UserIp } from '../../decorators/user-ip.decorator';
@@ -31,6 +32,9 @@ import { AuthService } from './auth.service';
 import { GetNewPasswordDto } from './dto/get-new-password.dto';
 import { LoginAuthDto } from './dto/login-auth.dto';
 import { ResendingEmailDto } from './dto/resending-email.dto';
+import { uuid } from 'uuidv4';
+import { CodeAuthDto } from './dto/code-auth.dto';
+
 @Controller('auth')
 export class AuthController {
   constructor(
@@ -63,18 +67,15 @@ export class AuthController {
     @PuerRefresgToken()
     refreshToken: string,
   ) {
-    await this.blackListService.addTokenClearQuery({
-      tokenValue: refreshToken,
-      userId: user.id.toString(),
-      deviceId: deviceId.toString(),
-    });
+    await this.blackListService.addTokenClearQuery(refreshToken);
     const tokens = await this.authService.getRefreshAccessToken(
       user.id.toString(),
       deviceId,
     );
-    await this.securityService.updateDevice({
-      userId: user._id,
-      deviceId,
+
+    await this.devicesService.changeDeviceExpiredClearQuery({
+      userId: user.id.toString(),
+      deviceId: deviceId.toString(),
     });
     res.cookie('refreshToken', tokens.refreshToken, {
       httpOnly: true,
@@ -95,13 +96,14 @@ export class AuthController {
     @UserIp() userIp: string,
     @DeviceName() deviceName: string,
   ) {
-    const deviceId = new mongoose.Types.ObjectId();
+    const deviceId = uuid();
     const tokens = await this.authService.getRefreshAccessToken(
       userId,
       deviceId,
     );
 
-    await this.securityService.createDevice({
+    await this.devicesService.createDeviceClearQuery({
+      id: deviceId,
       ip: userIp,
       userId,
       deviceName,
@@ -166,8 +168,8 @@ export class AuthController {
     @PuerRefresgToken()
     refreshToken: string,
   ) {
-    await this.securityService.deleteCurrentDevice(deviceId, user._id);
-    await this.blackListRepository.addToken(refreshToken);
+    await this.devicesService.deleteDeviceClearQuery(deviceId);
+    await this.blackListService.addTokenClearQuery(refreshToken);
     return;
   }
 
@@ -178,9 +180,9 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   async me(@GetUser() user: User) {
     return {
-      email: user.accountData.email,
-      login: user.accountData.userName,
-      userId: user._id,
+      email: user.email,
+      login: user.name,
+      userId: user.id,
     };
   }
 }

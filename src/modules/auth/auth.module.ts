@@ -14,6 +14,8 @@ import { UsersService } from '../users/users.service';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { User } from '../users/user.entity';
+import { MailService } from '../common-services/mail/mail.service';
+import { IsExpired } from '../../dto-validator/check-expiration-code';
 
 @Module({
   imports: [
@@ -37,6 +39,8 @@ import { User } from '../users/user.entity';
     UsersService,
     JwtStrategy,
     LocalStrategy,
+    MailService,
+    IsExpired,
   ],
 })
 export class AuthModule {}

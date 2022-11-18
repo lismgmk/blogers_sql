@@ -11,20 +11,30 @@ import { JwtPassModule } from './modules/common-services/jwt-pass-custom/jwt-pas
 import { AuthModule } from './modules/auth/auth.module';
 import { BlackListModule } from './modules/black-list/black-list.module';
 import { DevicesModule } from './modules/devices/devices.module';
-
+import { MailModule } from './modules/common-services/mail/mail.module';
+import * as Joi from 'joi';
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      validationSchema: Joi.object({
+        POSTGRES_HOST: Joi.string().required(),
+        POSTGRES_PORT: Joi.number().required(),
+        POSTGRES_USER: Joi.string().required(),
+        POSTGRES_PASSWORD: Joi.string().required(),
+        POSTGRES_DB: Joi.string().required(),
+      }),
+    }),
     BlogsModule,
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         type: 'postgres',
-        host: 'localhost',
-        port: 5432,
-        username: configService.get<string>('DB_USERNAME'),
-        password: configService.get<string>('DB_PASSWORD'),
-        database: configService.get<string>('DB_DATABASE_NAME'),
+        host: configService.get<string>('POSTGRES_HOST'),
+        port: +configService.get<string>('POSTGRES_PORT'),
+        username: configService.get<string>('POSTGRES_USER'),
+        password: configService.get<string>('POSTGRES_PASSWORD'),
+        database: configService.get<string>('POSTGRES_DB'),
         entities: [Blog, Post],
         synchronize: true,
         autoLoadEntities: true,
@@ -38,6 +48,7 @@ import { DevicesModule } from './modules/devices/devices.module';
     AuthModule,
     BlackListModule,
     DevicesModule,
+    MailModule,
   ],
   controllers: [],
   providers: [],

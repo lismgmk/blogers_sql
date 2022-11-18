@@ -15,7 +15,7 @@ export class UsersService {
 
   async getUserByIdClearQuery(id: string) {
     const queryComand = `
-    SELECT * FROM public.user
+    SELECT * FROM public."user"
 WHERE id= $1
     `;
     const user = await this.dataSource.query(queryComand, [id]);
@@ -24,8 +24,8 @@ WHERE id= $1
 
   async getUserByNameClearQuery(name: string) {
     const queryComand = `
-    SELECT * FROM public.user
-WHERE name= $1
+    SELECT * FROM public."user"
+WHERE "name"= $1
     `;
     const user = await this.dataSource.query(queryComand, [name]);
     return user[0];
@@ -33,19 +33,22 @@ WHERE name= $1
 
   async getUserByEmailClearQuery(email: string) {
     const queryComand = `
-    SELECT * FROM public.user
-WHERE email= $1
+    SELECT * FROM public."user"
+WHERE "email"= $1
     `;
     const user = await this.dataSource.query(queryComand, [email]);
     return user[0];
   }
 
   async getUserByConfirmationCodeClearQuery(code: Date) {
+    console.log(code);
     const queryComand = `
-    SELECT * FROM public.user
-WHERE confirmationCode= $1
+    SELECT * FROM public."user"
+WHERE "confirmationCode" = $1
     `;
     const user = await this.dataSource.query(queryComand, [code]);
+    console.log(user);
+
     return user[0];
   }
 
@@ -63,14 +66,14 @@ WHERE confirmationCode= $1
       dto.email,
       hashPassword,
       dto.confirmationCode || null,
-      true,
+      dto.isConfirmed,
     ]);
     return;
   }
 
   async deleteUserByIdClearQuery(id: string) {
     const queryComand = `
-   DELETE FROM user
+   DELETE FROM "user"
 WHERE id = $1;
     `;
     await this.dataSource.query(queryComand, [id]);
@@ -81,15 +84,15 @@ WHERE id = $1;
     const offset =
       dto.pageNumber === 1 ? 0 : (dto.pageNumber - 1) * dto.pageSize;
     const allRows = await this.dataSource.query(
-      `SELECT  COUNT("id")  FROM  public.user WHERE name like $1 and email like $2`,
+      `SELECT  COUNT("id")  FROM  public."user" WHERE name like $1 and email like $2`,
       [`%${dto.searchLoginTerm}%`, `%${dto.searchEmailTerm}%`],
     );
 
     const allUsersQuery = await this.dataSource.query(
       `
       SELECT id, name, "email", "createdAt", "passwordHash", "confirmationCode", "isConfirmed"
-FROM public.user
-WHERE name like $1 and email like $2
+FROM public."user"
+WHERE "name" like $1 and "email" like $2
 ORDER BY $3
 LIMIT $4 OFFSET $5
 `,
@@ -116,7 +119,7 @@ LIMIT $4 OFFSET $5
     confirmationCode: string;
   }) {
     const queryComand = `
-   UPDATE user
+   UPDATE "user"
 SET "confirmationCode" = $1
 WHERE id = $2;
     `;
@@ -131,7 +134,7 @@ WHERE id = $2;
     isConfirmed: boolean;
   }) {
     const queryComand = `
-   UPDATE user
+   UPDATE "user"
 SET "confirmationCode" = $1, "isConfirmed" = $2 
 WHERE id = $3;
     `;
@@ -150,7 +153,7 @@ WHERE id = $3;
     isConfirmed: boolean;
   }) {
     const queryComand = `
-   UPDATE user
+   UPDATE "user"
 SET "passwordHash" = $1, "isConfirmed" = $2 
 WHERE id = $3;
     `;
@@ -165,9 +168,9 @@ WHERE id = $3;
 
   async changeConfirmClearQuery(dto: { id: number; isConfirmed: boolean }) {
     const queryComand = `
-   UPDATE user
+   UPDATE "user"
 SET  "isConfirmed" = $1 
-WHERE id = $2;
+WHERE "id" = $2;
     `;
     await this.dataSource.query(queryComand, [dto.isConfirmed, dto.id]);
 

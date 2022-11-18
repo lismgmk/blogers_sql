@@ -19,14 +19,14 @@ export class BlogsService {
       dto.pageNumber === 1 ? 0 : (dto.pageNumber - 1) * dto.pageSize;
     // CEILING((SELECT  COUNT("id")  FROM  public.blog ) / $3) as "totalRows"
     const allRows = await this.dataSource.query(
-      `SELECT  COUNT("id")  FROM  public.blog WHERE name like $1`,
+      `SELECT  COUNT("id")  FROM  public."blog" WHERE name like $1`,
       [`%${dto.searchNameTerm}%`],
     );
 
     const allBlogsQuery = await this.dataSource.query(
       `
       SELECT id, name, youtube, "createdAt"
-FROM public.blog
+FROM public."blog"
 WHERE name like $1
 ORDER BY $2
 LIMIT $3 OFFSET $4
@@ -51,7 +51,7 @@ LIMIT $3 OFFSET $4
   async createBlogClearQuery(dto: CreateBlogDto) {
     try {
       return this.dataSource.query(
-        `INSERT INTO public.blog(
+        `INSERT INTO public."blog"(
 	 name, youtube, "createdAt")
 	VALUES ( $1, $2, now());`,
         [dto.name, dto.youtubeUrl],
@@ -62,7 +62,7 @@ LIMIT $3 OFFSET $4
   }
   async getBlogByIdClearQuery(id: string) {
     const queryComand = `
-    SELECT * FROM public.blog
+    SELECT * FROM public."blog"
 WHERE id= $1
     `;
     const blog = await this.dataSource.query(queryComand, [id]);
@@ -71,7 +71,7 @@ WHERE id= $1
 
   async changeBlogClearQuery(dto: CreateBlogDto & { id: string }) {
     const queryComand = `
-   UPDATE blog
+   UPDATE "blog"
 SET name = $1, youtube = $2
 WHERE id = $3;
     `;
@@ -86,7 +86,7 @@ WHERE id = $3;
 
   async deleteBlogByIdClearQuery(id: string) {
     const queryComand = `
-   DELETE FROM blog
+   DELETE FROM "blog"
 WHERE id = $1;
     `;
     await this.dataSource.query(queryComand, [id]);
