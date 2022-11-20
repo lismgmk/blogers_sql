@@ -5,6 +5,7 @@ import {
   Get,
   HttpCode,
   Param,
+  ParseUUIDPipe,
   Post,
   Put,
   Query,
@@ -16,6 +17,8 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { ValidationBodyExceptionFilter } from '../../exceptions/validation-body-exception-filter';
 import { CustomValidationPipe } from '../../pipes/validation.pipe';
+import { CreatePostDto } from '../posts/dto/create-post.dto';
+import { PostsService } from '../posts/posts.service';
 
 import { BlogsService } from './blogs.service';
 import { CreateBlogDto } from './dto/create-blog.dto';
@@ -24,7 +27,8 @@ import { GetAllBlogsQueryDto } from './dto/get-all-blogs-query.dto';
 @Controller('blogs')
 export class BlogsController {
   constructor(
-    private readonly blogsService: BlogsService, // private readonly postsService: PostsService,
+    private readonly blogsService: BlogsService,
+    private readonly postsService: PostsService,
   ) {}
 
   @Get()
@@ -55,7 +59,7 @@ export class BlogsController {
   @HttpCode(200)
   @UsePipes(new ValidationPipe({ transform: true }))
   async getBloggerById(
-    @Param('id')
+    @Param('id', ParseUUIDPipe)
     blogId: string,
   ) {
     return await this.blogsService.getBlogByIdClearQuery(blogId);
@@ -66,7 +70,7 @@ export class BlogsController {
   @UseGuards(AuthGuard('basic'))
   @UseFilters(new ValidationBodyExceptionFilter())
   async changeBlog(
-    @Param('id')
+    @Param('id', ParseUUIDPipe)
     blogId: string,
     @Body(new CustomValidationPipe()) createBlogDto: CreateBlogDto,
   ) {
@@ -81,7 +85,7 @@ export class BlogsController {
   @UseGuards(AuthGuard('basic'))
   @UsePipes(new ValidationPipe({ transform: true }))
   async deleteBlog(
-    @Param('id')
+    @Param('id', ParseUUIDPipe)
     blogId: string,
   ) {
     return await this.blogsService.deleteBlogByIdClearQuery(blogId);
@@ -109,20 +113,19 @@ export class BlogsController {
   //   );
   // }
 
-  // @Post(':blogId/posts')
-  // @HttpCode(201)
-  // @UseGuards(AuthGuard('basic'))
-  // @UseFilters(new MongoExceptionFilter())
-  // @UseFilters(new ValidationBodyExceptionFilter())
-  // async createPostsForBloggerId(
-  //   @Param('blogId', ParamIdValidationPipe)
-  //   blogId: string,
-  //   @Body(new CustomValidationPipe())
-  //   createPostDto: CreatePostDto,
-  // ) {
-  //   return await this.postsService.createPost({
-  //     ...createPostDto,
-  //     blogId,
-  //   });
-  // }
+  @Post(':blogId/posts')
+  @HttpCode(201)
+  @UseGuards(AuthGuard('basic'))
+  @UseFilters(new ValidationBodyExceptionFilter())
+  async createPostsForBloggerId(
+    @Param('blogId', ParseUUIDPipe)
+    blogId: string,
+    @Body(new CustomValidationPipe())
+    createPostDto: CreatePostDto,
+  ) {
+    return await this.postsService.createPost({
+      ...createPostDto,
+      blogId,
+    });
+  }
 }

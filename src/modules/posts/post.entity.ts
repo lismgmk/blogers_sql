@@ -22,8 +22,4 @@ export class Post {
   // @Column()
   @ManyToOne(() => Blog, (blog) => blog.id)
   blog: Blog;
-
-  // @Column()
-  @ManyToOne(() => User, (user) => user.id)
-  user: User;
 }

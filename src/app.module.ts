@@ -12,6 +12,9 @@ import { AuthModule } from './modules/auth/auth.module';
 import { BlackListModule } from './modules/black-list/black-list.module';
 import { DevicesModule } from './modules/devices/devices.module';
 import { MailModule } from './modules/common-services/mail/mail.module';
+import { CommentsModule } from './modules/comments/comments.module';
+import { TestingModule } from './modules/testing/testing.module';
+// import { CommentsController } from './testing/comments/comments.controller';
 import * as Joi from 'joi';
 @Module({
   imports: [
@@ -49,6 +52,8 @@ import * as Joi from 'joi';
     BlackListModule,
     DevicesModule,
     MailModule,
+    CommentsModule,
+    TestingModule,
   ],
   controllers: [],
   providers: [],

@@ -148,7 +148,7 @@ WHERE id = $3;
   }
 
   async changeAdmitStateClearQuery(dto: {
-    id: number;
+    id: string;
     passwordHash: string;
     isConfirmed: boolean;
   }) {
@@ -166,7 +166,7 @@ WHERE id = $3;
     return;
   }
 
-  async changeConfirmClearQuery(dto: { id: number; isConfirmed: boolean }) {
+  async changeConfirmClearQuery(dto: { id: string; isConfirmed: boolean }) {
     const queryComand = `
    UPDATE "user"
 SET  "isConfirmed" = $1 

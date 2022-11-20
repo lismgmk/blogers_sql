@@ -3,16 +3,14 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
-  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Device } from '../devices/device.entity';
-import { Post } from '../posts/post.entity';
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn('uuid')
-  id: number;
+  id: string;
 
   @Column()
   name: string;
@@ -33,9 +31,6 @@ export class User {
 
   @Column()
   isConfirmed: boolean;
-
-  @OneToMany(() => Post, (post) => post.user)
-  postId: Post[];
 
   @ManyToMany(() => Device, (device) => device.id)
   @JoinTable()

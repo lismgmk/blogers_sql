@@ -11,7 +11,8 @@ export class BlogsService {
   constructor(
     @InjectRepository(Blog)
     private blogsRepository: Repository<Blog>,
-    @InjectDataSource() protected dataSource: DataSource,
+    @InjectDataSource()
+    protected dataSource: DataSource,
   ) {}
 
   async getAllBlogsClearQuery(dto: GetAllBlogsQueryDto) {
