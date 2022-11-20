@@ -27,12 +27,16 @@ import { User } from '../users/user.entity';
 import { CreatePostWithBlogIdDto } from './dto/create-post-with-blog-id.dto';
 import { GetAllPostsdDto } from './dto/get-all-posts.dto';
 import { PostsService } from './posts.service';
+import { LikesService } from '../likes/likes.service';
+import { GetUserId } from '../../decorators/get-user-id.decorator';
+import { CreateCommentDto } from '../comments/dto/create-comment.dto';
 
 @Controller('posts')
 export class PostsController {
   constructor(
     private readonly postsService: PostsService, // private readonly commentsService: CommentsService,
     private readonly postsQueryRepository: PostsQueryRepository,
+    private readonly likesService: LikesService,
   ) {}
 
   // @Get()
@@ -66,16 +70,16 @@ export class PostsController {
   async addLikeStatusePost(
     @Param('postId', ParseUUIDPipe)
     postId: string,
-    @GetUser()
-    user: User,
+    @GetUserId()
+    userId: string,
     @Body(new CustomValidationPipe())
-    likeStatus: LikeStatusDto,
+    status: LikeStatusDto,
   ) {
-    return await this.postsService.addLikeStatusePost(
-      user,
-      likeStatus.likeStatus,
+    return await this.likesService.upDateLikesInfo({
+      userId,
+      status: status.likeStatus,
       postId,
-    );
+    });
   }
 
   // @Get(':postId/comments')
@@ -110,26 +114,26 @@ export class PostsController {
     return this.postsQueryRepository.getPostById(postId, user ? user.id : null);
   }
 
-  // @Post(':postId/comments')
-  // @HttpCode(201)
-  // @SkipThrottle()
-  // @UseGuards(JwtAuthGuard)
-  // @UseFilters(new CommonErrorFilter())
-  // @UseFilters(new ValidationBodyExceptionFilter())
-  // async createPostsForBloggerId(
-  //   @Param('postId')
-  //   postId: string,
-  //   @Body(new CustomValidationPipe())
-  //   content: CreateCommentDto,
-  //   @GetUser() user: User,
-  // ) {
-  //   return await this.commentsService.createComment({
-  //     postId,
-  //     ...content,
-  //     userId: user ? user.id : null,
-  //     userLogin: user.name,
-  //   });
-  // }
+  @Post(':postId/comments')
+  @HttpCode(201)
+  @SkipThrottle()
+  @UseGuards(JwtAuthGuard)
+  @UseFilters(new CommonErrorFilter())
+  @UseFilters(new ValidationBodyExceptionFilter())
+  async createPostsForBloggerId(
+    @Param('postId')
+    postId: string,
+    @Body(new CustomValidationPipe())
+    content: CreateCommentDto,
+    @GetUser() user: User,
+  ) {
+    return await this.commentsService.createComment({
+      postId,
+      ...content,
+      userId: user ? user.id : null,
+      userLogin: user.name,
+    });
+  }
 
   @Put(':id')
   @HttpCode(204)

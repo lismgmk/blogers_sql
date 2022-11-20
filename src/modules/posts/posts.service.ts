@@ -18,7 +18,6 @@ import { Post } from './post.entity';
 export class PostsService {
   constructor(
     private blogsService: BlogsService,
-    private likesService: LikesService,
     private postsClearQueryRepository: PostsQueryRepository,
   ) {}
   //   async getAllPosts(queryParams: GetAllPostsdDto, userId: string) {
@@ -35,25 +34,7 @@ export class PostsService {
   //     return await this.postModel.findById(id).exec();
   //   }
 
-  async addLikeStatusePost(
-    user: User,
-    likeStatus: keyof typeof LikeStatusEnum,
-    postId: string,
-  ) {
-    const currentPost = await this.postsClearQueryRepository.getPostById(
-      postId,
-    );
-    if (!currentPost) {
-      throw new NotFoundException();
-    }
-    await this.likesService.upDateLikesInfo({
-      postId,
-      commentId: null,
-      status: likeStatus,
-      userId: user._id,
-      login: user.accountData.userName,
-    });
-  }
+
 
   async createPost(dto: CreatePostWithBlogIdDto) {
     const currentBlog = (await this.blogsService.getBlogByIdClearQuery(

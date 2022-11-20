@@ -9,8 +9,8 @@ import { GetAllBlogsQueryDto } from './dto/get-all-blogs-query.dto';
 @Injectable()
 export class BlogsService {
   constructor(
-    @InjectRepository(Blog)
-    private blogsRepository: Repository<Blog>,
+    // @InjectRepository(Blog)
+    // private blogsRepository: Repository<Blog>,
     @InjectDataSource()
     protected dataSource: DataSource,
   ) {}

@@ -1,11 +1,14 @@
 import {
   Column,
   Entity,
+  JoinColumn,
   JoinTable,
   ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Device } from '../devices/device.entity';
+import { Like } from '../likes/like.entity';
 
 @Entity()
 export class User {
@@ -35,4 +38,8 @@ export class User {
   @ManyToMany(() => Device, (device) => device.id)
   @JoinTable()
   device: Device[];
+
+  @OneToMany(() => Like, (like) => like.id)
+  @JoinColumn()
+  likeId: Like[];
 }

@@ -1,3 +1,4 @@
+import { LikesRepository } from './../likes/likes.repository';
 import { UsersService } from './../users/users.service';
 import { Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
@@ -13,9 +14,14 @@ import { BlogsService } from '../blogs/blogs.service';
 import { LikesService } from '../likes/likes.service';
 import { Blog } from '../blogs/blog.entity';
 import { PostsQueryRepository } from './postsClearQuert.repositiry';
+import { Like } from '../likes/like.entity';
+import { PostComment } from '../comments/comment.entity';
 
 @Module({
-  imports: [PassportModule, TypeOrmModule.forFeature([Post, Blog])],
+  imports: [
+    PassportModule,
+    TypeOrmModule.forFeature([Post, Blog, Like, PostComment]),
+  ],
   controllers: [PostsController],
   providers: [
     PostsService,
@@ -27,6 +33,7 @@ import { PostsQueryRepository } from './postsClearQuert.repositiry';
     PostsQueryRepository,
     LikesService,
     BlogsService,
+    LikesRepository,
   ],
 })
 export class PostsModule {}

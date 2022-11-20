@@ -6,6 +6,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { PostComment } from '../comments/comment.entity';
 import { Post } from '../posts/post.entity';
 import { User } from '../users/user.entity';
 
@@ -16,12 +17,6 @@ export class Like {
 
   @Column()
   status: string;
-
-  @Column()
-  content: string;
-
-  @Column()
-  title: string;
 
   @CreateDateColumn()
   created_at: Date;
@@ -35,6 +30,6 @@ export class Like {
   @ManyToOne(() => User, (user) => user.id)
   user: User;
 
-  @ManyToOne(() => Comment, (comment) => comment.id)
-  comment: Comment;
+  @ManyToOne(() => PostComment, (comment) => comment.id)
+  comment: PostComment;
 }
