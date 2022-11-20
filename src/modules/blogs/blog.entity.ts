@@ -9,8 +9,8 @@ import { Post } from '../posts/post.entity';
 
 @Entity()
 export class Blog {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column()
   name: string;
@@ -23,6 +23,5 @@ export class Blog {
 
   @OneToMany(() => Post, (post) => post.blog)
   @JoinColumn()
-  // postId: Relation<Post[]>;
   postId: Post[];
 }

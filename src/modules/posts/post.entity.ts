@@ -1,9 +1,18 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Blog } from '../blogs/blog.entity';
+import { Like } from '../likes/like.entity';
+import { User } from '../users/user.entity';
 
 @Entity()
 export class Post {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: number;
 
   @Column()
@@ -18,8 +27,10 @@ export class Post {
   @Column()
   createdAt: Date;
 
-  // @Column()
   @ManyToOne(() => Blog, (blog) => blog.id)
-  // blogId: Relation<Blog>;
   blog: Blog;
+
+  @OneToMany(() => Like, (like) => like.id)
+  @JoinColumn()
+  likeId: Like[];
 }
