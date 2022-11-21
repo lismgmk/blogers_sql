@@ -1,3 +1,4 @@
+import { CommentsService } from './../comments/comments.service';
 import { PostsQueryRepository } from './postsClearQuert.repositiry';
 import {
   Body,
@@ -37,6 +38,7 @@ export class PostsController {
     private readonly postsService: PostsService, // private readonly commentsService: CommentsService,
     private readonly postsQueryRepository: PostsQueryRepository,
     private readonly likesService: LikesService,
+    private readonly commentsService: CommentsService,
   ) {}
 
   // @Get()
@@ -104,16 +106,6 @@ export class PostsController {
   //   );
   // }
 
-  @Get(':postId')
-  @HttpCode(200)
-  async getPostById(
-    @Param('postId', ParseUUIDPipe)
-    postId: string,
-    @GetUser() user: User,
-  ) {
-    return this.postsQueryRepository.getPostById(postId, user ? user.id : null);
-  }
-
   @Post(':postId/comments')
   @HttpCode(201)
   @SkipThrottle()
@@ -121,7 +113,7 @@ export class PostsController {
   @UseFilters(new CommonErrorFilter())
   @UseFilters(new ValidationBodyExceptionFilter())
   async createPostsForBloggerId(
-    @Param('postId')
+    @Param('postId', ParseUUIDPipe)
     postId: string,
     @Body(new CustomValidationPipe())
     content: CreateCommentDto,
@@ -133,6 +125,16 @@ export class PostsController {
       userId: user ? user.id : null,
       userLogin: user.name,
     });
+  }
+
+  @Get(':postId')
+  @HttpCode(200)
+  async getPostById(
+    @Param('postId', ParseUUIDPipe)
+    postId: string,
+    @GetUser() user: User,
+  ) {
+    return this.postsQueryRepository.getPostById(postId, user ? user.id : null);
   }
 
   @Put(':id')

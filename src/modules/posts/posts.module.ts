@@ -1,3 +1,4 @@
+import { CommentsService } from './../comments/comments.service';
 import { LikesRepository } from './../likes/likes.repository';
 import { UsersService } from './../users/users.service';
 import { Module } from '@nestjs/common';
@@ -16,6 +17,7 @@ import { Blog } from '../blogs/blog.entity';
 import { PostsQueryRepository } from './postsClearQuert.repositiry';
 import { Like } from '../likes/like.entity';
 import { PostComment } from '../comments/comment.entity';
+import { CommentsQueryRepository } from '../comments/commentsQuert.repositiry';
 
 @Module({
   imports: [
@@ -34,6 +36,8 @@ import { PostComment } from '../comments/comment.entity';
     LikesService,
     BlogsService,
     LikesRepository,
+    CommentsService,
+    CommentsQueryRepository,
   ],
 })
 export class PostsModule {}

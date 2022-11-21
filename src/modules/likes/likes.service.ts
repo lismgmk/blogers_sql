@@ -8,27 +8,27 @@ export class LikesService {
 
   async upDateLikesInfo(dto: ILikeInfo) {
     if (dto.postId) {
-      const existEnt = this.likesRepository.getLikePost(dto.postId);
+      const existEnt = await this.likesRepository.getLikePost(dto.postId);
       return existEnt
-        ? this.likesRepository.changeLikeStatusPost({
+        ? await this.likesRepository.changeLikeStatusPost({
             status: dto.status,
             postId: dto.postId,
             userId: dto.userId,
           })
-        : this.likesRepository.createLikeForPost({
+        : await this.likesRepository.createLikeForPost({
             status: dto.status,
             postId: dto.postId,
             userId: dto.userId,
           });
     } else {
-      const existEnt = this.likesRepository.getLikePost(dto.commentId);
+      const existEnt = this.likesRepository.getLikeCommentPost(dto.commentId);
       return existEnt
-        ? this.likesRepository.changeLikeStatusComment({
+        ? await this.likesRepository.changeLikeStatusComment({
             status: dto.status,
             commentId: dto.commentId,
             userId: dto.userId,
           })
-        : this.likesRepository.createLikeForComment({
+        : await this.likesRepository.createLikeForComment({
             status: dto.status,
             commentId: dto.commentId,
             userId: dto.userId,

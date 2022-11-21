@@ -10,16 +10,16 @@ export class LikesRepository {
   async getLikePost(postId: string) {
     const queryComand = `
     SELECT * FROM public."like"
-WHERE postId= $1
+WHERE "postId"= $1
     `;
     const like = await this.dataSource.query(queryComand, [postId]);
     return like[0];
   }
 
-  async getCommentPost(commentId: string) {
+  async getLikeCommentPost(commentId: string) {
     const queryComand = `
     SELECT * FROM public."like"
-WHERE commentId= $1
+WHERE "commentId"= $1
     `;
     const like = await this.dataSource.query(queryComand, [commentId]);
     return like[0];
@@ -43,7 +43,7 @@ WHERE commentId= $1
     const queryComand = `
    UPDATE "like"
 SET status = $1
-WHERE userId = $2 and postId = $3;
+WHERE "userId" = $2 and "postId" = $3
 RETURNING *
 `;
     return this.dataSource.query(queryComand, [
@@ -71,7 +71,7 @@ RETURNING *
     const queryComand = `
    UPDATE "like"
 SET status = $1
-WHERE userId = $2 and commentId = $3;
+WHERE "userId" = $2 and "commentId" = $3
 RETURNING *
 `;
     return this.dataSource.query(queryComand, [
