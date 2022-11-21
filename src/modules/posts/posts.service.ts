@@ -18,23 +18,19 @@ import { Post } from './post.entity';
 export class PostsService {
   constructor(
     private blogsService: BlogsService,
-    private postsClearQueryRepository: PostsQueryRepository,
+    private postsQueryRepository: PostsQueryRepository,
   ) {}
-  //   async getAllPosts(queryParams: GetAllPostsdDto, userId: string) {
-  //     return this.postsQueryRepository.queryAllPostsPagination(
-  //       queryParams,
-  //       null,
-  //       userId,
-  //     );
-  //   }
-  //   async getPostByIdWithLikes(id: string, userId: string) {
-  //     return this.postsQueryRepository.queryPostById(id, userId);
-  //   }
-  //   async getPostById(id: string | ObjectId) {
-  //     return await this.postModel.findById(id).exec();
-  //   }
+  async getAllPosts(queryParams: GetAllPostsdDto, userId: string) {
+    return this.postsQueryRepository.getAllPostsClearQuery(queryParams, userId);
+  }
 
+  // async getPostByIdWithLikes(id: string, userId: string) {
+  //   return this.postsQueryRepository.queryPostById(id, userId);
+  // }
 
+  // async getPostById(id: string | ObjectId) {
+  //   return await this.postsQueryRepository.findById(id).exec();
+  // }
 
   async createPost(dto: CreatePostWithBlogIdDto) {
     const currentBlog = (await this.blogsService.getBlogByIdClearQuery(
@@ -51,9 +47,7 @@ export class PostsService {
       shortDescription: dto.shortDescription,
       blogId: dto.blogId,
     };
-    const createdPost = await this.postsClearQueryRepository.createPost(
-      newPost,
-    );
+    const createdPost = await this.postsQueryRepository.createPost(newPost);
 
     const extendedLikesInfo: LikeInfoRequest = {
       likesCount: 0,
@@ -77,6 +71,6 @@ export class PostsService {
     if (!post) {
       throw new NotFoundException();
     }
-    await this.postsClearQueryRepository.changePost({ id: dto.id, ...dto });
+    await this.postsQueryRepository.changePost({ id: dto.id, ...dto });
   }
 }

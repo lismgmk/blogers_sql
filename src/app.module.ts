@@ -1,4 +1,9 @@
-import { Module } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Blog } from './modules/blogs/blog.entity';
@@ -16,6 +21,10 @@ import { CommentsModule } from './modules/comments/comments.module';
 import { TestingModule } from './modules/testing/testing.module';
 // import { CommentsController } from './testing/comments/comments.controller';
 import * as Joi from 'joi';
+import { CheckBearerMiddleware } from './middlewares/check-bearer.middleware';
+import { JwtPassService } from './modules/common-services/jwt-pass-custom/jwt-pass.service';
+import { UsersService } from './modules/users/users.service';
+import { JwtService } from '@nestjs/jwt';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -56,6 +65,40 @@ import * as Joi from 'joi';
     TestingModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [JwtPassService, UsersService, JwtService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    // consumer.apply(CheckIpStatusMiddleware).forRoutes(
+    //   { path: '/auth/registration', method: RequestMethod.POST },
+    //   { path: 'users/:id', method: RequestMethod.DELETE },
+    //   { path: 'refresh-token', method: RequestMethod.POST },
+    // );
+    consumer.apply(CheckBearerMiddleware).forRoutes(
+      {
+        path: '/posts/:postId/comments',
+        method: RequestMethod.GET,
+      },
+      {
+        path: '/blogs/:postId/posts',
+        method: RequestMethod.GET,
+      },
+      {
+        path: '/posts',
+        method: RequestMethod.GET,
+      },
+      {
+        path: '/posts/:postId/comments',
+        method: RequestMethod.GET,
+      },
+      {
+        path: '/posts/:postId',
+        method: RequestMethod.GET,
+      },
+      {
+        path: '/comments/:id',
+        method: RequestMethod.GET,
+      },
+    );
+  }
+}

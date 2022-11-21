@@ -35,25 +35,25 @@ import { CreateCommentDto } from '../comments/dto/create-comment.dto';
 @Controller('posts')
 export class PostsController {
   constructor(
-    private readonly postsService: PostsService, // private readonly commentsService: CommentsService,
+    private readonly postsService: PostsService,
     private readonly postsQueryRepository: PostsQueryRepository,
     private readonly likesService: LikesService,
     private readonly commentsService: CommentsService,
   ) {}
 
-  // @Get()
-  // @HttpCode(200)
-  // @UsePipes(new ValidationPipe({ transform: true }))
-  // async getAllPosts(
-  //   @Query() queryParams: GetAllPostsdDto,
-  //   @GetUser()
-  //   user: User,
-  // ) {
-  //   return await this.postsService.getAllPosts(
-  //     queryParams,
-  //     user ? user.id : null,
-  //   );
-  // }
+  @Get()
+  @HttpCode(200)
+  @UsePipes(new ValidationPipe({ transform: true }))
+  async getAllPosts(
+    @Query() queryParams: GetAllPostsdDto,
+    @GetUser()
+    user: User,
+  ) {
+    return await this.postsService.getAllPosts(
+      queryParams,
+      user ? user.id : null,
+    );
+  }
 
   @Post()
   @UseGuards(AuthGuard('basic'))
