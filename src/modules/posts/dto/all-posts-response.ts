@@ -12,6 +12,6 @@ export interface IPostsRequest {
     dislikesCount: number;
     likesCount: number;
     myStatus: likeStatusType;
-    newestLikes: { addedAt: string; userId: string; login: string }[];
+    newestLikes?: { addedAt: Date; userId: string; login: string }[];
   };
 }
