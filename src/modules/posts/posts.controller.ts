@@ -1,3 +1,4 @@
+import { CommentsService } from './../comments/comments.service';
 import { PostsQueryRepository } from './postsClearQuert.repositiry';
 import {
   Body,
@@ -30,28 +31,30 @@ import { PostsService } from './posts.service';
 import { LikesService } from '../likes/likes.service';
 import { GetUserId } from '../../decorators/get-user-id.decorator';
 import { CreateCommentDto } from '../comments/dto/create-comment.dto';
+import { GetAllCommentsDto } from '../comments/dto/get-all-comments.dto';
 
 @Controller('posts')
 export class PostsController {
   constructor(
-    private readonly postsService: PostsService, // private readonly commentsService: CommentsService,
+    private readonly postsService: PostsService,
     private readonly postsQueryRepository: PostsQueryRepository,
     private readonly likesService: LikesService,
+    private readonly commentsService: CommentsService,
   ) {}
 
-  // @Get()
-  // @HttpCode(200)
-  // @UsePipes(new ValidationPipe({ transform: true }))
-  // async getAllPosts(
-  //   @Query() queryParams: GetAllPostsdDto,
-  //   @GetUser()
-  //   user: User,
-  // ) {
-  //   return await this.postsService.getAllPosts(
-  //     queryParams,
-  //     user ? user.id : null,
-  //   );
-  // }
+  @Get()
+  @HttpCode(200)
+  @UsePipes(new ValidationPipe({ transform: true }))
+  async getAllPosts(
+    @Query() queryParams: GetAllPostsdDto,
+    @GetUser()
+    user: User,
+  ) {
+    return await this.postsService.getAllPosts(
+      queryParams,
+      user ? user.id : null,
+    );
+  }
 
   @Post()
   @UseGuards(AuthGuard('basic'))
@@ -82,36 +85,26 @@ export class PostsController {
     });
   }
 
-  // @Get(':postId/comments')
-  // @HttpCode(200)
-  // @SkipThrottle()
-  // async getPostsForBloggerId(
-  //   @Param('postId')
-  //   postId: string,
-  //   @Query(
-  //     new ValidationPipe({
-  //       transform: true,
-  //       transformOptions: { enableImplicitConversion: true },
-  //     }),
-  //   )
-  //   queryParams: GetAllCommentsDto,
-  //   @GetUser() user: User,
-  // ) {
-  //   return this.commentsService.getCommentsForPostId(
-  //     queryParams,
-  //     postId,
-  //     user ? user._id : null,
-  //   );
-  // }
-
-  @Get(':postId')
+  @Get(':postId/comments')
   @HttpCode(200)
-  async getPostById(
+  async getPostsForBloggerId(
     @Param('postId', ParseUUIDPipe)
     postId: string,
+    @Query(
+      new ValidationPipe({
+        transform: true,
+        transformOptions: { enableImplicitConversion: true },
+        forbidNonWhitelisted: true,
+      }),
+    )
+    queryParams: GetAllCommentsDto,
     @GetUser() user: User,
   ) {
-    return this.postsQueryRepository.getPostById(postId, user ? user.id : null);
+    return this.commentsService.getCommentsForPostId({
+      ...queryParams,
+      postId,
+      userId: user ? user.id : null,
+    });
   }
 
   @Post(':postId/comments')
@@ -121,7 +114,7 @@ export class PostsController {
   @UseFilters(new CommonErrorFilter())
   @UseFilters(new ValidationBodyExceptionFilter())
   async createPostsForBloggerId(
-    @Param('postId')
+    @Param('postId', ParseUUIDPipe)
     postId: string,
     @Body(new CustomValidationPipe())
     content: CreateCommentDto,
@@ -132,6 +125,19 @@ export class PostsController {
       ...content,
       userId: user ? user.id : null,
       userLogin: user.name,
+    });
+  }
+
+  @Get(':id')
+  @HttpCode(200)
+  async getPostById(
+    @Param('id', ParseUUIDPipe)
+    id: string,
+    @GetUser() user: User,
+  ) {
+    return this.postsService.getPostById({
+      id,
+      userId: user ? user.id : null,
     });
   }
 

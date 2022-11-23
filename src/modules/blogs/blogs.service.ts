@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 import { paginationBuilder } from './../../helpers/pagination-builder';
@@ -93,5 +93,12 @@ WHERE id = $1;
     await this.dataSource.query(queryComand, [id]);
 
     return;
+  }
+
+  async checkExistBlog(id: string) {
+    const post = await this.getBlogByIdClearQuery(id);
+    if (!post) {
+      throw new NotFoundException();
+    }
   }
 }

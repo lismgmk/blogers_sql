@@ -1,40 +1,41 @@
-import { PostsQueryRepository } from './postsClearQuert.repositiry';
 import {
   BadRequestException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { LikeInfoRequest } from '../../global-dto/like-info.request';
-import { LikeStatusEnum } from '../../global-dto/like-status.dto';
 import { Blog } from '../blogs/blog.entity';
 import { BlogsService } from '../blogs/blogs.service';
-import { LikesService } from '../likes/likes.service';
-import { User } from '../users/user.entity';
 import { CreatePostWithBlogIdDto } from './dto/create-post-with-blog-id.dto';
 import { GetAllPostsdDto } from './dto/get-all-posts.dto';
-import { Post } from './post.entity';
+import { IPostById } from './dto/get-post-by-id.interface';
+import { PostsQueryRepository } from './postsClearQuert.repositiry';
 
 @Injectable()
 export class PostsService {
   constructor(
     private blogsService: BlogsService,
-    private postsClearQueryRepository: PostsQueryRepository,
+    private postsQueryRepository: PostsQueryRepository,
   ) {}
-  //   async getAllPosts(queryParams: GetAllPostsdDto, userId: string) {
-  //     return this.postsQueryRepository.queryAllPostsPagination(
-  //       queryParams,
-  //       null,
-  //       userId,
-  //     );
-  //   }
-  //   async getPostByIdWithLikes(id: string, userId: string) {
-  //     return this.postsQueryRepository.queryPostById(id, userId);
-  //   }
-  //   async getPostById(id: string | ObjectId) {
-  //     return await this.postModel.findById(id).exec();
-  //   }
+  async getAllPosts(queryParams: GetAllPostsdDto, userId: string) {
+    return this.postsQueryRepository.getAllPostsClearQuery({
+      ...queryParams,
+      userId,
+      blogId: null,
+    });
+  }
 
+  async getPostByBlogId(
+    dto: GetAllPostsdDto & { blogId: string; userId: string },
+  ) {
+    await this.blogsService.checkExistBlog(dto.blogId);
+    return this.postsQueryRepository.getAllPostsClearQuery(dto);
+  }
 
+  async getPostById(dto: IPostById) {
+    await this.checkExistPost(dto.id);
+    return this.postsQueryRepository.getPostByIdWithLikes(dto);
+  }
 
   async createPost(dto: CreatePostWithBlogIdDto) {
     const currentBlog = (await this.blogsService.getBlogByIdClearQuery(
@@ -51,9 +52,7 @@ export class PostsService {
       shortDescription: dto.shortDescription,
       blogId: dto.blogId,
     };
-    const createdPost = await this.postsClearQueryRepository.createPost(
-      newPost,
-    );
+    const createdPost = await this.postsQueryRepository.createPost(newPost);
 
     const extendedLikesInfo: LikeInfoRequest = {
       likesCount: 0,
@@ -73,10 +72,14 @@ export class PostsService {
     };
   }
   async changePost(dto: CreatePostWithBlogIdDto & { id: string }) {
-    const post = await this.blogsService.getBlogByIdClearQuery(dto.blogId);
+    await this.blogsService.checkExistBlog(dto.blogId);
+    await this.postsQueryRepository.changePost({ id: dto.id, ...dto });
+  }
+
+  async checkExistPost(id: string) {
+    const post = await this.postsQueryRepository.getPostById(id);
     if (!post) {
       throw new NotFoundException();
     }
-    await this.postsClearQueryRepository.changePost({ id: dto.id, ...dto });
   }
 }
