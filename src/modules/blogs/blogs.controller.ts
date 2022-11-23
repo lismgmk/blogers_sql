@@ -15,10 +15,13 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { GetUser } from '../../decorators/get-user.decorator';
 import { ValidationBodyExceptionFilter } from '../../exceptions/validation-body-exception-filter';
 import { CustomValidationPipe } from '../../pipes/validation.pipe';
 import { CreatePostDto } from '../posts/dto/create-post.dto';
+import { GetAllPostsdDto } from '../posts/dto/get-all-posts.dto';
 import { PostsService } from '../posts/posts.service';
+import { User } from '../users/user.entity';
 
 import { BlogsService } from './blogs.service';
 import { CreateBlogDto } from './dto/create-blog.dto';
@@ -91,27 +94,27 @@ export class BlogsController {
     return await this.blogsService.deleteBlogByIdClearQuery(blogId);
   }
 
-  // @Get(':blogId/posts')
-  // @HttpCode(200)
-  // @UseFilters(new MongoExceptionFilter())
-  // async getPostsForBloggerId(
-  //   @Param('blogId', ParamIdValidationPipe)
-  //   blogId: string,
-  //   @Query(
-  //     new ValidationPipe({
-  //       transform: true,
-  //       transformOptions: { enableImplicitConversion: true },
-  //     }),
-  //   )
-  //   queryParams: GetAllPostsdDto,
-  //   @GetUser() user: User,
-  // ) {
-  //   return await this.blogsService.getPostsForBlogId(
-  //     queryParams,
-  //     blogId,
-  //     user ? user._id : null,
-  //   );
-  // }
+  @Get(':blogId/posts')
+  @HttpCode(200)
+  async getPostsForBloggerId(
+    @Param('blogId', ParseUUIDPipe)
+    blogId: string,
+    @Query(
+      new ValidationPipe({
+        transform: true,
+        transformOptions: { enableImplicitConversion: true },
+        forbidNonWhitelisted: true,
+      }),
+    )
+    queryParams: GetAllPostsdDto,
+    @GetUser() user: User,
+  ) {
+    return await this.postsService.getPostByBlogId({
+      ...queryParams,
+      blogId,
+      userId: user ? user.id : null,
+    });
+  }
 
   @Post(':blogId/posts')
   @HttpCode(201)

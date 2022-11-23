@@ -3,7 +3,7 @@ import { INCORRECT_TYPE_VALIDATION_ERROR } from '../../../consts/ad-validation-c
 import { PaginationQueryDto } from '../../../global-dto/pagination-query.dto';
 
 export enum SortByFielComment {
-  createdAt,
+  created_at,
   userLogin,
   content,
 }
@@ -11,5 +11,5 @@ export enum SortByFielComment {
 export class GetAllCommentsDto extends PaginationQueryDto {
   @IsEnum(SortByFielComment, { message: INCORRECT_TYPE_VALIDATION_ERROR })
   @IsOptional()
-  readonly sortBy: keyof typeof SortByFielComment = 'createdAt';
+  readonly sortBy: keyof typeof SortByFielComment = 'created_at';
 }

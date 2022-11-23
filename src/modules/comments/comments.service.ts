@@ -2,21 +2,21 @@ import {
   BadRequestException,
   ForbiddenException,
   Injectable,
-  NotFoundException,
 } from '@nestjs/common';
 import { LikeInfoRequest } from '../../global-dto/like-info.request';
-import { CreatePostWithBlogIdDto } from '../posts/dto/create-post-with-blog-id.dto';
 import { Post } from '../posts/post.entity';
 import { PostsQueryRepository } from '../posts/postsClearQuert.repositiry';
-import { UsersService } from '../users/users.service';
+import { PostsService } from './../posts/posts.service';
 import { CommentsQueryRepository } from './commentsQuert.repositiry';
 import { ICreateComment } from './dto/comments-interfaces';
+import { GetAllCommentsDto } from './dto/get-all-comments.dto';
 
 @Injectable()
 export class CommentsService {
   constructor(
     private commentsClearQueryRepository: CommentsQueryRepository,
     private postsQueryRepository: PostsQueryRepository,
+    private postsService: PostsService,
   ) {}
   //   async getAllPosts(queryParams: GetAllPostsdDto, userId: string) {
   //     return this.postsQueryRepository.queryAllPostsPagination(
@@ -31,6 +31,13 @@ export class CommentsService {
   //   async getPostById(id: string | ObjectId) {
   //     return await this.postModel.findById(id).exec();
   //   }
+
+  async getCommentsForPostId(
+    dto: GetAllCommentsDto & { postId: string; userId: string },
+  ) {
+    await this.postsService.checkExistPost(dto.postId);
+    return this.commentsClearQueryRepository.getAllCommentsByPostId(dto);
+  }
 
   async createComment(dto: ICreateComment) {
     const currentPost = (await this.postsQueryRepository.getPostById(

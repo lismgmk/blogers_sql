@@ -59,17 +59,6 @@ export const postsQueryBuilder = (dto: IPostQuery[]): IPostsRequest[] => {
       });
       return;
     }
-    // if (existIndex !== -1) {
-    //   res[existIndex].extendedLikesInfo.newestLikes.push({
-    //     addedAt: el.likeInfoCreated,
-    //     userId: el.likeInfoUserId,
-    //     login: el.likeInfoUser,
-    //   });
-    //   return;
-    // } else {
-    //   helperArr.push(el.id);
-    //   res.push(post);
-    // }
   });
   return res;
 };

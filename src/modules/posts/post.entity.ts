@@ -8,7 +8,6 @@ import {
 } from 'typeorm';
 import { Blog } from '../blogs/blog.entity';
 import { Like } from '../likes/like.entity';
-import { User } from '../users/user.entity';
 
 @Entity()
 export class Post {

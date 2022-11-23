@@ -4,17 +4,17 @@ import { DataSource } from 'typeorm';
 import { paginationBuilder } from '../../helpers/pagination-builder';
 import { postsQueryBuilder } from '../../helpers/post-query-builder';
 import { CreatePostWithBlogIdDto } from './dto/create-post-with-blog-id.dto';
-import { CreatePostDto } from './dto/create-post.dto';
 import { GetAllPostsdDto } from './dto/get-all-posts.dto';
 
 @Injectable()
 export class PostsQueryRepository {
   constructor(@InjectDataSource() protected dataSource: DataSource) {}
 
-  async getAllPostsClearQuery(dto: GetAllPostsdDto, userId: string) {
+  async getAllPostsClearQuery(
+    dto: GetAllPostsdDto & { userId: string; blogId?: string },
+  ) {
     const offset =
       dto.pageNumber === 1 ? 0 : (dto.pageNumber - 1) * dto.pageSize;
-    // CEILING((SELECT  COUNT("id")  FROM  public.blog ) / $3) as "totalRows"
     const allRows = await this.dataSource.query(
       `SELECT  COUNT("id")  FROM  public."post" `,
     );
@@ -30,12 +30,24 @@ CASE
     ELSE 'None'
 END As "UserStatus",
 (select "user"."name" from "user" where "user"."id" = "like"."userId" ) as "likeInfoUser"
-	FROM "public"."post"
+	FROM "public"."post" 
 	Left Join "blog" ON post."blogId" = "blog"."id"
 	Left join ( Select *  from "like" where "like"."status"='Like' order by "created_at" ASC limit 3) as "like"  ON "post"."id" = "like"."postId" 
+  where "blogId" =(
+    CASE
+    WHEN $5 != NULL  THEN $5::uuid 
+    ELSE "blogId"::uuid
+END
+  )
   ORDER BY $1
       LIMIT $2 OFFSET $3`,
-      [`${dto.sortBy} ${dto.sortDirection}`, dto.pageSize, offset, userId],
+      [
+        `${dto.sortBy} ${dto.sortDirection}`,
+        dto.pageSize,
+        offset,
+        dto.userId,
+        dto.blogId,
+      ],
     );
 
     return {
@@ -63,7 +75,28 @@ END As "UserStatus",
     return post[0];
   }
 
-  async getPostById(id: string, userId?: string) {
+  async getPostByIdWithLikes(dto: { id: string; userId: string }) {
+    const post = await this.dataSource.query(
+      `SELECT "shortDescription", "content", "title", "post"."createdAt", "blogId", "post"."id", "blog"."name" as "blogName",
+(select count("id") from "like" where "like"."postId" = "post"."id" and "like"."status" = 'Like'  ) as "likeCount",
+(select count("id") from "like" where "like"."postId" = "post"."id" and "like"."status" = 'Dislike' ) as "dislikeCount",
+"like"."userId" as "likeInfoUserId",
+"like"."created_at" AS "likeInfoCreated",
+CASE
+    WHEN "like"."userId" = $2  THEN "like"."status" 
+    ELSE 'None'
+END As "UserStatus",
+(select "user"."name" from "user" where "user"."id" = "like"."userId" ) as "likeInfoUser"
+	FROM "public"."post" 
+	Left Join "blog" ON post."blogId" = "blog"."id"
+	Left join ( Select *  from "like" where "like"."status"='Like' order by "created_at" ASC limit 3) as "like"  ON "post"."id" = "like"."postId" 
+  where "post"."id" =$1`,
+      [dto.id, dto.userId],
+    );
+    return postsQueryBuilder(post)[0];
+  }
+
+  async getPostById(id: string) {
     const queryComand = `
     SELECT * FROM public."post"
 WHERE id= $1

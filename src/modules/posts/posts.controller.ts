@@ -31,6 +31,7 @@ import { PostsService } from './posts.service';
 import { LikesService } from '../likes/likes.service';
 import { GetUserId } from '../../decorators/get-user-id.decorator';
 import { CreateCommentDto } from '../comments/dto/create-comment.dto';
+import { GetAllCommentsDto } from '../comments/dto/get-all-comments.dto';
 
 @Controller('posts')
 export class PostsController {
@@ -84,27 +85,27 @@ export class PostsController {
     });
   }
 
-  // @Get(':postId/comments')
-  // @HttpCode(200)
-  // @SkipThrottle()
-  // async getPostsForBloggerId(
-  //   @Param('postId')
-  //   postId: string,
-  //   @Query(
-  //     new ValidationPipe({
-  //       transform: true,
-  //       transformOptions: { enableImplicitConversion: true },
-  //     }),
-  //   )
-  //   queryParams: GetAllCommentsDto,
-  //   @GetUser() user: User,
-  // ) {
-  //   return this.commentsService.getCommentsForPostId(
-  //     queryParams,
-  //     postId,
-  //     user ? user._id : null,
-  //   );
-  // }
+  @Get(':postId/comments')
+  @HttpCode(200)
+  async getPostsForBloggerId(
+    @Param('postId', ParseUUIDPipe)
+    postId: string,
+    @Query(
+      new ValidationPipe({
+        transform: true,
+        transformOptions: { enableImplicitConversion: true },
+        forbidNonWhitelisted: true,
+      }),
+    )
+    queryParams: GetAllCommentsDto,
+    @GetUser() user: User,
+  ) {
+    return this.commentsService.getCommentsForPostId({
+      ...queryParams,
+      postId,
+      userId: user ? user.id : null,
+    });
+  }
 
   @Post(':postId/comments')
   @HttpCode(201)
@@ -127,14 +128,17 @@ export class PostsController {
     });
   }
 
-  @Get(':postId')
+  @Get(':id')
   @HttpCode(200)
   async getPostById(
-    @Param('postId', ParseUUIDPipe)
-    postId: string,
+    @Param('id', ParseUUIDPipe)
+    id: string,
     @GetUser() user: User,
   ) {
-    return this.postsQueryRepository.getPostById(postId, user ? user.id : null);
+    return this.postsService.getPostById({
+      id,
+      userId: user ? user.id : null,
+    });
   }
 
   @Put(':id')

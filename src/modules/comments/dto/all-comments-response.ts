@@ -5,7 +5,7 @@ export interface ICommentsRequest {
   content: string;
   userId: string;
   userName: string;
-  createdAt: Date;
+  createdAt: string;
   likeInfo: {
     dislikesCount: number;
     likesCount: number;
