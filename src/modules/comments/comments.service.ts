@@ -2,6 +2,7 @@ import {
   BadRequestException,
   ForbiddenException,
   Injectable,
+  NotFoundException,
 } from '@nestjs/common';
 import { LikeInfoRequest } from '../../global-dto/like-info.request';
 import { Post } from '../posts/post.entity';
@@ -10,6 +11,7 @@ import { PostsService } from './../posts/posts.service';
 import { CommentsQueryRepository } from './commentsQuert.repositiry';
 import { ICreateComment } from './dto/comments-interfaces';
 import { GetAllCommentsDto } from './dto/get-all-comments.dto';
+import { ICommentById } from './dto/get-comment-by-id.interface';
 
 @Injectable()
 export class CommentsService {
@@ -18,19 +20,11 @@ export class CommentsService {
     private postsQueryRepository: PostsQueryRepository,
     private postsService: PostsService,
   ) {}
-  //   async getAllPosts(queryParams: GetAllPostsdDto, userId: string) {
-  //     return this.postsQueryRepository.queryAllPostsPagination(
-  //       queryParams,
-  //       null,
-  //       userId,
-  //     );
-  //   }
-  //   async getPostByIdWithLikes(id: string, userId: string) {
-  //     return this.postsQueryRepository.queryPostById(id, userId);
-  //   }
-  //   async getPostById(id: string | ObjectId) {
-  //     return await this.postModel.findById(id).exec();
-  //   }
+
+  async getCommentByIdWithLikes(dto: ICommentById) {
+    await this.checkExistComment(dto.id);
+    return this.commentsClearQueryRepository.getCommentsByPostIdWithLikes(dto);
+  }
 
   async getCommentsForPostId(
     dto: GetAllCommentsDto & { postId: string; userId: string },
@@ -83,8 +77,16 @@ export class CommentsService {
 
   async checkOwner(id: string, userId: string) {
     const comment = await this.commentsClearQueryRepository.getCommentById(id);
-    if (!comment.userId.equals(userId)) {
+    // if (comment.userId.equals(userId)) {
+    if (comment.userId !== userId) {
       throw new ForbiddenException();
+    }
+  }
+
+  async checkExistComment(id: string) {
+    const comment = await this.commentsClearQueryRepository.getCommentById(id);
+    if (!comment) {
+      throw new NotFoundException();
     }
   }
 }

@@ -81,17 +81,17 @@ export class CommentsController {
     return await this.commentsService.deleteComment(id, userId);
   }
 
-  // @Get(':id')
-  // @HttpCode(200)
-  // @SkipThrottle()
-  // async getCommentById(
-  //   @Param('id')
-  //   id: string,
-  //   @GetUser() user: User,
-  // ) {
-  //   return this.commentsService.getCommentByIdWithLikes(
-  //     id,
-  //     user ? user.id : null,
-  //   );
-  // }
+  @Get(':id')
+  @HttpCode(200)
+  @SkipThrottle()
+  async getCommentById(
+    @Param('id')
+    id: string,
+    @GetUser() user: User,
+  ) {
+    return this.commentsService.getCommentByIdWithLikes({
+      id,
+      userId: user ? user.id : null,
+    });
+  }
 }

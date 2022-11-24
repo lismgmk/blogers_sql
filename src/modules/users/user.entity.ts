@@ -35,7 +35,7 @@ export class User {
   @Column()
   isConfirmed: boolean;
 
-  @ManyToMany(() => Device, (device) => device.id)
+  @ManyToMany(() => Device, (device) => device.id, { onDelete: 'CASCADE' })
   @JoinTable()
   device: Device[];
 

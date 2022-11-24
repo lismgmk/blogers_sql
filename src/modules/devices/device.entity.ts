@@ -1,11 +1,4 @@
-import {
-  Column,
-  Entity,
-  ManyToMany,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-import { BlackList } from '../black-list/black-list.entity';
+import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from '../users/user.entity';
 
 @Entity()
@@ -25,6 +18,6 @@ export class Device {
   @Column({ type: 'timestamptz' })
   expiredAt: Date;
 
-  @ManyToMany(() => User, (user) => user.id)
+  @ManyToMany(() => User, (user) => user.id, { onDelete: 'CASCADE' })
   user: User[];
 }

@@ -26,7 +26,7 @@ export class Post {
   @Column()
   createdAt: Date;
 
-  @ManyToOne(() => Blog, (blog) => blog.id)
+  @ManyToOne(() => Blog, (blog) => blog.id, { onDelete: 'CASCADE' })
   blog: Blog;
 
   @OneToMany(() => Like, (like) => like.id)

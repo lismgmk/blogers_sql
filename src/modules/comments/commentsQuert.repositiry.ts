@@ -1,3 +1,4 @@
+import { ICommentById } from './dto/get-comment-by-id.interface';
 import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
@@ -16,17 +17,18 @@ export class CommentsQueryRepository {
     const offset =
       dto.pageNumber === 1 ? 0 : (dto.pageNumber - 1) * dto.pageSize;
     const allRows = await this.dataSource.query(
-      `SELECT  COUNT("id")  FROM  public."post_comment" `,
+      `SELECT  COUNT("id")  FROM  public."post_comment" where "postId"=$1`,
+      [dto.postId],
     );
 
     const allCommentsQuery = await this.dataSource.query(
       `SELECT "post_comment".id, "post_comment".content, "post_comment".created_at, "post_comment"."userId",
-(select "user"."name" from "user" where "user"."id" = "like"."userId" ) as "UserName",
+(select "user"."name" from "user" where "user"."id" = "post_comment"."userId" ) as "UserName",
 (select count("id") from "like" where "like"."commentId" = post_comment."id" and "like"."status" = 'Like'  ) as "likeCount",
 (select count("id") from "like" where "like"."commentId" = post_comment."id" and "like"."status" = 'Dislike' ) as "dislikeCount",
 CASE
-    WHEN "like"."userId" != $4  THEN 'None'
-    ELSE "like"."status"
+    WHEN "like"."userId" = $4  THEN "like"."status" 
+    ELSE 'None'
 END As "UserStatus"
 	FROM public.post_comment 
 	 join "user" ON "user"."id" = "post_comment"."userId" 
@@ -52,6 +54,26 @@ END As "UserStatus"
       // items: postsQueryBuilder(allPostsQuery),
       items: commentsQueryBuilder(allCommentsQuery),
     };
+  }
+
+  async getCommentsByPostIdWithLikes(dto: ICommentById) {
+    const comment = await this.dataSource.query(
+      `SELECT "post_comment".id, "post_comment".content, "post_comment".created_at, "post_comment"."userId",
+(select "user"."name" from "user" where "user"."id" = "post_comment"."userId" ) as "UserName",
+(select count("id") from "like" where "like"."commentId" = post_comment."id" and "like"."status" = 'Like'  ) as "likeCount",
+(select count("id") from "like" where "like"."commentId" = post_comment."id" and "like"."status" = 'Dislike' ) as "dislikeCount",
+CASE
+    WHEN "like"."userId" = $2  THEN "like"."status" 
+    ELSE 'None'
+END As "UserStatus"
+	FROM public.post_comment 
+	 join "user" ON "user"."id" = "post_comment"."userId" 
+	 and "post_comment"."id"=$1
+    left join "like" ON "user"."id" = "like"."userId"
+`,
+      [dto.id, dto.userId],
+    );
+    return commentsQueryBuilder(comment)[0];
   }
 
   async createComment(dto: Omit<ICreateComment, 'userLogin'>) {
@@ -94,7 +116,6 @@ WHERE id = $2;
 WHERE id = $1;
     `;
     await this.dataSource.query(queryComand, [id]);
-
     return;
   }
 }
