@@ -55,7 +55,6 @@ export class AuthController {
   }
   @HttpCode(200)
   @Post('/refresh-token')
-  @SkipThrottle()
   @UseFilters(new ValidationBodyExceptionFilter())
   @UseFilters(new CommonErrorFilter())
   @UseGuards(CookieGuard)
@@ -102,7 +101,7 @@ export class AuthController {
       deviceId,
     );
 
-    await this.devicesService.createDeviceClearQuery({
+    await this.devicesService.createDevice({
       id: deviceId,
       ip: userIp,
       userId,
@@ -168,7 +167,7 @@ export class AuthController {
     @PuerRefresgToken()
     refreshToken: string,
   ) {
-    await this.devicesService.deleteDeviceClearQuery(deviceId);
+    await this.devicesService.deleteAllExcludeCurrent(deviceId, user.id);
     await this.blackListService.addTokenClearQuery(refreshToken);
     return;
   }

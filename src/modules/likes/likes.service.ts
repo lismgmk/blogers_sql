@@ -21,7 +21,9 @@ export class LikesService {
             userId: dto.userId,
           });
     } else {
-      const existEnt = this.likesRepository.getLikeCommentPost(dto.commentId);
+      const existEnt = await this.likesRepository.getLikeCommentPost(
+        dto.commentId,
+      );
       return existEnt
         ? await this.likesRepository.changeLikeStatusComment({
             status: dto.status,

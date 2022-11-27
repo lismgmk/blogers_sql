@@ -1,11 +1,11 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   ManyToMany,
-  OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
-import { BlackList } from '../black-list/black-list.entity';
 import { User } from '../users/user.entity';
 
 @Entity()
@@ -19,8 +19,11 @@ export class Device {
   @Column()
   ip: string;
 
-  @Column()
+  @CreateDateColumn()
   createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 
   @Column({ type: 'timestamptz' })
   expiredAt: Date;

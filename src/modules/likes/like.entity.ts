@@ -24,12 +24,14 @@ export class Like {
   @UpdateDateColumn()
   updated_at: Date;
 
-  @ManyToOne(() => Post, (post) => post.id)
+  @ManyToOne(() => Post, (post) => post.id, { onDelete: 'CASCADE' })
   post: Post;
 
-  @ManyToOne(() => User, (user) => user.id)
+  @ManyToOne(() => User, (user) => user.id, { onDelete: 'CASCADE' })
   user: User;
 
-  @ManyToOne(() => PostComment, (comment) => comment.id)
+  @ManyToOne(() => PostComment, (comment) => comment.id, {
+    onDelete: 'CASCADE',
+  })
   comment: PostComment;
 }

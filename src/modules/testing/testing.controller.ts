@@ -8,6 +8,6 @@ export class TestingController {
   @Delete('/all-data')
   @HttpCode(204)
   async deleteAllData() {
-    // return await this.testingService.deleteAllData();
+    return await this.testingService.deleteAllData();
   }
 }
