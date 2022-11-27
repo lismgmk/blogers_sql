@@ -1,3 +1,4 @@
+import { DevicesQueryRepository } from './../devices/devices.clearQuery.repository';
 import { Device } from './../devices/device.entity';
 import { BlackList } from './../black-list/black-list.entity';
 import { Module } from '@nestjs/common';
@@ -33,6 +34,7 @@ import { IsExpired } from '../../dto-validator/check-expiration-code';
   controllers: [AuthController],
   providers: [
     DevicesService,
+    DevicesQueryRepository,
     AuthService,
     BlackListService,
     JwtPassService,

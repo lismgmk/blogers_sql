@@ -1,8 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
-import { DataSource, Repository } from 'typeorm';
+import { InjectDataSource } from '@nestjs/typeorm';
+import { DataSource } from 'typeorm';
 import { paginationBuilder } from './../../helpers/pagination-builder';
-import { Blog } from './blog.entity';
 import { CreateBlogDto } from './dto/create-blog.dto';
 import { GetAllBlogsQueryDto } from './dto/get-all-blogs-query.dto';
 
@@ -16,6 +15,54 @@ export class BlogsService {
   ) {}
 
   async getAllBlogsClearQuery(dto: GetAllBlogsQueryDto) {
+    const foo = (keyString, nestedObg) => {
+      const arrKeys = keyString.split('.');
+
+      let tempObj = nestedObg;
+      for (let i = 0; i < arrKeys.length; i++) {
+        if (tempObj[arrKeys[i]]) {
+          tempObj = tempObj[arrKeys[i]];
+        }
+      }
+      return tempObj;
+      // let helperArr;
+      // const helper = (obj) => {
+      //   Object.entries(obj).forEach(([key, val], index) => {
+      //     if (arrKeys[index] !== key) {
+      //       helperArr = 'error';
+      //       return;
+      //     }
+      //     if (typeof val === 'object' && arrKeys[index] === key) {
+      //       arrKeys.shift();
+      //       return helper(val);
+      //     } else {
+      //       helperArr = val;
+      //       return;
+      //     }
+      //   });
+      // };
+
+      // helper(nestedObg);
+      // return helperArr;
+    };
+    console.log(
+      foo('car.mercedes.good', { car: { mercedes: { good: true } } }),
+      'ddddd+++ddddddddd+',
+    );
+
+    // const cary = (fn) => {
+    //   return (...args) => {
+    //     if (fn.length > args.length) {
+    //       const f = fn.bind(null, args);
+    //       cary(f);
+    //     } else return fn(...args);
+    //   };
+    // };
+
+    // const sum = (a, b, c, d) => a + b + c + d;
+    // const x: any = cary(sum);
+    // console.log(x(1)(2)(3, 4));
+
     const offset =
       dto.pageNumber === 1 ? 0 : (dto.pageNumber - 1) * dto.pageSize;
     // CEILING((SELECT  COUNT("id")  FROM  public.blog ) / $3) as "totalRows"

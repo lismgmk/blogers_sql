@@ -1,4 +1,11 @@
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { User } from '../users/user.entity';
 
 @Entity()
@@ -12,12 +19,15 @@ export class Device {
   @Column()
   ip: string;
 
-  @Column()
+  @CreateDateColumn()
   createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 
   @Column({ type: 'timestamptz' })
   expiredAt: Date;
 
-  @ManyToMany(() => User, (user) => user.id, { onDelete: 'CASCADE' })
+  @ManyToMany(() => User, (user) => user.id)
   user: User[];
 }
