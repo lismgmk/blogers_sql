@@ -15,40 +15,56 @@ export class BlogsService {
   ) {}
 
   async getAllBlogsClearQuery(dto: GetAllBlogsQueryDto) {
-    const foo = (keyString, nestedObg) => {
-      const arrKeys = keyString.split('.');
-
-      let tempObj = nestedObg;
-      for (let i = 0; i < arrKeys.length; i++) {
-        if (tempObj[arrKeys[i]]) {
-          tempObj = tempObj[arrKeys[i]];
-        }
+    const arr = [100, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 44, 4, 4, 4, 4, 4];
+    const obj = {};
+    let count = 0;
+    arr.reduce((acc, curr) => {
+      if (acc === curr) {
+        count += 1;
+      } else {
+        count = 1;
       }
-      return tempObj;
-      // let helperArr;
-      // const helper = (obj) => {
-      //   Object.entries(obj).forEach(([key, val], index) => {
-      //     if (arrKeys[index] !== key) {
-      //       helperArr = 'error';
-      //       return;
-      //     }
-      //     if (typeof val === 'object' && arrKeys[index] === key) {
-      //       arrKeys.shift();
-      //       return helper(val);
-      //     } else {
-      //       helperArr = val;
-      //       return;
-      //     }
-      //   });
-      // };
+      obj[curr] = count;
+      return curr;
+    }, 0);
 
-      // helper(nestedObg);
-      // return helperArr;
-    };
+    Object.entries(obj).sort((a: any, b: any) => a[1] - b[1]);
     console.log(
-      foo('car.mercedes.good', { car: { mercedes: { good: true } } }),
-      'ddddd+++ddddddddd+',
+      Object.entries(obj)
+        .sort((a: any, b: any) => b[1] - a[1])
+        .map((el) => el[0]),
     );
+
+    // const foo = (keyString, nestedObg) => {
+    //   const arrKeys = keyString.split('.');
+
+    //   let tempObj = nestedObg;
+    //   for (let i = 0; i < arrKeys.length; i++) {
+    //     if (tempObj[arrKeys[i]]) {
+    //       tempObj = tempObj[arrKeys[i]];
+    //     }
+    //   }
+    //   return tempObj;
+    // let helperArr;
+    // const helper = (obj) => {
+    //   Object.entries(obj).forEach(([key, val], index) => {
+    //     if (arrKeys[index] !== key) {
+    //       helperArr = 'error';
+    //       return;
+    //     }
+    //     if (typeof val === 'object' && arrKeys[index] === key) {
+    //       arrKeys.shift();
+    //       return helper(val);
+    //     } else {
+    //       helperArr = val;
+    //       return;
+    //     }
+    //   });
+    // };
+
+    // helper(nestedObg);
+    // return helperArr;
+    // };
 
     // const cary = (fn) => {
     //   return (...args) => {
