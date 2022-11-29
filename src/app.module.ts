@@ -25,7 +25,7 @@ import { MailModule } from './modules/common-services/mail/mail.module';
 import { CommentsModule } from './modules/comments/comments.module';
 import { TestingModule } from './modules/testing/testing.module';
 // import { CommentsController } from './testing/comments/comments.controller';
-import * as Joi from 'joi';
+import Joi from 'joi';
 import { CheckBearerMiddleware } from './middlewares/check-bearer.middleware';
 import { JwtPassService } from './modules/common-services/jwt-pass-custom/jwt-pass.service';
 import { UsersService } from './modules/users/users.service';
