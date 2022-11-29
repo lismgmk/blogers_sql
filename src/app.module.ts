@@ -1,3 +1,8 @@
+import { User } from './modules/users/user.entity';
+import { Like } from './modules/likes/like.entity';
+import { Device } from './modules/devices/device.entity';
+import { CheckIpAttempt } from './modules/check-ip-attempt/checkIpAttempt.entity';
+import { BlackList } from './modules/black-list/black-list.entity';
 import {
   MiddlewareConsumer,
   Module,
@@ -20,11 +25,15 @@ import { MailModule } from './modules/common-services/mail/mail.module';
 import { CommentsModule } from './modules/comments/comments.module';
 import { TestingModule } from './modules/testing/testing.module';
 // import { CommentsController } from './testing/comments/comments.controller';
-import * as Joi from 'joi';
+import Joi from 'joi';
 import { CheckBearerMiddleware } from './middlewares/check-bearer.middleware';
 import { JwtPassService } from './modules/common-services/jwt-pass-custom/jwt-pass.service';
 import { UsersService } from './modules/users/users.service';
 import { JwtService } from '@nestjs/jwt';
+import { CheckIpAttemptModule } from './modules/check-ip-attempt/check-ip-attempt.module';
+import { PostComment } from './modules/comments/comment.entity';
+import { CheckIpStatusMiddleware } from './middlewares/check-ip-status.middleware';
+import { CheckIpAttemptService } from './modules/check-ip-attempt/check-ip-attempt.service';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -47,7 +56,16 @@ import { JwtService } from '@nestjs/jwt';
         username: configService.get<string>('POSTGRES_USER'),
         password: configService.get<string>('POSTGRES_PASSWORD'),
         database: configService.get<string>('POSTGRES_DB'),
-        entities: [Blog, Post],
+        entities: [
+          Blog,
+          Post,
+          PostComment,
+          BlackList,
+          CheckIpAttempt,
+          Device,
+          Like,
+          User,
+        ],
         synchronize: true,
         autoLoadEntities: true,
       }),
@@ -63,17 +81,21 @@ import { JwtService } from '@nestjs/jwt';
     MailModule,
     CommentsModule,
     TestingModule,
+    CheckIpAttemptModule,
   ],
   controllers: [],
-  providers: [JwtPassService, UsersService, JwtService],
+  providers: [JwtPassService, UsersService, JwtService, CheckIpAttemptService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    // consumer.apply(CheckIpStatusMiddleware).forRoutes(
-    //   { path: '/auth/registration', method: RequestMethod.POST },
-    //   { path: 'users/:id', method: RequestMethod.DELETE },
-    //   { path: 'refresh-token', method: RequestMethod.POST },
-    // );
+    consumer
+      .apply(CheckIpStatusMiddleware)
+      .forRoutes(
+        { path: '/auth/registration', method: RequestMethod.POST },
+        { path: 'users/:id', method: RequestMethod.DELETE },
+        { path: 'refresh-token', method: RequestMethod.POST },
+        { path: '/security/devices', method: RequestMethod.GET },
+      );
     consumer.apply(CheckBearerMiddleware).forRoutes(
       {
         path: '/posts/:postId/comments',
