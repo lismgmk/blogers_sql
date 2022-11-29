@@ -24,7 +24,6 @@ import { DevicesModule } from './modules/devices/devices.module';
 import { MailModule } from './modules/common-services/mail/mail.module';
 import { CommentsModule } from './modules/comments/comments.module';
 import { TestingModule } from './modules/testing/testing.module';
-// import { CommentsController } from './testing/comments/comments.controller';
 import Joi from 'joi';
 import { CheckBearerMiddleware } from './middlewares/check-bearer.middleware';
 import { JwtPassService } from './modules/common-services/jwt-pass-custom/jwt-pass.service';
@@ -68,9 +67,9 @@ import { CheckIpAttemptService } from './modules/check-ip-attempt/check-ip-attem
         ],
         synchronize: true,
         autoLoadEntities: true,
-        extra: {
-          max: 5,
-        },
+        // extra: {
+        //   max: 5,
+        // },
       }),
       inject: [ConfigService],
     }),
