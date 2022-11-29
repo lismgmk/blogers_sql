@@ -68,6 +68,9 @@ import { CheckIpAttemptService } from './modules/check-ip-attempt/check-ip-attem
         ],
         synchronize: true,
         autoLoadEntities: true,
+        extra: {
+          max: 5,
+        },
       }),
       inject: [ConfigService],
     }),
