@@ -7,9 +7,8 @@ import {
 import { ConfigModule } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { path } from 'app-root-path';
-import { configuration } from '../config/configuration';
-import { validationSchema } from '../config/validation';
+import { typeOrmConfigAsync } from '../config/ormconfig';
+import { configRoot } from './../config/configuration';
 import { CheckBearerMiddleware } from './middlewares/check-bearer.middleware';
 import { CheckIpStatusMiddleware } from './middlewares/check-ip-status.middleware';
 import { AuthModule } from './modules/auth/auth.module';
@@ -27,15 +26,17 @@ import { PostsModule } from './modules/posts/posts.module';
 import { TestingModule } from './modules/testing/testing.module';
 import { UsersModule } from './modules/users/users.module';
 import { UsersService } from './modules/users/users.service';
-import { typeOrmConfigAsync } from './ormconfig';
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-      validationSchema,
-      envFilePath: `${path}/config/env/${process.env.NODE_ENV}.env`,
-      load: [configuration],
-    }),
+    ConfigModule.forRoot(
+      configRoot,
+      //   {
+      //   isGlobal: true,
+      //   validationSchema,
+      //   envFilePath: `${path}/config/env/${process.env.NODE_ENV}.env`,
+      //   load: [configuration],
+      // }
+    ),
     BlogsModule,
     TypeOrmModule.forRootAsync(typeOrmConfigAsync),
     PostsModule,

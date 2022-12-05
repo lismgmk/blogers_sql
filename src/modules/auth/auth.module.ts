@@ -1,3 +1,4 @@
+import { jwtConfigAsync } from './../../../config/jwtconfig';
 import { DevicesQueryRepository } from './../devices/devices.clearQuery.repository';
 import { BlackList } from '../../entity/black-list.entity';
 import { Module } from '@nestjs/common';
@@ -24,13 +25,16 @@ import { RootDevicesRepository } from '../devices/classes/root.devices.repositor
     TypeOrmModule.forFeature([BlackList, Device, User]),
     PassportModule,
     PassportModule,
-    JwtModule.registerAsync({
-      imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
-        secret: configService.get<string>('SECRET'),
-      }),
-      inject: [ConfigService],
-    }),
+    JwtModule.registerAsync(
+      jwtConfigAsync,
+      //   {
+      //   imports: [ConfigModule],
+      //   useFactory: async (configService: ConfigService) => ({
+      //     secret: configService.get<string>('SECRET'),
+      //   }),
+      //   inject: [ConfigService],
+      // }
+    ),
   ],
   controllers: [AuthController],
   providers: [
