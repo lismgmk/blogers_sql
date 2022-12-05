@@ -28,15 +28,7 @@ import { UsersModule } from './modules/users/users.module';
 import { UsersService } from './modules/users/users.service';
 @Module({
   imports: [
-    ConfigModule.forRoot(
-      configRoot,
-      //   {
-      //   isGlobal: true,
-      //   validationSchema,
-      //   envFilePath: `${path}/config/env/${process.env.NODE_ENV}.env`,
-      //   load: [configuration],
-      // }
-    ),
+    ConfigModule.forRoot(configRoot),
     BlogsModule,
     TypeOrmModule.forRootAsync(typeOrmConfigAsync),
     PostsModule,

@@ -17,7 +17,7 @@ lerna-debug.log*
 # enviroment
 
  **/*.env
-!config/env/development.env
+!env/development.env
 # Tests
 /coverage
 /.nyc_output
