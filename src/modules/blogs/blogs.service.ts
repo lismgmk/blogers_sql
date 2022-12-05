@@ -15,25 +15,65 @@ export class BlogsService {
   ) {}
 
   async getAllBlogsClearQuery(dto: GetAllBlogsQueryDto) {
-    const arr = [100, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 44, 4, 4, 4, 4, 4];
-    const obj = {};
-    let count = 0;
-    arr.reduce((acc, curr) => {
-      if (acc === curr) {
-        count += 1;
-      } else {
-        count = 1;
-      }
-      obj[curr] = count;
-      return curr;
-    }, 0);
+    const fetchUrl = function (url) {
+      console.log(`fetching ${url}`, this.name);
+    };
 
-    Object.entries(obj).sort((a: any, b: any) => a[1] - b[1]);
-    console.log(
-      Object.entries(obj)
-        .sort((a: any, b: any) => b[1] - a[1])
-        .map((el) => el[0]),
-    );
+    const firstUser = { name: 'Bob' };
+
+    function debounce(callback, delay) {
+      let timer = null;
+      return (...args) => {
+        if (timer) {
+          clearInterval(timer);
+        }
+        timer = setTimeout(() => {
+          callback(...args);
+          // console.log.bind(callback(...args), firstUser.name)();
+        }, delay);
+      };
+    }
+
+    const fetching = debounce(fetchUrl.bind(firstUser), 3000);
+    fetching(1);
+    fetching(2);
+    fetching(3);
+    fetching(4);
+    // const arr = [
+    //   { name: 'vova', age: 37 },
+    //   { name: 'vova', age: 38 },
+    //   { name: 'vova', age: 39 },
+    //   { name: 'igor', age: 37 },
+    //   { name: 'igor', age: 37 },
+    // ];
+    // const obj = {};
+    // arr.forEach((el) => {
+    //   if (!obj[el.name]) {
+    //     obj[el.name] = [];
+    //   }
+    //   obj[el.name].push(el.age);
+    // });
+    // console.log(obj);
+
+    // const arr = [100, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 44, 4, 4, 4, 4, 4];
+    // const obj = {};
+    // let count = 0;
+    // arr.reduce((acc, curr) => {
+    //   if (acc === curr) {
+    //     count += 1;
+    //   } else {
+    //     count = 1;
+    //   }
+    //   obj[curr] = count;
+    //   return curr;
+    // }, 0);
+
+    // Object.entries(obj).sort((a: any, b: any) => a[1] - b[1]);
+    // console.log(
+    //   Object.entries(obj)
+    //     .sort((a: any, b: any) => b[1] - a[1])
+    //     .map((el) => el[0]),
+    // );
 
     // const foo = (keyString, nestedObg) => {
     //   const arrKeys = keyString.split('.');

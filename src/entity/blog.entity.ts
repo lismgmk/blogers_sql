@@ -5,7 +5,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Post } from '../posts/post.entity';
+import { Post } from './post.entity';
 
 @Entity()
 export class Blog {

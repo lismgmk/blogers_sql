@@ -5,7 +5,7 @@ import { compareDesc } from 'date-fns';
 import { DataSource } from 'typeorm';
 import { JwtPassService } from '../common-services/jwt-pass-custom/jwt-pass.service';
 import { MailService } from '../common-services/mail/mail.service';
-import { User } from '../users/user.entity';
+import { User } from '../../entity/user.entity';
 import { UsersService } from '../users/users.service';
 import {
   IRegistrationConfirmationResponse,

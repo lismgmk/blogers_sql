@@ -6,8 +6,8 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Blog } from '../blogs/blog.entity';
-import { Like } from '../likes/like.entity';
+import { Blog } from './blog.entity';
+import { Like } from './like.entity';
 
 @Entity()
 export class Post {

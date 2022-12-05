@@ -24,7 +24,7 @@ import { ValidationBodyExceptionFilter } from '../../exceptions/validation-body-
 import { LikeStatusDto } from '../../global-dto/like-status.dto';
 import { JwtAuthGuard } from '../../guards/jwt-auth.guard';
 import { CustomValidationPipe } from '../../pipes/validation.pipe';
-import { User } from '../users/user.entity';
+import { User } from '../../entity/user.entity';
 import { CreatePostWithBlogIdDto } from './dto/create-post-with-blog-id.dto';
 import { GetAllPostsdDto } from './dto/get-all-posts.dto';
 import { PostsService } from './posts.service';

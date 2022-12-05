@@ -1,78 +1,43 @@
-import { User } from './modules/users/user.entity';
-import { Like } from './modules/likes/like.entity';
-import { Device } from './modules/devices/device.entity';
-import { CheckIpAttempt } from './modules/check-ip-attempt/checkIpAttempt.entity';
-import { BlackList } from './modules/black-list/black-list.entity';
 import {
   MiddlewareConsumer,
   Module,
   NestModule,
   RequestMethod,
 } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Blog } from './modules/blogs/blog.entity';
-import { BlogsModule } from './modules/blogs/blogs.module';
-import { Post } from './modules/posts/post.entity';
-import { PostsModule } from './modules/posts/posts.module';
-import { UsersModule } from './modules/users/users.module';
-import { LikesModule } from './modules/likes/likes.module';
-import { JwtPassModule } from './modules/common-services/jwt-pass-custom/jwt-pass.module';
+import { path } from 'app-root-path';
+import { configuration } from '../config/configuration';
+import { validationSchema } from '../config/validation';
+import { CheckBearerMiddleware } from './middlewares/check-bearer.middleware';
+import { CheckIpStatusMiddleware } from './middlewares/check-ip-status.middleware';
 import { AuthModule } from './modules/auth/auth.module';
 import { BlackListModule } from './modules/black-list/black-list.module';
-import { DevicesModule } from './modules/devices/devices.module';
-import { MailModule } from './modules/common-services/mail/mail.module';
-import { CommentsModule } from './modules/comments/comments.module';
-import { TestingModule } from './modules/testing/testing.module';
-import Joi from 'joi';
-import { CheckBearerMiddleware } from './middlewares/check-bearer.middleware';
-import { JwtPassService } from './modules/common-services/jwt-pass-custom/jwt-pass.service';
-import { UsersService } from './modules/users/users.service';
-import { JwtService } from '@nestjs/jwt';
+import { BlogsModule } from './modules/blogs/blogs.module';
 import { CheckIpAttemptModule } from './modules/check-ip-attempt/check-ip-attempt.module';
-import { PostComment } from './modules/comments/comment.entity';
-import { CheckIpStatusMiddleware } from './middlewares/check-ip-status.middleware';
 import { CheckIpAttemptService } from './modules/check-ip-attempt/check-ip-attempt.service';
+import { CommentsModule } from './modules/comments/comments.module';
+import { JwtPassModule } from './modules/common-services/jwt-pass-custom/jwt-pass.module';
+import { JwtPassService } from './modules/common-services/jwt-pass-custom/jwt-pass.service';
+import { MailModule } from './modules/common-services/mail/mail.module';
+import { DevicesModule } from './modules/devices/devices.module';
+import { LikesModule } from './modules/likes/likes.module';
+import { PostsModule } from './modules/posts/posts.module';
+import { TestingModule } from './modules/testing/testing.module';
+import { UsersModule } from './modules/users/users.module';
+import { UsersService } from './modules/users/users.service';
+import { typeOrmConfigAsync } from './ormconfig';
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      validationSchema: Joi.object({
-        POSTGRES_HOST: Joi.string().required(),
-        POSTGRES_PORT: Joi.number().required(),
-        POSTGRES_USER: Joi.string().required(),
-        POSTGRES_PASSWORD: Joi.string().required(),
-        POSTGRES_DB: Joi.string().required(),
-      }),
+      validationSchema,
+      envFilePath: `${path}/config/env/${process.env.NODE_ENV}.env`,
+      load: [configuration],
     }),
     BlogsModule,
-    TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
-        type: 'postgres',
-        host: configService.get<string>('POSTGRES_HOST'),
-        port: +configService.get<string>('POSTGRES_PORT'),
-        username: configService.get<string>('POSTGRES_USER'),
-        password: configService.get<string>('POSTGRES_PASSWORD'),
-        database: configService.get<string>('POSTGRES_DB'),
-        entities: [
-          Blog,
-          Post,
-          PostComment,
-          BlackList,
-          CheckIpAttempt,
-          Device,
-          Like,
-          User,
-        ],
-        synchronize: true,
-        autoLoadEntities: true,
-        extra: {
-          max: 5,
-        },
-      }),
-      inject: [ConfigService],
-    }),
+    TypeOrmModule.forRootAsync(typeOrmConfigAsync),
     PostsModule,
     UsersModule,
     LikesModule,
@@ -84,6 +49,7 @@ import { CheckIpAttemptService } from './modules/check-ip-attempt/check-ip-attem
     CommentsModule,
     TestingModule,
     CheckIpAttemptModule,
+    TypeOrmModule,
   ],
   controllers: [],
   providers: [JwtPassService, UsersService, JwtService, CheckIpAttemptService],

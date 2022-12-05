@@ -20,7 +20,7 @@ import { LikeStatusDto } from '../../global-dto/like-status.dto';
 import { JwtAuthGuard } from '../../guards/jwt-auth.guard';
 import { CustomValidationPipe } from '../../pipes/validation.pipe';
 import { LikesService } from '../likes/likes.service';
-import { User } from '../users/user.entity';
+import { User } from '../../entity/user.entity';
 import { CommentsService } from './comments.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 
