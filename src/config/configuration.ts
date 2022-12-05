@@ -12,6 +12,6 @@ const configuration = () => ({
 export const configRoot = {
   isGlobal: true,
   validationSchema,
-  envFilePath: `${path}/config/env/${process.env.NODE_ENV}.env`,
+  envFilePath: `${path}/env/${process.env.NODE_ENV}.env`,
   load: [configuration],
 };

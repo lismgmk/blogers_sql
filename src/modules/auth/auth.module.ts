@@ -1,4 +1,4 @@
-import { jwtConfigAsync } from './../../../config/jwtconfig';
+import { jwtConfigAsync } from '../../config/jwtconfig';
 import { DevicesQueryRepository } from './../devices/devices.clearQuery.repository';
 import { BlackList } from '../../entity/black-list.entity';
 import { Module } from '@nestjs/common';
