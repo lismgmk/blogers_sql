@@ -13,6 +13,9 @@ async function bootstrap() {
   app.enableCors();
   app.use(cookieParser());
   await app.listen(process.env.PORT || 5000);
-  console.log(`Start with: ${process.env.NODE_ENV}.env`);
+  console.log(
+    `Start with: ${process.env.NODE_ENV}.env`,
+    `${[__dirname + '/**/*.entity{.ts,.js}']}`,
+  );
 }
 bootstrap();

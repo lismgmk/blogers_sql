@@ -14,7 +14,6 @@ export default class TypeOrmConfig {
       password: configService.get<string>('POSTGRES_PASSWORD'),
       database: configService.get<string>('POSTGRES_DB'),
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: false,
       migrations: [__dirname + '/migrations/**/*{.ts,.js}'],
     };
   }

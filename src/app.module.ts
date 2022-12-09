@@ -7,8 +7,17 @@ import {
 import { ConfigModule } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { typeOrmConfigAsync } from './config/ormconfig';
 import { configRoot } from './config/configuration';
+import { migrationTypeOrmConfig } from './config/migration';
+import { typeOrmConfigAsync } from './config/ormconfig';
+import { BlackList } from './entity/black-list.entity';
+import { Blog } from './entity/blog.entity';
+import { CheckIpAttempt } from './entity/checkIpAttempt.entity';
+import { PostComment } from './entity/comment.entity';
+import { Device } from './entity/device.entity';
+import { Like } from './entity/like.entity';
+import { Post } from './entity/post.entity';
+import { User } from './entity/user.entity';
 import { CheckBearerMiddleware } from './middlewares/check-bearer.middleware';
 import { CheckIpStatusMiddleware } from './middlewares/check-ip-status.middleware';
 import { AuthModule } from './modules/auth/auth.module';
@@ -29,8 +38,8 @@ import { UsersService } from './modules/users/users.service';
 @Module({
   imports: [
     ConfigModule.forRoot(configRoot),
-    BlogsModule,
     TypeOrmModule.forRootAsync(typeOrmConfigAsync),
+    BlogsModule,
     PostsModule,
     UsersModule,
     LikesModule,
@@ -42,7 +51,6 @@ import { UsersService } from './modules/users/users.service';
     CommentsModule,
     TestingModule,
     CheckIpAttemptModule,
-    TypeOrmModule,
   ],
   controllers: [],
   providers: [JwtPassService, UsersService, JwtService, CheckIpAttemptService],

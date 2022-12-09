@@ -15,30 +15,30 @@ export class BlogsService {
   ) {}
 
   async getAllBlogsClearQuery(dto: GetAllBlogsQueryDto) {
-    const fetchUrl = function (url) {
-      console.log(`fetching ${url}`, this.name);
-    };
+    // const fetchUrl = function (url) {
+    //   console.log(`fetching ${url}`, this.name);
+    // };
 
-    const firstUser = { name: 'Bob' };
+    // const firstUser = { name: 'Bob' };
 
-    function debounce(callback, delay) {
-      let timer = null;
-      return (...args) => {
-        if (timer) {
-          clearInterval(timer);
-        }
-        timer = setTimeout(() => {
-          callback(...args);
-          // console.log.bind(callback(...args), firstUser.name)();
-        }, delay);
-      };
-    }
+    // function debounce(callback, delay) {
+    //   let timer = null;
+    //   return (...args) => {
+    //     if (timer) {
+    //       clearInterval(timer);
+    //     }
+    //     timer = setTimeout(() => {
+    //       callback(...args);
+    //       // console.log.bind(callback(...args), firstUser.name)();
+    //     }, delay);
+    //   };
+    // }
 
-    const fetching = debounce(fetchUrl.bind(firstUser), 3000);
-    fetching(1);
-    fetching(2);
-    fetching(3);
-    fetching(4);
+    // const fetching = debounce(fetchUrl.bind(firstUser), 3000);
+    // fetching(1);
+    // fetching(2);
+    // fetching(3);
+    // fetching(4);
     // const arr = [
     //   { name: 'vova', age: 37 },
     //   { name: 'vova', age: 38 },

@@ -10,8 +10,8 @@
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nodemon",
-    "start:debug-localdb": "NODE_ENV=development nest start --debug --watch",
-    "start:debug-remotedb": "NODE_ENV=production nest start --debug --watch",
+    "start:localdb": "NODE_ENV=dev nest start --debug --watch",
+    "start:remotedb": "NODE_ENV=prod nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
@@ -19,11 +19,12 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --config src/config/typeorm.config-migration.ts",
-    "db:drop": "npm run typeorm schema:drop",
-    "db:create": "npm run typeorm migration:generate -- -n",
-    "db:migrate": "npm run typeorm migration:run",
-    "db:seed": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --config src/config/typeorm.config-migration.ts.ts migration:run"
+    "typeorm": "NODE_ENV=dev ts-node ./node_modules/typeorm/cli",
+    "db:drop": "npm run typeorm -- -d ./src/config/migration.ts schema:drop",
+    "typeorm:generate-migration": "npm run typeorm -- -d ./src/config/migration.ts migration:generate",
+    "typeorm:run-migration": "npm run typeorm -- -d ./src/config/migration.ts migration:run",
+    "db:seed": "npm run typeorm -- -d ./src/config/migrationSeed.ts migration:run",
+    "typeorm:revert-migration": "npm run typeorm -- -d ./src/config/migration.ts migration:revert"
   },
   "dependencies": {
     "@nestjs-modules/mailer": "^1.8.1",
