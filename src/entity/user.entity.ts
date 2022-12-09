@@ -7,8 +7,8 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Device } from '../devices/device.entity';
-import { Like } from '../likes/like.entity';
+import { Device } from './device.entity';
+import { Like } from './like.entity';
 
 @Entity()
 export class User {

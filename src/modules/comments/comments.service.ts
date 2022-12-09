@@ -4,8 +4,8 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { Post } from '../../entity/post.entity';
 import { LikeInfoRequest } from '../../global-dto/like-info.request';
-import { Post } from '../posts/post.entity';
 import { PostsQueryRepository } from '../posts/postsClearQuert.repositiry';
 import { PostsService } from './../posts/posts.service';
 import { CommentsQueryRepository } from './commentsQuert.repositiry';

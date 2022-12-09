@@ -27,7 +27,7 @@ import { CustomValidationPipe } from '../../pipes/validation.pipe';
 import { BlackListService } from '../black-list/black-list.service';
 import { DevicesService } from '../devices/devices.service';
 import { CreateUserDto } from '../users/dto/create-user.dto';
-import { User } from '../users/user.entity';
+import { User } from '../../entity/user.entity';
 import { AuthService } from './auth.service';
 import { GetNewPasswordDto } from './dto/get-new-password.dto';
 import { LoginAuthDto } from './dto/login-auth.dto';

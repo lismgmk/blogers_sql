@@ -1,6 +1,6 @@
+import { jwtConfigAsync } from '../../config/jwtconfig';
 import { DevicesQueryRepository } from './../devices/devices.clearQuery.repository';
-import { Device } from './../devices/device.entity';
-import { BlackList } from './../black-list/black-list.entity';
+import { BlackList } from '../../entity/black-list.entity';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
@@ -14,22 +14,27 @@ import { DevicesService } from '../devices/devices.service';
 import { UsersService } from '../users/users.service';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { User } from '../users/user.entity';
+import { User } from '../../entity/user.entity';
 import { MailService } from '../common-services/mail/mail.service';
 import { IsExpired } from '../../dto-validator/check-expiration-code';
+import { Device } from '../../entity/device.entity';
+import { RootDevicesRepository } from '../devices/classes/root.devices.repository';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([BlackList, Device, User]),
     PassportModule,
     PassportModule,
-    JwtModule.registerAsync({
-      imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
-        secret: configService.get<string>('SECRET'),
-      }),
-      inject: [ConfigService],
-    }),
+    JwtModule.registerAsync(
+      jwtConfigAsync,
+      //   {
+      //   imports: [ConfigModule],
+      //   useFactory: async (configService: ConfigService) => ({
+      //     secret: configService.get<string>('SECRET'),
+      //   }),
+      //   inject: [ConfigService],
+      // }
+    ),
   ],
   controllers: [AuthController],
   providers: [
@@ -43,6 +48,7 @@ import { IsExpired } from '../../dto-validator/check-expiration-code';
     LocalStrategy,
     MailService,
     IsExpired,
+    RootDevicesRepository,
   ],
 })
 export class AuthModule {}

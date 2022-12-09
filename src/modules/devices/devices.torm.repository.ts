@@ -4,15 +4,18 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { InjectDataSource } from '@nestjs/typeorm';
+import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import { add } from 'date-fns';
-import { DataSource } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
+import { Device } from '../../entity/device.entity';
 import { RootDevicesRepository } from './classes/root.devices.repository';
 import { ICreateDevice } from './dto/createDevice.interface';
 
 @Injectable()
-export class DevicesQueryRepository extends RootDevicesRepository {
+export class DevicesTormRepository extends RootDevicesRepository {
   constructor(
+    @InjectRepository(Device)
+    private devicesRepository: Repository<Device>,
     @InjectDataSource() protected dataSource: DataSource,
     private configService: ConfigService,
   ) {

@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { User } from '../users/user.entity';
+import { User } from './user.entity';
 
 @Entity()
 export class Device {

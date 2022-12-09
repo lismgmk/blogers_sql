@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { LikeInfoRequest } from '../../global-dto/like-info.request';
-import { Blog } from '../blogs/blog.entity';
+import { Blog } from '../../entity/blog.entity';
 import { BlogsService } from '../blogs/blogs.service';
 import { CreatePostWithBlogIdDto } from './dto/create-post-with-blog-id.dto';
 import { GetAllPostsdDto } from './dto/get-all-posts.dto';

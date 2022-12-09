@@ -2,23 +2,22 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
   ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Like } from '../likes/like.entity';
-import { Post } from '../posts/post.entity';
-import { User } from '../users/user.entity';
+import { PostComment } from './comment.entity';
+import { Post } from './post.entity';
+
+import { User } from './user.entity';
 
 @Entity()
-export class PostComment {
+export class Like {
   @PrimaryGeneratedColumn('uuid')
   id: number;
 
   @Column()
-  content: string;
+  status: string;
 
   @CreateDateColumn()
   created_at: Date;
@@ -32,7 +31,8 @@ export class PostComment {
   @ManyToOne(() => User, (user) => user.id, { onDelete: 'CASCADE' })
   user: User;
 
-  @OneToMany(() => Like, (like) => like.id)
-  @JoinColumn()
-  likeId: Like[];
+  @ManyToOne(() => PostComment, (comment) => comment.id, {
+    onDelete: 'CASCADE',
+  })
+  comment: PostComment;
 }

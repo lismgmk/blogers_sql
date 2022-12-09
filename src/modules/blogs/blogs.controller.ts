@@ -21,7 +21,7 @@ import { CustomValidationPipe } from '../../pipes/validation.pipe';
 import { CreatePostDto } from '../posts/dto/create-post.dto';
 import { GetAllPostsdDto } from '../posts/dto/get-all-posts.dto';
 import { PostsService } from '../posts/posts.service';
-import { User } from '../users/user.entity';
+import { User } from '../../entity/user.entity';
 
 import { BlogsService } from './blogs.service';
 import { CreateBlogDto } from './dto/create-blog.dto';
