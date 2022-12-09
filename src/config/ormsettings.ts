@@ -1,7 +1,6 @@
-import { DataSourceOptions } from 'typeorm';
 import { path } from 'app-root-path';
 import dotenv, { config } from 'dotenv';
-import { DataSource } from 'typeorm';
+import { DataSourceOptions } from 'typeorm';
 
 config();
 

@@ -1,8 +1,6 @@
-import { DataSource, DataSourceOptions } from 'typeorm';
-import { config } from 'dotenv';
 import { path } from 'app-root-path';
-import dotenv from 'dotenv';
-import { migrationTypeOrmConfig } from './migration';
+import dotenv, { config } from 'dotenv';
+import { DataSource } from 'typeorm';
 import { ormSettings } from './ormsettings';
 config();
 

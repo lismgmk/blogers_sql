@@ -19,22 +19,14 @@ import { MailService } from '../common-services/mail/mail.service';
 import { IsExpired } from '../../dto-validator/check-expiration-code';
 import { Device } from '../../entity/device.entity';
 import { RootDevicesRepository } from '../devices/classes/root.devices.repository';
+import { obj } from '../../config/proV';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([BlackList, Device, User]),
     PassportModule,
     PassportModule,
-    JwtModule.registerAsync(
-      jwtConfigAsync,
-      //   {
-      //   imports: [ConfigModule],
-      //   useFactory: async (configService: ConfigService) => ({
-      //     secret: configService.get<string>('SECRET'),
-      //   }),
-      //   inject: [ConfigService],
-      // }
-    ),
+    JwtModule.registerAsync(jwtConfigAsync),
   ],
   controllers: [AuthController],
   providers: [
@@ -48,7 +40,9 @@ import { RootDevicesRepository } from '../devices/classes/root.devices.repositor
     LocalStrategy,
     MailService,
     IsExpired,
-    RootDevicesRepository,
+    // RootDevicesRepository,
+    obj,
   ],
+  // exports: [RootDevicesRepository],
 })
 export class AuthModule {}

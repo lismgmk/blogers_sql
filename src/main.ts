@@ -14,6 +14,7 @@ async function bootstrap() {
   app.use(cookieParser());
   await app.listen(process.env.PORT || 5000);
   console.log(
+    process.env.TYPE_ORM,
     `Start with: ${process.env.NODE_ENV}.env`,
     `${[__dirname + '/**/*.entity{.ts,.js}']}`,
   );

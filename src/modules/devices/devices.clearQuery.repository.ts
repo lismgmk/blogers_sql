@@ -35,6 +35,9 @@ END As "lastActiveDate"
   }
 
   async createDevice(dto: ICreateDevice) {
+    console.log(
+      'dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd',
+    );
     const expiredAt = add(new Date(), {
       seconds: Number(this.expiredRefresh.slice(0, -1)),
     });

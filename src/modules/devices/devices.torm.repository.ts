@@ -24,6 +24,8 @@ export class DevicesTormRepository extends RootDevicesRepository {
   expiredRefresh = this.configService.get<string>('EXPIRED_REFRESH');
 
   async getAllDevices(userId: string) {
+    console.log('typeORM!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+
     const allDevicesQuery = `
 SELECT name, ip, id, "expiredAt",
 CASE

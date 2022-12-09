@@ -10,6 +10,7 @@ import { DevicesQueryRepository } from './devices.clearQuery.repository';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Device } from '../../entity/device.entity';
 import { DevicesTormRepository } from './devices.torm.repository';
+import { obj } from '../../config/proV';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Device])],
@@ -22,14 +23,15 @@ import { DevicesTormRepository } from './devices.torm.repository';
     JwtService,
     DevicesQueryRepository,
     DevicesTormRepository,
-    RootDevicesRepository,
-    {
-      provide: RootDevicesRepository,
-      useClass:
-        process.env.TYPE_ORM === 'on'
-          ? DevicesQueryRepository
-          : DevicesTormRepository,
-    },
+    obj,
+    // {
+    //   provide: RootDevicesRepository,
+    //   useClass:
+    //     process.env.TYPE_ORM === 'on'
+    //       ? DevicesTormRepository
+    //       : DevicesQueryRepository,
+    // },
   ],
+  exports: [RootDevicesRepository],
 })
 export class DevicesModule {}

@@ -15,6 +15,11 @@ export default class TypeOrmConfig {
       database: configService.get<string>('POSTGRES_DB'),
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       migrations: [__dirname + '/migrations/**/*{.ts,.js}'],
+      poolSize: 5,
+      extra: {
+        connectionTimeoutMS: 1000,
+        connectionLimit: 5,
+      },
     };
   }
 }
