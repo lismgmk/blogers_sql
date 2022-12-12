@@ -7,8 +7,8 @@ import { ConfigService } from '@nestjs/config';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { add } from 'date-fns';
 import { DataSource } from 'typeorm';
-import { RootDevicesRepository } from './classes/root.devices.repository';
-import { ICreateDevice } from './dto/createDevice.interface';
+import { RootDevicesRepository } from '../../../config/switchers/rootClasses/root.devices.repository';
+import { ICreateDevice } from '../dto/createDevice.interface';
 
 @Injectable()
 export class DevicesQueryRepository extends RootDevicesRepository {
@@ -35,9 +35,6 @@ END As "lastActiveDate"
   }
 
   async createDevice(dto: ICreateDevice) {
-    console.log(
-      'dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd',
-    );
     const expiredAt = add(new Date(), {
       seconds: Number(this.expiredRefresh.slice(0, -1)),
     });

@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { RootDevicesRepository } from './classes/root.devices.repository';
-import { DevicesTormRepository } from './devices.torm.repository';
+import { RootDevicesRepository } from '../../config/switchers/rootClasses/root.devices.repository';
 import { ICreateDevice } from './dto/createDevice.interface';
 
 @Injectable()

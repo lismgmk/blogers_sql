@@ -1,16 +1,15 @@
-import { RootDevicesRepository } from './classes/root.devices.repository';
-import { BlackListService } from './../black-list/black-list.service';
 import { Module } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { rootInstanceSwitcher } from '../../config/switchers/rootSwitcher';
+import { Device } from '../../entity/device.entity';
+import { JwtPassService } from '../common-services/jwt-pass-custom/jwt-pass.service';
+import { UsersService } from '../users/users.service';
+import { BlackListService } from './../black-list/black-list.service';
 import { DevicesController } from './devices.controller';
 import { DevicesService } from './devices.service';
-import { UsersService } from '../users/users.service';
-import { JwtPassService } from '../common-services/jwt-pass-custom/jwt-pass.service';
-import { JwtService } from '@nestjs/jwt';
-import { DevicesQueryRepository } from './devices.clearQuery.repository';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { Device } from '../../entity/device.entity';
-import { DevicesTormRepository } from './devices.torm.repository';
-import { obj } from '../../config/proV';
+import { DevicesQueryRepository } from './repositories/devices.clearQuery.repository';
+import { DevicesTormRepository } from './repositories/devices.torm.repository';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Device])],
@@ -23,15 +22,7 @@ import { obj } from '../../config/proV';
     JwtService,
     DevicesQueryRepository,
     DevicesTormRepository,
-    obj,
-    // {
-    //   provide: RootDevicesRepository,
-    //   useClass:
-    //     process.env.TYPE_ORM === 'on'
-    //       ? DevicesTormRepository
-    //       : DevicesQueryRepository,
-    // },
+    rootInstanceSwitcher.devices(),
   ],
-  exports: [RootDevicesRepository],
 })
 export class DevicesModule {}

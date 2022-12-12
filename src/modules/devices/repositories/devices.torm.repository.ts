@@ -7,9 +7,10 @@ import { ConfigService } from '@nestjs/config';
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import { add } from 'date-fns';
 import { DataSource, Repository } from 'typeorm';
-import { Device } from '../../entity/device.entity';
-import { RootDevicesRepository } from './classes/root.devices.repository';
-import { ICreateDevice } from './dto/createDevice.interface';
+import { RootDevicesRepository } from '../../../config/switchers/rootClasses/root.devices.repository';
+import { Device } from '../../../entity/device.entity';
+import { ICreateDevice } from '../dto/createDevice.interface';
+
 
 @Injectable()
 export class DevicesTormRepository extends RootDevicesRepository {
