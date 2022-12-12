@@ -18,7 +18,7 @@ import { DevicesTormRepository } from './repositories/devices.torm.repository';
     DevicesService,
     UsersService,
     JwtPassService,
-    BlackListService,
+    rootInstanceSwitcher.blackList(),
     JwtService,
     DevicesQueryRepository,
     DevicesTormRepository,

@@ -31,7 +31,7 @@ import { AuthService } from './auth.service';
     DevicesService,
     DevicesQueryRepository,
     AuthService,
-    BlackListService,
+    rootInstanceSwitcher.blackList(),
     JwtPassService,
     UsersService,
     JwtStrategy,
