@@ -26,13 +26,15 @@ export class PostComment {
   @UpdateDateColumn()
   updated_at: Date;
 
-  @ManyToOne(() => Post, (post) => post.id, { onDelete: 'CASCADE' })
+  @ManyToOne(() => Post, (post) => post.comments, { onDelete: 'CASCADE' })
+  @JoinColumn()
   post: Post;
 
-  @ManyToOne(() => User, (user) => user.id, { onDelete: 'CASCADE' })
+  @ManyToOne(() => User, (user) => user.comments, { onDelete: 'CASCADE' })
+  @JoinColumn()
   user: User;
 
-  @OneToMany(() => Like, (like) => like.id)
+  @OneToMany(() => Like, (like) => like.comment)
   @JoinColumn()
-  likeId: Like[];
+  likes: Like[];
 }

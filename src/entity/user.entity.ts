@@ -7,6 +7,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { PostComment } from './comment.entity';
 import { Device } from './device.entity';
 import { Like } from './like.entity';
 
@@ -35,12 +36,16 @@ export class User {
   @Column()
   isConfirmed: boolean;
 
-  // @ManyToMany(() => Device, (device) => device.id, { onDelete: 'CASCADE' })
-  @ManyToMany(() => Device, (device) => device.id)
-  @JoinTable()
-  device: Device[];
+  @OneToMany(() => PostComment, (comment) => comment.user, {
+    onDelete: 'CASCADE',
+  })
+  comments: PostComment[];
 
-  @OneToMany(() => Like, (like) => like.id)
+  @OneToMany(() => Like, (like) => like.user)
   @JoinColumn()
-  likeId: Like[];
+  likes: Like[];
+
+  @ManyToMany(() => Device, (device) => device.users)
+  @JoinTable()
+  devices: Device[];
 }

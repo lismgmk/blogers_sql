@@ -29,7 +29,7 @@ export class JwtPassService {
     return decodeToken.payload;
   }
 
-  async createPassBcrypt(password: string) {
+  async createPassBcrypt(password: string): Promise<string> {
     const salt = await bcrypt.genSalt(10);
     const pass = await bcrypt.hash(password, salt);
     return pass;

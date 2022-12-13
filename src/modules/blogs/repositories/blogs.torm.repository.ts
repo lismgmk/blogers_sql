@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { RootBlogsRepository } from '../../../config/switchers/rootClasses/root.blogs.repository';
+import { Blog } from '../../../entity/blog.entity';
 import { paginationBuilder } from '../../../helpers/pagination-builder';
 import { CreateBlogDto } from '../dto/create-blog.dto';
 import { GetAllBlogsQueryDto } from '../dto/get-all-blogs-query.dto';
@@ -15,15 +16,15 @@ export class BlogsTormRepository extends RootBlogsRepository {
     super();
   }
 
-  async getAllBlogsClearQuery(dto: GetAllBlogsQueryDto) {
-    const offset =
-      dto.pageNumber === 1 ? 0 : (dto.pageNumber - 1) * dto.pageSize;
-    const allRows = await this.dataSource.query(
+  async getCountRows(searchNameTerm: string) {
+    return this.dataSource.query(
       `SELECT  COUNT("id")  FROM  public."blog" WHERE name like $1`,
-      [`%${dto.searchNameTerm}%`],
+      [`%${searchNameTerm}%`],
     );
+  }
 
-    const allBlogsQuery = await this.dataSource.query(
+  async getAllBlogsClearQuery(dto: GetAllBlogsQueryDto & { offset: number }) {
+    return this.dataSource.query(
       `
       SELECT id, name, youtube, "createdAt"
 FROM public."blog"
@@ -35,17 +36,9 @@ LIMIT $3 OFFSET $4
         `%${dto.searchNameTerm}%`,
         `${dto.sortBy} ${dto.sortDirection}`,
         dto.pageSize,
-        offset,
+        dto.offset,
       ],
     );
-    return {
-      ...paginationBuilder({
-        totalCount: Number(allRows[0].count),
-        pageSize: dto.pageSize,
-        pageNumber: dto.pageNumber,
-      }),
-      items: allBlogsQuery,
-    };
   }
 
   async createBlogClearQuery(dto: CreateBlogDto) {
@@ -60,7 +53,7 @@ LIMIT $3 OFFSET $4
       console.log(e);
     }
   }
-  async getBlogByIdClearQuery(id: string) {
+  async getBlogByIdClearQuery(id: string): Promise<Blog> {
     const queryComand = `
     SELECT * FROM public."blog"
 WHERE id= $1

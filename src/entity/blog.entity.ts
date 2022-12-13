@@ -23,5 +23,5 @@ export class Blog {
 
   @OneToMany(() => Post, (post) => post.blog)
   @JoinColumn()
-  postId: Post[];
+  posts: Post[];
 }

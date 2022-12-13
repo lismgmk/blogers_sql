@@ -4,11 +4,13 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { RootCommentsRepository } from '../../config/switchers/rootClasses/root.comments.repository';
 import { Post } from '../../entity/post.entity';
 import { LikeInfoRequest } from '../../global-dto/like-info.request';
+import { commentsQueryBuilder } from '../../helpers/comment-query-builder';
+import { paginationBuilder } from '../../helpers/pagination-builder';
 import { PostsQueryRepository } from '../posts/postsClearQuert.repositiry';
 import { PostsService } from './../posts/posts.service';
-import { CommentsQueryRepository } from './commentsQuert.repositiry';
 import { ICreateComment } from './dto/comments-interfaces';
 import { GetAllCommentsDto } from './dto/get-all-comments.dto';
 import { ICommentById } from './dto/get-comment-by-id.interface';
@@ -16,21 +18,40 @@ import { ICommentById } from './dto/get-comment-by-id.interface';
 @Injectable()
 export class CommentsService {
   constructor(
-    private commentsClearQueryRepository: CommentsQueryRepository,
+    private rootCommentsRepository: RootCommentsRepository,
     private postsQueryRepository: PostsQueryRepository,
     private postsService: PostsService,
   ) {}
 
   async getCommentByIdWithLikes(dto: ICommentById) {
     await this.checkExistComment(dto.id);
-    return this.commentsClearQueryRepository.getCommentsByPostIdWithLikes(dto);
+    const comment =
+      await this.rootCommentsRepository.getCommentsByPostIdWithLikes(dto);
+    return commentsQueryBuilder(comment)[0];
   }
 
   async getCommentsForPostId(
     dto: GetAllCommentsDto & { postId: string; userId: string },
   ) {
     await this.postsService.checkExistPost(dto.postId);
-    return this.commentsClearQueryRepository.getAllCommentsByPostId(dto);
+    const offset =
+      dto.pageNumber === 1 ? 0 : (dto.pageNumber - 1) * dto.pageSize;
+    const allRows = await this.rootCommentsRepository.getCountRows(dto.postId);
+
+    const allCommentsQuery =
+      await this.rootCommentsRepository.getAllCommentsByPostId({
+        ...dto,
+        offset,
+      });
+
+    return {
+      ...paginationBuilder({
+        totalCount: Number(allRows[0].count),
+        pageSize: dto.pageSize,
+        pageNumber: dto.pageNumber,
+      }),
+      items: commentsQueryBuilder(allCommentsQuery),
+    };
   }
 
   async createComment(dto: ICreateComment) {
@@ -47,8 +68,9 @@ export class CommentsService {
       userId: dto.userId,
       postId: dto.postId,
     };
-    const createdComment =
-      await this.commentsClearQueryRepository.createComment(newComment);
+    const createdComment = await this.rootCommentsRepository.createComment(
+      newComment,
+    );
 
     const likesInfo: LikeInfoRequest = {
       likesCount: 0,
@@ -60,31 +82,30 @@ export class CommentsService {
       content: createdComment.content,
       userId: createdComment.userId,
       userLogin: dto.userLogin,
-      createdAt: createdComment.createdAt,
+      createdAt: createdComment.created_at,
       likesInfo,
     };
   }
 
   async changeComment(id: string, content: string, userId: string) {
     await this.checkOwner(id, userId);
-    await this.commentsClearQueryRepository.changeComment(id, content);
+    await this.rootCommentsRepository.changeComment(id, content);
   }
 
   async deleteComment(id: string, userId: string) {
     await this.checkOwner(id, userId);
-    await this.commentsClearQueryRepository.deleteCommentById(id);
+    await this.rootCommentsRepository.deleteCommentById(id);
   }
 
   async checkOwner(id: string, userId: string) {
-    const comment = await this.commentsClearQueryRepository.getCommentById(id);
-    // if (comment.userId.equals(userId)) {
+    const comment = await this.rootCommentsRepository.getCommentById(id);
     if (comment.userId !== userId) {
       throw new ForbiddenException();
     }
   }
 
   async checkExistComment(id: string) {
-    const comment = await this.commentsClearQueryRepository.getCommentById(id);
+    const comment = await this.rootCommentsRepository.getCommentById(id);
     if (!comment) {
       throw new NotFoundException();
     }

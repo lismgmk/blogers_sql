@@ -1,3 +1,4 @@
+import { PostComment } from './comment.entity';
 import {
   Column,
   Entity,
@@ -26,10 +27,15 @@ export class Post {
   @Column()
   createdAt: Date;
 
-  @ManyToOne(() => Blog, (blog) => blog.id, { onDelete: 'CASCADE' })
-  blog: Blog;
+  @OneToMany(() => PostComment, (comment) => comment.post, {
+    onDelete: 'CASCADE',
+  })
+  comments: PostComment[];
 
-  @OneToMany(() => Like, (like) => like.id)
+  @OneToMany(() => Like, (like) => like.post)
   @JoinColumn()
-  likeId: Like[];
+  likes: Like[];
+
+  @ManyToOne(() => Blog, (blog) => blog.posts, { onDelete: 'CASCADE' })
+  blog: Blog;
 }

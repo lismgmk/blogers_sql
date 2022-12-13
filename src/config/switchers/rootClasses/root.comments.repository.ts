@@ -1,29 +1,45 @@
 import { Injectable } from '@nestjs/common';
-import { ICreateDevice } from '../../../modules/devices/dto/createDevice.interface';
+import { PostComment } from '../../../entity/comment.entity';
+import { ICommentQuery } from '../../../helpers/comment-query-builder';
+import { ICreateComment } from '../../../modules/comments/dto/comments-interfaces';
+import { GetAllCommentsDto } from '../../../modules/comments/dto/get-all-comments.dto';
+import { ICommentById } from '../../../modules/comments/dto/get-comment-by-id.interface';
 
 @Injectable()
-export class RootDevicesRepository {
+export class RootCommentsRepository {
   constructor() {}
-  getAllDevices(userId: string): void {
-    return;
-  }
-  createDevice(dto: ICreateDevice): void {
-    return;
-  }
-  deleteAllExcludeCurrent(userId: string, deviceId: string): void {
-    return;
-  }
-  createDeviceClearQuery(dto: ICreateDevice): void {
-    return;
-  }
-  getUserIdByDeviceId(id: string): void {
-    return;
-  }
-  deleteDeviceClearQuery(id: string, userId: string): void {
+
+  async getCountRows(id: string) {
     return;
   }
 
-  changeDeviceExpiredClearQuery(dto: { userId: string; deviceId: string }) {
+  async getAllCommentsByPostId(
+    dto: GetAllCommentsDto & { postId: string; userId: string; offset: number },
+  ): Promise<ICommentQuery[]> {
+    return;
+  }
+
+  async getCommentsByPostIdWithLikes(
+    dto: ICommentById,
+  ): Promise<ICommentQuery[]> {
+    return;
+  }
+
+  async createComment(
+    dto: Omit<ICreateComment, 'userLogin'>,
+  ): Promise<PostComment> {
+    return;
+  }
+
+  async getCommentById(id: string): Promise<PostComment> {
+    return;
+  }
+
+  async changeComment(id: string, content: string) {
+    return;
+  }
+
+  async deleteCommentById(id: string) {
     return;
   }
 }

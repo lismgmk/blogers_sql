@@ -1,10 +1,31 @@
 import { BlackListQueryRepository } from '../../modules/black-list/repositories/blackList.clearQuery.repository';
 import { BlackListTormRepository } from '../../modules/black-list/repositories/blackList.torm.repository';
+import { BlogsQueryRepository } from '../../modules/blogs/repositories/blogs.clearQuery.repository';
+import { BlogsTormRepository } from '../../modules/blogs/repositories/blogs.torm.repository';
+import { CheckIpQueryRepository } from '../../modules/check-ip-attempt/repositories/checkIp.clearQuery.repository';
+import { CheckIpTormRepository } from '../../modules/check-ip-attempt/repositories/checkIp.torm.repository';
+import { CommentsQueryRepository } from '../../modules/comments/repositories/comments.clearQuery.repository';
+import { CommentsTormRepository } from '../../modules/comments/repositories/comments.torm.repository';
 import { DevicesQueryRepository } from '../../modules/devices/repositories/devices.clearQuery.repository';
 import { DevicesTormRepository } from '../../modules/devices/repositories/devices.torm.repository';
+import { LikesQueryRepository } from '../../modules/likes/repositories/likes.clearQuery.repository';
+import { LikesTormRepository } from '../../modules/likes/repositories/likes.torm.repository';
+import { PostsQueryRepository } from '../../modules/posts/postsClearQuert.repositiry';
+import { PostsTormRepository } from '../../modules/posts/repositories/posts.torm.repository';
+import { TestingQueryRepository } from '../../modules/testing/repositories/testing.clearQuery.repository';
+import { TestingTormRepository } from '../../modules/testing/repositories/testing.torm.repository';
+import { UsersQueryRepository } from '../../modules/users/repositories/users.clearQuery.repository';
+import { UsersTormRepository } from '../../modules/users/repositories/users.torm.repository';
 import { IRootCommon } from './dto/common.interfce';
 import { RootBlackListRepository } from './rootClasses/root.blackList.repository';
+import { RootBlogsRepository } from './rootClasses/root.blogs.repository';
+import { RootCheckIpRepository } from './rootClasses/root.checkIp.repository';
+import { RootCommentsRepository } from './rootClasses/root.comments.repository';
 import { RootDevicesRepository } from './rootClasses/root.devices.repository';
+import { RootLikesRepository } from './rootClasses/root.likes.repository';
+import { RootPostsRepository } from './rootClasses/root.posts.repository';
+import { RootTestingRepository } from './rootClasses/root.testing.repository';
+import { RootUsersRepository } from './rootClasses/root.users.repository';
 
 class RootSwither {
   private _switchOnTorm = process.env.TYPE_ORM === 'on';

@@ -1,29 +1,31 @@
 import { Injectable } from '@nestjs/common';
-import { ICreateDevice } from '../../../modules/devices/dto/createDevice.interface';
+import { Like } from '../../../entity/like.entity';
+import { ILikeInfo } from '../../../modules/likes/dto/create-like.interface';
 
 @Injectable()
-export class RootDevicesRepository {
+export class RootLikesRepository {
   constructor() {}
-  getAllDevices(userId: string): void {
-    return;
-  }
-  createDevice(dto: ICreateDevice): void {
-    return;
-  }
-  deleteAllExcludeCurrent(userId: string, deviceId: string): void {
-    return;
-  }
-  createDeviceClearQuery(dto: ICreateDevice): void {
-    return;
-  }
-  getUserIdByDeviceId(id: string): void {
-    return;
-  }
-  deleteDeviceClearQuery(id: string, userId: string): void {
+  async getLikePost(postId: string): Promise<Like> {
     return;
   }
 
-  changeDeviceExpiredClearQuery(dto: { userId: string; deviceId: string }) {
+  async getLikeCommentPost(commentId: string): Promise<Like> {
+    return;
+  }
+
+  async createLikeForPost(dto: Omit<ILikeInfo, 'commentId'>): Promise<Like> {
+    return;
+  }
+
+  async changeLikeStatusPost(dto: Omit<ILikeInfo, 'commentId'>) {
+    return;
+  }
+
+  async createLikeForComment(dto: Omit<ILikeInfo, 'postId'>): Promise<Like> {
+    return;
+  }
+
+  async changeLikeStatusComment(dto: Omit<ILikeInfo, 'postId'>) {
     return;
   }
 }
