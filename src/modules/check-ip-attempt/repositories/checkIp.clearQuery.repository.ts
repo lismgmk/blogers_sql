@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { RootCheckIpRepository } from '../../../config/switchers/rootClasses/root.checkIp.repository';
+import { CheckIpAttempt } from '../../../entity/checkIpAttempt.entity';
 
 @Injectable()
 export class CheckIpQueryRepository extends RootCheckIpRepository {
@@ -13,7 +14,10 @@ export class CheckIpQueryRepository extends RootCheckIpRepository {
     super();
   }
 
-  async getAllUsersIp(dto: { userIp: string; path: string }) {
+  async getAllUsersIp(dto: {
+    userIp: string;
+    path: string;
+  }): Promise<CheckIpAttempt[]> {
     const secondsLimit = this.configService.get<string>('SECONDS_LIMIT');
 
     const queryComand = `

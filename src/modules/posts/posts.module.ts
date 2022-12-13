@@ -13,11 +13,10 @@ import { JwtService } from '@nestjs/jwt';
 import { BlogsService } from '../blogs/blogs.service';
 import { LikesService } from '../likes/likes.service';
 import { Blog } from '../../entity/blog.entity';
-import { PostsQueryRepository } from './postsClearQuert.repositiry';
 import { Like } from '../../entity/like.entity';
-import { CommentsQueryRepository } from '../comments/commentsQuert.repositiry';
 import { Post } from '../../entity/post.entity';
 import { PostComment } from '../../entity/comment.entity';
+import { rootInstanceSwitcher } from '../../config/switchers/rootSwitcher';
 
 @Module({
   imports: [
@@ -32,12 +31,12 @@ import { PostComment } from '../../entity/comment.entity';
     UsersService,
     JwtPassService,
     JwtService,
-    PostsQueryRepository,
+    rootInstanceSwitcher.posts(),
+    rootInstanceSwitcher.comments(),
     LikesService,
     BlogsService,
     LikesRepository,
     CommentsService,
-    CommentsQueryRepository,
   ],
 })
 export class PostsModule {}

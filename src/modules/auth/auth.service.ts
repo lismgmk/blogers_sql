@@ -77,7 +77,7 @@ export class AuthService {
     if (currentUser) {
       const confirmationCode = new Date().toISOString();
       await this.mailService.sendUserConfirmation(
-        { email, name: currentUser.accountData.userName },
+        { email, name: currentUser.name },
         confirmationCode,
       );
       await this.usersService.changeUserStatusConfirmCodeClearQuery({

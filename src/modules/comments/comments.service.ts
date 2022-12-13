@@ -9,7 +9,6 @@ import { Post } from '../../entity/post.entity';
 import { LikeInfoRequest } from '../../global-dto/like-info.request';
 import { commentsQueryBuilder } from '../../helpers/comment-query-builder';
 import { paginationBuilder } from '../../helpers/pagination-builder';
-import { PostsQueryRepository } from '../posts/postsClearQuert.repositiry';
 import { PostsService } from './../posts/posts.service';
 import { ICreateComment } from './dto/comments-interfaces';
 import { GetAllCommentsDto } from './dto/get-all-comments.dto';
@@ -19,7 +18,6 @@ import { ICommentById } from './dto/get-comment-by-id.interface';
 export class CommentsService {
   constructor(
     private rootCommentsRepository: RootCommentsRepository,
-    private postsQueryRepository: PostsQueryRepository,
     private postsService: PostsService,
   ) {}
 
@@ -55,9 +53,10 @@ export class CommentsService {
   }
 
   async createComment(dto: ICreateComment) {
-    const currentPost = (await this.postsQueryRepository.getPostById(
-      dto.postId,
-    )) as Post;
+    const currentPost = await this.postsService.getPostById({
+      id: dto.postId,
+      userId: dto.userId,
+    });
     if (!currentPost) {
       throw new BadRequestException({
         message: { message: 'post does not found', field: 'postId' },
@@ -80,7 +79,7 @@ export class CommentsService {
     return {
       id: createdComment.id,
       content: createdComment.content,
-      userId: createdComment.userId,
+      userId: dto.userId,
       userLogin: dto.userLogin,
       createdAt: createdComment.created_at,
       likesInfo,
@@ -99,7 +98,7 @@ export class CommentsService {
 
   async checkOwner(id: string, userId: string) {
     const comment = await this.rootCommentsRepository.getCommentById(id);
-    if (comment.userId !== userId) {
+    if (comment.user.id !== userId) {
       throw new ForbiddenException();
     }
   }

@@ -1,11 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { ICreateDevice } from '../../../modules/devices/dto/createDevice.interface';
+import { CheckIpAttempt } from '../../../entity/checkIpAttempt.entity';
 
 @Injectable()
 export class RootCheckIpRepository {
   constructor() {}
 
-  async getAllUsersIp(dto: { userIp: string; path: string }) {
+  async getAllUsersIp(dto: {
+    userIp: string;
+    path: string;
+  }): Promise<CheckIpAttempt[]> {
     return;
   }
   async createUsersIp(dto: { userIp: string; path: string }) {

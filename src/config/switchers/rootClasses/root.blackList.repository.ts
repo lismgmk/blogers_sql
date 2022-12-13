@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { BlackList } from '../../../entity/black-list.entity';
 
 @Injectable()
 export class RootBlackListRepository {
@@ -6,7 +7,7 @@ export class RootBlackListRepository {
     return;
   }
 
-  async getTokenClearQuery(token: string) {
+  async getTokenClearQuery(token: string): Promise<BlackList[]> {
     return;
   }
 }

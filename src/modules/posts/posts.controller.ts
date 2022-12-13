@@ -1,5 +1,4 @@
 import { CommentsService } from './../comments/comments.service';
-import { PostsQueryRepository } from './postsClearQuert.repositiry';
 import {
   Body,
   Controller,
@@ -37,7 +36,6 @@ import { GetAllCommentsDto } from '../comments/dto/get-all-comments.dto';
 export class PostsController {
   constructor(
     private readonly postsService: PostsService,
-    private readonly postsQueryRepository: PostsQueryRepository,
     private readonly likesService: LikesService,
     private readonly commentsService: CommentsService,
   ) {}
@@ -162,6 +160,6 @@ export class PostsController {
     @Param('id', ParseUUIDPipe)
     id: string,
   ) {
-    return await this.postsQueryRepository.deletePostById(id);
+    return await this.postsService.deletePostById(id);
   }
 }

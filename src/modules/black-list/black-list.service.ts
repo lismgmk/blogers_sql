@@ -1,3 +1,4 @@
+import { BlackList } from './../../entity/black-list.entity';
 import { Injectable } from '@nestjs/common';
 import { RootBlackListRepository } from '../../config/switchers/rootClasses/root.blackList.repository';
 
@@ -9,7 +10,7 @@ export class BlackListService {
     return this.blackListQueryRepository.addTokenClearQuery(token);
   }
 
-  async getTokenClearQuery(token: string) {
+  async getTokenClearQuery(token: string): Promise<BlackList[]> {
     return this.blackListQueryRepository.getTokenClearQuery(token);
   }
 }

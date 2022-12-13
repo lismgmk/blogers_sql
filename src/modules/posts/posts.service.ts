@@ -116,4 +116,11 @@ export class PostsService {
       throw new NotFoundException();
     }
   }
+  async deletePostById(id: string) {
+    const post = await this.rootPostsRepository.getPostById(id);
+    if (!post) {
+      throw new NotFoundException();
+    }
+    return this.rootPostsRepository.getPostById(id);
+  }
 }

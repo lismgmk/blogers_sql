@@ -8,14 +8,13 @@ import { Like } from '../../entity/like.entity';
 import { LikesRepository } from '../likes/likes.repository';
 import { LikesService } from '../likes/likes.service';
 import { PostsService } from '../posts/posts.service';
-import { PostsQueryRepository } from '../posts/postsClearQuert.repositiry';
 import { User } from '../../entity/user.entity';
 import { UsersService } from '../users/users.service';
 import { CommentsController } from './comments.controller';
 import { CommentsService } from './comments.service';
-import { CommentsQueryRepository } from './commentsQuert.repositiry';
 import { PostComment } from '../../entity/comment.entity';
 import { Post } from '../../entity/post.entity';
+import { rootInstanceSwitcher } from '../../config/switchers/rootSwitcher';
 
 @Module({
   imports: [
@@ -25,8 +24,8 @@ import { Post } from '../../entity/post.entity';
   controllers: [CommentsController],
   providers: [
     CommentsService,
-    CommentsQueryRepository,
-    PostsQueryRepository,
+    rootInstanceSwitcher.comments(),
+    rootInstanceSwitcher.posts(),
     JwtPassService,
     JwtService,
     UsersService,
