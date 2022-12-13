@@ -10,7 +10,7 @@ import { DevicesQueryRepository } from '../../modules/devices/repositories/devic
 import { DevicesTormRepository } from '../../modules/devices/repositories/devices.torm.repository';
 import { LikesQueryRepository } from '../../modules/likes/repositories/likes.clearQuery.repository';
 import { LikesTormRepository } from '../../modules/likes/repositories/likes.torm.repository';
-import { PostsQueryRepository } from '../../modules/posts/postsClearQuert.repositiry';
+import { PostsQueryRepository } from '../../modules/posts/repositories/posts.clearQuery.repository';
 import { PostsTormRepository } from '../../modules/posts/repositories/posts.torm.repository';
 import { TestingQueryRepository } from '../../modules/testing/repositories/testing.clearQuery.repository';
 import { TestingTormRepository } from '../../modules/testing/repositories/testing.torm.repository';
