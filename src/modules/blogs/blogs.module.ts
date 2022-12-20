@@ -17,6 +17,7 @@ import { rootInstanceSwitcher } from '../../config/switchers/rootSwitcher';
     BlogsService,
     BasicStrategy,
     rootInstanceSwitcher.posts(),
+    rootInstanceSwitcher.blogs(),
     PostsService,
   ],
 })

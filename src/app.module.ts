@@ -9,10 +9,12 @@ import { JwtService } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { configRoot } from './config/configuration';
 import { typeOrmConfigAsync } from './config/ormconfig';
+import { rootInstanceSwitcher } from './config/switchers/rootSwitcher';
 import { CheckBearerMiddleware } from './middlewares/check-bearer.middleware';
 import { CheckIpStatusMiddleware } from './middlewares/check-ip-status.middleware';
 import { AuthModule } from './modules/auth/auth.module';
 import { BlackListModule } from './modules/black-list/black-list.module';
+import { BlackListService } from './modules/black-list/black-list.service';
 import { BlogsModule } from './modules/blogs/blogs.module';
 import { CheckIpAttemptModule } from './modules/check-ip-attempt/check-ip-attempt.module';
 import { CheckIpAttemptService } from './modules/check-ip-attempt/check-ip-attempt.service';
@@ -44,7 +46,16 @@ import { UsersService } from './modules/users/users.service';
     CheckIpAttemptModule,
   ],
   controllers: [],
-  providers: [JwtPassService, UsersService, JwtService, CheckIpAttemptService],
+  providers: [
+    JwtPassService,
+    UsersService,
+    JwtService,
+    CheckIpAttemptService,
+    BlackListService,
+    rootInstanceSwitcher.blackList(),
+    rootInstanceSwitcher.users(),
+    rootInstanceSwitcher.checkIp(),
+  ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

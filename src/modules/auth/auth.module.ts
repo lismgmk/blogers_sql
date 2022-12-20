@@ -29,16 +29,17 @@ import { AuthService } from './auth.service';
   controllers: [AuthController],
   providers: [
     DevicesService,
-    DevicesQueryRepository,
     AuthService,
+    BlackListService,
     rootInstanceSwitcher.blackList(),
+    rootInstanceSwitcher.devices(),
+    rootInstanceSwitcher.users(),
     JwtPassService,
     UsersService,
     JwtStrategy,
     LocalStrategy,
     MailService,
     IsExpired,
-    rootInstanceSwitcher.devices(),
   ],
 })
 export class AuthModule {}
