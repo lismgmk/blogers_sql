@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { RootUsersRepository } from '../../../config/switchers/rootClasses/root.users.repository';
-import { JwtPassService } from '../../common-services/jwt-pass-custom/jwt-pass.service';
 import { GetAllUsersQueryDto } from '../dto/get-all-user-query.dto';
 import { ICreatedUserDto } from '../dto/user-interfaces.dto';
 
@@ -24,7 +23,7 @@ WHERE id= $1
   async getUserByNameClearQuery(name: string) {
     const queryComand = `
     SELECT * FROM public."user"
-WHERE "name"= $1
+WHERE "name"= $1 or "email"= $1 
     `;
     const user = await this.dataSource.query(queryComand, [name]);
     return user[0];

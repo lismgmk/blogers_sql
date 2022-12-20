@@ -15,7 +15,6 @@ import { MailService } from '../common-services/mail/mail.service';
 import { DevicesService } from '../devices/devices.service';
 import { UsersService } from '../users/users.service';
 import { rootInstanceSwitcher } from './../../config/switchers/rootSwitcher';
-import { DevicesQueryRepository } from '../devices/repositories/devices.clearQuery.repository';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 

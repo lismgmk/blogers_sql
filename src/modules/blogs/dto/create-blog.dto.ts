@@ -10,5 +10,8 @@ export class CreateBlogDto {
 
   @Matches(urlRegEx)
   @Length(1, 100, { message: FIELD_LENGTH_VALIDATION_ERROR })
-  readonly youtubeUrl: string;
+  readonly websiteUrl: string;
+
+  @Length(1, 100, { message: FIELD_LENGTH_VALIDATION_ERROR })
+  readonly decription: string;
 }

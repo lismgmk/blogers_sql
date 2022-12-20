@@ -1,6 +1,8 @@
-export interface IBlog {
-  id: string;
-  name: string;
-  youtubeUrl: string;
-  createdAt: string;
+
+export enum SortByField {
+  name,
+  decription,
+  websiteUrl,
+  createdAt,
 }
+export type IBlog = Record<SortByField, string>;
