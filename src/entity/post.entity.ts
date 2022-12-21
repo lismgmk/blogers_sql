@@ -1,6 +1,7 @@
 import { PostComment } from './comment.entity';
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -24,7 +25,7 @@ export class Post {
   @Column()
   title: string;
 
-  @Column()
+  @CreateDateColumn()
   createdAt: Date;
 
   @OneToMany(() => PostComment, (comment) => comment.post, {

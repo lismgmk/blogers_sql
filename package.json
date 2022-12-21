@@ -24,6 +24,7 @@
     "db:drop": "npm run typeorm -- -d ./src/config/migration.ts schema:drop",
     "typeorm:generate-migration": "npm run typeorm -- -d ./src/config/migration.ts migration:generate",
     "typeorm:run-migration": "npm run typeorm -- -d ./src/config/migration.ts migration:run",
+    "typeorm:show-migration": "npm run typeorm -- -d ./src/config/migration.ts migration:show",
     "db:seed": "npm run typeorm -- -d ./src/config/migrationSeed.ts migration:run",
     "typeorm:revert-migration": "npm run typeorm -- -d ./src/config/migration.ts migration:revert"
   },

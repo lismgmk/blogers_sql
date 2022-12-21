@@ -22,7 +22,7 @@ WHERE id= $1
 
   async getUserByNameClearQuery(name: string) {
     const queryComand = `
-    SELECT * FROM public."user"
+SELECT * FROM public."user"
 WHERE "name"= $1 or "email"= $1 
     `;
     const user = await this.dataSource.query(queryComand, [name]);
