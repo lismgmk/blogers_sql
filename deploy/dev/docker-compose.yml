@@ -1,10 +1,37 @@
 version: '3.9'
 services:
+  server:
+    build:
+      context: .
+      dockerfile: ./deploy/dev/Dockerfile
+    image: todolist-graphql
+    env_file:
+      - ./deploy/dev/.env.dev
+    ports:
+      - '5000:5000'
+      - '9229:9229'
+    networks:
+      - webnet
+    depends_on:
+      - 'postgres'
+    volumes:
+      - ../../src:/app/src
+      - ../../dist:/app/dist
+    # command: ["./wait-for-it.sh", "postgres:5432", "--", "node", "index.js"]
+    restart: always
+
   postgres:
     image: postgres:14.6
     environment:
       POSTGRES_USER: 'postgres'
       POSTGRES_PASSWORD: '2156128'
+      POSTGRES_DB: 'blog_sql-db'
     ports:
       #!!
       - '5432:5432'
+
+networks:
+  webnet:
+
+volumes:
+  db:
