@@ -46,7 +46,7 @@ services:
       - 'postgres'
     volumes:
       - ../../src:/app/src
-      - ../../dist:/app/dist
+       - ./.env.docker:/app/.env
     # command: ["./wait-for-it.sh", "postgres:5432", "--", "node", "index.js"]
     restart: always
 

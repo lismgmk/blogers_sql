@@ -12,8 +12,8 @@ async function bootstrap() {
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
   app.enableCors();
   app.use(cookieParser());
-  await app.listen(process.env.PORT || 5000);
-  console.log(process.env.TYPE_ORM);
+  await app.listen(process.env.PORT || 5000, '0.0.0.0');
+  // console.log(process.env.TYPE_ORM);
 
   // console.log(
   //   process.env.TYPE_ORM,
