@@ -4,6 +4,7 @@ export class fixPostEntity1671622999306 implements MigrationInterface {
   name = 'fixPostEntity1671622999306';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
+    // await queryRunner.query(`CREATE EXTENSION "uuid-ossp"`);
     await queryRunner.query(
       `CREATE TABLE "device" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "name" character varying NOT NULL, "ip" character varying NOT NULL, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "expiredAt" TIMESTAMP WITH TIME ZONE NOT NULL, CONSTRAINT "PK_2dc10972aa4e27c01378dad2c72" PRIMARY KEY ("id"))`,
     );

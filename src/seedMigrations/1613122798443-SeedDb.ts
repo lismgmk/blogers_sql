@@ -23,34 +23,39 @@ export class SeedDb1613122798443 implements MigrationInterface {
 
     await queryRunner.query(
       `INSERT INTO public.blog(
-	name, "websiteUrl", decription)
+	id, name, "websiteUrl", decription)
 	VALUES 
-  ('incub', 'https://cama.com', 'stuff'),	
-  ('short', 'https://ulb.com', 'simple speed'),	
-  ('general', 'https://codep.com', 'best practice'),	
-  ('tima', 'https://howrprogr.com', 'algoritms');	
+  ('2a6c4853-5dcd-4b13-ac35-9350ea5bedc7', 'incub', 'https://cama.com', 'stuff'),	
+  ('3d5c3828-da12-41ce-b54a-002b4f620795', 'short', 'https://ulb.com', 'simple speed'),	
+  ('f9b514a7-5cd3-48c6-b173-efeeab6dd72c', 'general', 'https://codep.com', 'best practice'),	
+  ('f9b514a7-5cd3-48c6-b173-efeeab6dd70c', 'tima', 'https://howrprogr.com', 'algoritms');	
   `,
     );
 
-    //   await queryRunner.query(`
-    //     INSERT INTO public.post(
-    // "shortDescription", "content", "title", "blogId")
-    // VALUES
-    // ('some post INCUB_1', 'maaany latters and digits 1', 'awesome post 1', '2a6c4853-5dcd-4b13-ac35-9350ea5bedc7'),
-    // ('some post INCUB_2', 'maaany latters and digits 2', 'awesome post 2', '2a6c4853-5dcd-4b13-ac35-9350ea5bedc7'),
-    // ('some post INCUB_3', 'maaany latters and digits 3', 'awesome post 3', '2a6c4853-5dcd-4b13-ac35-9350ea5bedc7'),
-    // ('some post INCUB_4', 'maaany latters and digits 4', 'awesome post 4', '2a6c4853-5dcd-4b13-ac35-9350ea5bedc7'),
+    await queryRunner.query(`
+        INSERT INTO public.post(
+    "shortDescription", "content", "title", "blogId")
+    VALUES
+    ('some post INCUB_1', 'maaany latters and digits 1', 'awesome post 1', '2a6c4853-5dcd-4b13-ac35-9350ea5bedc7'),
+    ('some post INCUB_2', 'maaany latters and digits 2', 'awesome post 2', '2a6c4853-5dcd-4b13-ac35-9350ea5bedc7'),
+    ('some post INCUB_3', 'maaany latters and digits 3', 'awesome post 3', '2a6c4853-5dcd-4b13-ac35-9350ea5bedc7'),
+    ('some post INCUB_4', 'maaany latters and digits 4', 'awesome post 4', '2a6c4853-5dcd-4b13-ac35-9350ea5bedc7'),
 
-    // ('some post ULB_1', 'maaany latters and digits 1', 'awesome post 1', '3d5c3828-da12-41ce-b54a-002b4f620795'),
-    // ('some post ULB_2', 'maaany latters and digits 2', 'awesome post 2', '3d5c3828-da12-41ce-b54a-002b4f620795'),
-    // ('some post ULB_3', 'maaany latters and digits 3', 'awesome post 3', '3d5c3828-da12-41ce-b54a-002b4f620795'),
-    // ('some post ULB_4', 'maaany latters and digits 4', 'awesome post 4', '3d5c3828-da12-41ce-b54a-002b4f620795'),
+    ('some post ULB_1', 'maaany latters and digits 1', 'awesome post 1', '3d5c3828-da12-41ce-b54a-002b4f620795'),
+    ('some post ULB_2', 'maaany latters and digits 2', 'awesome post 2', '3d5c3828-da12-41ce-b54a-002b4f620795'),
+    ('some post ULB_3', 'maaany latters and digits 3', 'awesome post 3', '3d5c3828-da12-41ce-b54a-002b4f620795'),
+    ('some post ULB_4', 'maaany latters and digits 4', 'awesome post 4', '3d5c3828-da12-41ce-b54a-002b4f620795'),
 
-    // ('some post TIMA_1', 'maaany latters and digits 1', 'awesome post 1', 'f9b514a7-5cd3-48c6-b173-efeeab6dd72c'),
-    // ('some post TIMA_2', 'maaany latters and digits 2', 'awesome post 2', 'f9b514a7-5cd3-48c6-b173-efeeab6dd72c'),
-    // ('some post TIMA_3', 'maaany latters and digits 3', 'awesome post 3', 'f9b514a7-5cd3-48c6-b173-efeeab6dd72c'),
-    // ('some post TIMA_4', 'maaany latters and digits 4', 'awesome post 4', 'f9b514a7-5cd3-48c6-b173-efeeab6dd72c');
-    // `);
+    ('some post GENERAL_1', 'maaany latters and digits 1', 'awesome post 1', 'f9b514a7-5cd3-48c6-b173-efeeab6dd72c'),
+    ('some post GENERAL_2', 'maaany latters and digits 2', 'awesome post 2', 'f9b514a7-5cd3-48c6-b173-efeeab6dd72c'),
+    ('some post GENERAL_3', 'maaany latters and digits 3', 'awesome post 3', 'f9b514a7-5cd3-48c6-b173-efeeab6dd72c'),
+    ('some post GENERAL_4', 'maaany latters and digits 4', 'awesome post 4', 'f9b514a7-5cd3-48c6-b173-efeeab6dd72c'),
+
+    ('some post TIMA_1', 'maaany latters and digits 1', 'awesome post 1', 'f9b514a7-5cd3-48c6-b173-efeeab6dd70c'),
+    ('some post TIMA_2', 'maaany latters and digits 2', 'awesome post 2', 'f9b514a7-5cd3-48c6-b173-efeeab6dd70c'),
+    ('some post TIMA_3', 'maaany latters and digits 3', 'awesome post 3', 'f9b514a7-5cd3-48c6-b173-efeeab6dd70c'),
+    ('some post TIMA_4', 'maaany latters and digits 4', 'awesome post 4', 'f9b514a7-5cd3-48c6-b173-efeeab6dd70c');
+    `);
   }
 
   public async down(): Promise<void> {}

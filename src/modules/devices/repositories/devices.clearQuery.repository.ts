@@ -45,7 +45,7 @@ END As "lastActiveDate"
 	VALUES ($1, $2, $3, $4)
       `;
     const nestedTableQueryComand = `
-   INSERT INTO "user_device_device" (
+   INSERT INTO "user_devices_device" (
           "userId", "deviceId"
         )
         VALUES( $1, $2)
