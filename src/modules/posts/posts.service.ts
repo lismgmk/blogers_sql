@@ -3,38 +3,72 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { LikeInfoRequest } from '../../global-dto/like-info.request';
+import { RootPostsRepository } from '../../config/switchers/rootClasses/root.posts.repository';
 import { Blog } from '../../entity/blog.entity';
+import { LikeInfoRequest } from '../../global-dto/like-info.request';
+import { paginationBuilder } from '../../helpers/pagination-builder';
+import { postsQueryBuilder } from '../../helpers/post-query-builder';
 import { BlogsService } from '../blogs/blogs.service';
 import { CreatePostWithBlogIdDto } from './dto/create-post-with-blog-id.dto';
 import { GetAllPostsdDto } from './dto/get-all-posts.dto';
 import { IPostById } from './dto/get-post-by-id.interface';
-import { PostsQueryRepository } from './postsClearQuert.repositiry';
 
 @Injectable()
 export class PostsService {
   constructor(
     private blogsService: BlogsService,
-    private postsQueryRepository: PostsQueryRepository,
+    private rootPostsRepository: RootPostsRepository,
   ) {}
-  async getAllPosts(queryParams: GetAllPostsdDto, userId: string) {
-    return this.postsQueryRepository.getAllPostsClearQuery({
-      ...queryParams,
+  async getAllPosts(dto: GetAllPostsdDto, userId: string) {
+    const offset =
+      dto.pageNumber === 1 ? 0 : (dto.pageNumber - 1) * dto.pageSize;
+
+    const allRows = await this.rootPostsRepository.getCountPosts();
+    const allPostsQuery = await this.rootPostsRepository.getAllPostsClearQuery({
+      ...dto,
       userId,
       blogId: null,
+      offset,
     });
+
+    return {
+      ...paginationBuilder({
+        totalCount: Number(allRows[0].count),
+        pageSize: dto.pageSize,
+        pageNumber: dto.pageNumber,
+      }),
+      items: postsQueryBuilder(allPostsQuery),
+    };
   }
 
   async getPostByBlogId(
     dto: GetAllPostsdDto & { blogId: string; userId: string },
   ) {
     await this.blogsService.checkExistBlog(dto.blogId);
-    return this.postsQueryRepository.getAllPostsClearQuery(dto);
+    const offset =
+      dto.pageNumber === 1 ? 0 : (dto.pageNumber - 1) * dto.pageSize;
+
+    const allRows = await this.rootPostsRepository.getCountPosts(dto.blogId);
+    const allPostsQuery = await this.rootPostsRepository.getAllPostsClearQuery({
+      ...dto,
+      blogId: null,
+      offset,
+    });
+
+    return {
+      ...paginationBuilder({
+        totalCount: Number(allRows[0].count),
+        pageSize: dto.pageSize,
+        pageNumber: dto.pageNumber,
+      }),
+      items: postsQueryBuilder(allPostsQuery),
+    };
   }
 
   async getPostById(dto: IPostById) {
     await this.checkExistPost(dto.id);
-    return this.postsQueryRepository.getPostByIdWithLikes(dto);
+    const post = await this.rootPostsRepository.getPostByIdWithLikes(dto);
+    return postsQueryBuilder(post)[0];
   }
 
   async createPost(dto: CreatePostWithBlogIdDto) {
@@ -52,7 +86,7 @@ export class PostsService {
       shortDescription: dto.shortDescription,
       blogId: dto.blogId,
     };
-    const createdPost = await this.postsQueryRepository.createPost(newPost);
+    const createdPost = await this.rootPostsRepository.createPost(newPost);
 
     const extendedLikesInfo: LikeInfoRequest = {
       likesCount: 0,
@@ -73,13 +107,20 @@ export class PostsService {
   }
   async changePost(dto: CreatePostWithBlogIdDto & { id: string }) {
     await this.blogsService.checkExistBlog(dto.blogId);
-    await this.postsQueryRepository.changePost({ id: dto.id, ...dto });
+    await this.rootPostsRepository.changePost({ id: dto.id, ...dto });
   }
 
   async checkExistPost(id: string) {
-    const post = await this.postsQueryRepository.getPostById(id);
+    const post = await this.rootPostsRepository.getPostById(id);
     if (!post) {
       throw new NotFoundException();
     }
+  }
+  async deletePostById(id: string) {
+    const post = await this.rootPostsRepository.getPostById(id);
+    if (!post) {
+      throw new NotFoundException();
+    }
+    return this.rootPostsRepository.getPostById(id);
   }
 }

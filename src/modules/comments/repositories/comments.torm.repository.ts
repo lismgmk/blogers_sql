@@ -1,27 +1,23 @@
-import { ICommentById } from './dto/get-comment-by-id.interface';
 import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
-import { commentsQueryBuilder } from '../../helpers/comment-query-builder';
-import { paginationBuilder } from '../../helpers/pagination-builder';
-import { ICreateComment } from './dto/comments-interfaces';
-import { GetAllCommentsDto } from './dto/get-all-comments.dto';
+import { RootCommentsRepository } from '../../../config/switchers/rootClasses/root.comments.repository';
+import { PostComment } from '../../../entity/comment.entity';
+import { ICommentQuery } from '../../../helpers/comment-query-builder';
+import { ICreateComment } from '../dto/comments-interfaces';
+import { GetAllCommentsDto } from '../dto/get-all-comments.dto';
+import { ICommentById } from '../dto/get-comment-by-id.interface';
 
 @Injectable()
-export class CommentsQueryRepository {
-  constructor(@InjectDataSource() protected dataSource: DataSource) {}
+export class CommentsTormRepository extends RootCommentsRepository {
+  constructor(@InjectDataSource() protected dataSource: DataSource) {
+    super();
+  }
 
   async getAllCommentsByPostId(
-    dto: GetAllCommentsDto & { postId: string; userId: string },
-  ) {
-    const offset =
-      dto.pageNumber === 1 ? 0 : (dto.pageNumber - 1) * dto.pageSize;
-    const allRows = await this.dataSource.query(
-      `SELECT  COUNT("id")  FROM  public."post_comment" where "postId"=$1`,
-      [dto.postId],
-    );
-
-    const allCommentsQuery = await this.dataSource.query(
+    dto: GetAllCommentsDto & { postId: string; userId: string; offset: number },
+  ): Promise<ICommentQuery[]> {
+    return this.dataSource.query(
       `SELECT "post_comment".id, "post_comment".content, "post_comment".created_at, "post_comment"."userId",
 (select "user"."name" from "user" where "user"."id" = "post_comment"."userId" ) as "UserName",
 (select count("id") from "like" where "like"."commentId" = post_comment."id" and "like"."status" = 'Like'  ) as "likeCount",
@@ -39,24 +35,16 @@ END As "UserStatus"
       [
         `${dto.sortBy} ${dto.sortDirection}`,
         dto.pageSize,
-        offset,
+        dto.offset,
         dto.userId,
         dto.postId,
       ],
     );
-
-    return {
-      ...paginationBuilder({
-        totalCount: Number(allRows[0].count),
-        pageSize: dto.pageSize,
-        pageNumber: dto.pageNumber,
-      }),
-      // items: postsQueryBuilder(allPostsQuery),
-      items: commentsQueryBuilder(allCommentsQuery),
-    };
   }
 
-  async getCommentsByPostIdWithLikes(dto: ICommentById) {
+  async getCommentsByPostIdWithLikes(
+    dto: ICommentById,
+  ): Promise<ICommentQuery[]> {
     const comment = await this.dataSource.query(
       `SELECT "post_comment".id, "post_comment".content, "post_comment".created_at, "post_comment"."userId",
 (select "user"."name" from "user" where "user"."id" = "post_comment"."userId" ) as "UserName",
@@ -73,10 +61,12 @@ END As "UserStatus"
 `,
       [dto.id, dto.userId],
     );
-    return commentsQueryBuilder(comment)[0];
+    return comment;
   }
 
-  async createComment(dto: Omit<ICreateComment, 'userLogin'>) {
+  async createComment(
+    dto: Omit<ICreateComment, 'userLogin'>,
+  ): Promise<PostComment> {
     const queryPostComand = `INSERT INTO public."post_comment"(
 	"content", "postId", "userId")
 	VALUES ($1, $2, $3 )
@@ -90,7 +80,7 @@ END As "UserStatus"
     return comment[0];
   }
 
-  async getCommentById(id: string) {
+  async getCommentById(id: string): Promise<PostComment> {
     const queryComand = `
     SELECT * FROM public."post_comment"
 WHERE id= $1

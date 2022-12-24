@@ -1,14 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { RootDevicesRepository } from './classes/root.devices.repository';
-import { DevicesTormRepository } from './devices.torm.repository';
+import { RootDevicesRepository } from '../../config/switchers/rootClasses/root.devices.repository';
 import { ICreateDevice } from './dto/createDevice.interface';
 
 @Injectable()
 export class DevicesService {
-  // module =
-  //   process.env.TYPE_ORM === 'on' ? DevicesQueryRepository : DevicesRepository;
-
-  // constructor(private devicesQueryRepository: typeof module) {}
   constructor(private devicesQueryRepository: RootDevicesRepository) {}
 
   async getAllDevices(userId: string) {

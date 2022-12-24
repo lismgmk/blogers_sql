@@ -9,6 +9,7 @@ import { Like } from '../../entity/like.entity';
 import { Device } from '../../entity/device.entity';
 import { PostComment } from '../../entity/comment.entity';
 import { Post } from '../../entity/post.entity';
+import { rootInstanceSwitcher } from '../../config/switchers/rootSwitcher';
 
 @Module({
   imports: [
@@ -23,6 +24,6 @@ import { Post } from '../../entity/post.entity';
     ]),
   ],
   controllers: [TestingController],
-  providers: [TestingService],
+  providers: [TestingService, rootInstanceSwitcher.testing()],
 })
 export class TestingModule {}

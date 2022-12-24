@@ -1,5 +1,6 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   OneToMany,
@@ -16,12 +17,15 @@ export class Blog {
   name: string;
 
   @Column()
-  youtube: string;
+  websiteUrl: string;
 
   @Column()
+  decription: string;
+
+  @CreateDateColumn()
   createdAt: Date;
 
   @OneToMany(() => Post, (post) => post.blog)
   @JoinColumn()
-  postId: Post[];
+  posts: Post[];
 }

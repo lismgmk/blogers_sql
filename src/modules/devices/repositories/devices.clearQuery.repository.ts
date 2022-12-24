@@ -7,8 +7,8 @@ import { ConfigService } from '@nestjs/config';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { add } from 'date-fns';
 import { DataSource } from 'typeorm';
-import { RootDevicesRepository } from './classes/root.devices.repository';
-import { ICreateDevice } from './dto/createDevice.interface';
+import { RootDevicesRepository } from '../../../config/switchers/rootClasses/root.devices.repository';
+import { ICreateDevice } from '../dto/createDevice.interface';
 
 @Injectable()
 export class DevicesQueryRepository extends RootDevicesRepository {
@@ -45,7 +45,7 @@ END As "lastActiveDate"
 	VALUES ($1, $2, $3, $4)
       `;
     const nestedTableQueryComand = `
-   INSERT INTO "user_device_device" (
+   INSERT INTO "user_devices_device" (
           "userId", "deviceId"
         )
         VALUES( $1, $2)

@@ -28,6 +28,6 @@ export class Device {
   @Column({ type: 'timestamptz' })
   expiredAt: Date;
 
-  @ManyToMany(() => User, (user) => user.id)
-  user: User[];
+  @ManyToMany(() => User, (user) => user.devices)
+  users: User[];
 }

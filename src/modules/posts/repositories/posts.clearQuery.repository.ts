@@ -1,26 +1,36 @@
 import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
-import { paginationBuilder } from '../../helpers/pagination-builder';
-import { postsQueryBuilder } from '../../helpers/post-query-builder';
-import { CreatePostWithBlogIdDto } from './dto/create-post-with-blog-id.dto';
-import { GetAllPostsdDto } from './dto/get-all-posts.dto';
+import { RootPostsRepository } from '../../../config/switchers/rootClasses/root.posts.repository';
+import { Post } from '../../../entity/post.entity';
+import { IPostQuery } from '../../../helpers/post-query-builder';
+import { CreatePostWithBlogIdDto } from '../dto/create-post-with-blog-id.dto';
+import { GetAllPostsdDto } from '../dto/get-all-posts.dto';
 
 @Injectable()
-export class PostsQueryRepository {
-  constructor(@InjectDataSource() protected dataSource: DataSource) {}
-
-  async getAllPostsClearQuery(
-    dto: GetAllPostsdDto & { userId: string; blogId?: string },
-  ) {
-    const offset =
-      dto.pageNumber === 1 ? 0 : (dto.pageNumber - 1) * dto.pageSize;
-    const allRows = await this.dataSource.query(
-      `SELECT  COUNT("id")  FROM  public."post" `,
+export class PostsQueryRepository extends RootPostsRepository {
+  constructor(@InjectDataSource() protected dataSource: DataSource) {
+    super();
+  }
+  async getCountPosts(blogId: string = null) {
+    return this.dataSource.query(
+      `
+	SELECT  COUNT("id")  FROM  public."post" 
+	where "blogId" =(
+	CASE
+    	WHEN $1 != NULL  THEN $1::uuid 
+    	ELSE "blogId"::uuid
+	END)
+	`,
+      [blogId],
     );
-
-    const allPostsQuery = await this.dataSource.query(
-      `SELECT "shortDescription", "content", "title", "post"."createdAt", "blogId", "post"."id", "blog"."name" as "blogName",
+  }
+  async getAllPostsClearQuery(
+    dto: GetAllPostsdDto & { userId: string; blogId?: string; offset: number },
+  ): Promise<IPostQuery[]> {
+    return await this.dataSource.query(
+      `
+      SELECT "shortDescription", "content", "title", "post"."createdAt", "blogId", "post"."id", "blog"."name" as "blogName",
 (select count("id") from "like" where "like"."postId" = "post"."id" and "like"."status" = 'Like'  ) as "likeCount",
 (select count("id") from "like" where "like"."postId" = "post"."id" and "like"."status" = 'Dislike' ) as "dislikeCount",
 "like"."userId" as "likeInfoUserId",
@@ -40,27 +50,20 @@ END As "UserStatus",
 END
   )
   ORDER BY $1
-      LIMIT $2 OFFSET $3`,
+      LIMIT $2 OFFSET $3
+      
+      `,
       [
         `${dto.sortBy} ${dto.sortDirection}`,
         dto.pageSize,
-        offset,
+        dto.offset,
         dto.userId,
         dto.blogId,
       ],
     );
-
-    return {
-      ...paginationBuilder({
-        totalCount: Number(allRows[0].count),
-        pageSize: dto.pageSize,
-        pageNumber: dto.pageNumber,
-      }),
-      items: postsQueryBuilder(allPostsQuery),
-    };
   }
 
-  async createPost(dto: CreatePostWithBlogIdDto) {
+  async createPost(dto: CreatePostWithBlogIdDto): Promise<Post> {
     const queryPostComand = `INSERT INTO public."post"(
 	"shortDescription", "content", "title", "createdAt", "blogId")
 	VALUES ($1, $2, $3, now(), $4 )
@@ -75,8 +78,11 @@ END
     return post[0];
   }
 
-  async getPostByIdWithLikes(dto: { id: string; userId: string }) {
-    const post = await this.dataSource.query(
+  async getPostByIdWithLikes(dto: {
+    id: string;
+    userId: string;
+  }): Promise<IPostQuery[]> {
+    return this.dataSource.query(
       `SELECT "shortDescription", "content", "title", "post"."createdAt", "blogId", "post"."id", "blog"."name" as "blogName",
 (select count("id") from "like" where "like"."postId" = "post"."id" and "like"."status" = 'Like'  ) as "likeCount",
 (select count("id") from "like" where "like"."postId" = "post"."id" and "like"."status" = 'Dislike' ) as "dislikeCount",
@@ -93,7 +99,6 @@ END As "UserStatus",
   where "post"."id" =$1`,
       [dto.id, dto.userId],
     );
-    return postsQueryBuilder(post)[0];
   }
 
   async getPostById(id: string) {

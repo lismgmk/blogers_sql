@@ -1,12 +1,7 @@
 import { IsOptional, IsEnum } from 'class-validator';
 import { INCORRECT_TYPE_VALIDATION_ERROR } from '../../../consts/ad-validation-const';
 import { PaginationQueryDto } from '../../../global-dto/pagination-query.dto';
-
-export enum SortByField {
-  name,
-  createdAt,
-  youtubeUrl,
-}
+import { SortByField } from './blogs-intergaces';
 
 export class GetAllBlogsQueryDto extends PaginationQueryDto {
   @IsOptional()

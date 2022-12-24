@@ -1,20 +1,18 @@
-import { UsersService } from './../modules/users/users.service';
-import { Strategy } from 'passport-local';
-import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { JwtPassService } from '../modules/common-services/jwt-pass-custom/jwt-pass.service';
-import { ConfigService } from '@nestjs/config';
+import { PassportStrategy } from '@nestjs/passport';
+import { Strategy } from 'passport-local';
 import { User } from '../entity/user.entity';
+import { JwtPassService } from '../modules/common-services/jwt-pass-custom/jwt-pass.service';
+import { UsersService } from './../modules/users/users.service';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
   constructor(
     private usersService: UsersService,
     private jwtPassService: JwtPassService,
-    private configService: ConfigService,
   ) {
     super({
-      usernameField: 'login',
+      usernameField: 'loginOrEmail',
     });
   }
 

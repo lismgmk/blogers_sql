@@ -1,12 +1,11 @@
-import { DataSourceOptions } from 'typeorm';
 import { path } from 'app-root-path';
 import dotenv, { config } from 'dotenv';
-import { DataSource } from 'typeorm';
+import { DataSourceOptions } from 'typeorm';
 
 config();
 
 const env = process.env.NODE_ENV;
-const dotenv_path = `${path}/env/.env.${env}`;
+const dotenv_path = `${path}/deploy/${process.env.NODE_ENV}/.env.${env}`;
 
 const result = dotenv.config({ path: dotenv_path });
 if (result.error) {
