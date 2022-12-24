@@ -19,7 +19,13 @@ export class TestingQueryRepository extends RootTestingRepository {
     await this.dataSource.query(`TRUNCATE TABLE public."post_comment" CASCADE`);
     await this.dataSource.query(`TRUNCATE TABLE public."like" CASCADE`);
     await this.dataSource.query(
-      `TRUNCATE TABLE public."user_device_id_device" CASCADE`,
+      `TRUNCATE TABLE public."custom_migration_table" CASCADE`,
+    );
+    await this.dataSource.query(
+      `TRUNCATE TABLE public."check_ip_attempt" CASCADE`,
+    );
+    await this.dataSource.query(
+      `TRUNCATE TABLE public."user_devices_device" CASCADE`,
     );
     return;
   }
