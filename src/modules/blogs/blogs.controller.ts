@@ -52,7 +52,7 @@ export class BlogsController {
   @Post()
   // @UseGuards(AuthGuard('basic'))
   @UseFilters(new ValidationBodyExceptionFilter())
-  async createUser(
+  async createBlog(
     @Body(new CustomValidationPipe()) createBlogDto: CreateBlogDto,
   ) {
     return await this.blogsService.createBlogClearQuery(createBlogDto);
