@@ -13,5 +13,5 @@ export class CreateBlogDto {
   readonly websiteUrl: string;
 
   // @Length(1, 100, { message: FIELD_LENGTH_VALIDATION_ERROR })
-  readonly decription: string;
+  readonly description: string;
 }

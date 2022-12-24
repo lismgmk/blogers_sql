@@ -48,7 +48,7 @@ LIMIT $3 OFFSET $4
         `INSERT INTO public."blog"(
 	 "name", "websiteUrl", "description")
 	VALUES ( $1, $2, $3);`,
-        [dto.name, dto.websiteUrl, dto.decription],
+        [dto.name, dto.websiteUrl, dto.description],
       );
     } catch (e) {
       console.log(e);
@@ -72,7 +72,7 @@ WHERE id = $4;
     await this.dataSource.query(queryComand, [
       dto.name,
       dto.websiteUrl,
-      dto.decription,
+      dto.description,
       dto.id,
     ]);
 

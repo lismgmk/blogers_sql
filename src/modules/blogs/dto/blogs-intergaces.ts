@@ -1,7 +1,7 @@
 
 export enum SortByField {
   name,
-  decription,
+  description,
   websiteUrl,
   createdAt,
 }
