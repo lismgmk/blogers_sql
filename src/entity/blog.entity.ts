@@ -20,7 +20,7 @@ export class Blog {
   websiteUrl: string;
 
   @Column()
-  decription: string;
+  description: string;
 
   @CreateDateColumn()
   createdAt: Date;

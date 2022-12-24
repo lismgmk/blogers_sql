@@ -12,7 +12,7 @@
     "start": "nodemon",
     "start:localdb-off": "NODE_ENV=dev TYPE_ORM=off nest start --debug --watch && npm run db:drop && npm run typeorm:run-migration && npm run db:seed",
     "start:localdb-on": "NODE_ENV=dev TYPE_ORM=on nest start --debug --watch",
-    "start:remotedb": "NODE_ENV=prod nest start --debug --watch  && npm run db:drop && npm run typeorm:run-migration && npm run db:seed",
+    "start:remotedb": "NODE_ENV=prod nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",

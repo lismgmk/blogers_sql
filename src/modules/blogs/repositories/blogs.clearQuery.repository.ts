@@ -25,7 +25,7 @@ export class BlogsQueryRepository extends RootBlogsRepository {
   async getAllBlogsClearQuery(dto: GetAllBlogsQueryDto & { offset: number }) {
     return this.dataSource.query(
       `
-      SELECT id, "name", "websiteUrl", "createdAt"
+      SELECT id, "name", "websiteUrl", "description", "createdAt"
 FROM public."blog"
 WHERE name like $1
 ORDER BY $2
@@ -41,12 +41,12 @@ LIMIT $3 OFFSET $4
   }
 
   async createBlogClearQuery(dto: CreateBlogDto) {
-    console.log(dto, 'createBlog');
+    console.log(dto, '!!!!!!!!!!!!!!!createBlog');
 
     try {
       return this.dataSource.query(
         `INSERT INTO public."blog"(
-	 name, "websiteUrl", "decription")
+	 "name", "websiteUrl", "description")
 	VALUES ( $1, $2, $3);`,
         [dto.name, dto.websiteUrl, dto.decription],
       );
@@ -66,7 +66,7 @@ WHERE id= $1
   async changeBlogClearQuery(dto: CreateBlogDto & { id: string }) {
     const queryComand = `
    UPDATE "blog"
-SET name = $1, "websiteUrl" = $2, decription = $3
+SET name = $1, "websiteUrl" = $2, description = $3
 WHERE id = $4;
     `;
     await this.dataSource.query(queryComand, [
