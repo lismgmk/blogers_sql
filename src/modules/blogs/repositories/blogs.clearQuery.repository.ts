@@ -25,7 +25,7 @@ export class BlogsQueryRepository extends RootBlogsRepository {
   async getAllBlogsClearQuery(dto: GetAllBlogsQueryDto & { offset: number }) {
     return this.dataSource.query(
       `
-      SELECT id, "name", "youtube", "createdAt"
+      SELECT id, "name", "websiteUrl", "createdAt"
 FROM public."blog"
 WHERE name like $1
 ORDER BY $2
@@ -47,7 +47,7 @@ LIMIT $3 OFFSET $4
       return this.dataSource.query(
         `INSERT INTO public."blog"(
 	 name, "websiteUrl", "decription")
-	VALUES ( $1, $2, now());`,
+	VALUES ( $1, $2, $3);`,
         [dto.name, dto.websiteUrl, dto.decription],
       );
     } catch (e) {
