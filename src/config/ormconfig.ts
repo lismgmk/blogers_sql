@@ -17,6 +17,7 @@ export default class TypeOrmConfig {
       migrations: [__dirname + '/migrations/**/*{.ts,.js}'],
       poolSize: 5,
       extra: {
+        max: 5,
         connectionTimeoutMS: 1000,
         connectionLimit: 5,
       },
