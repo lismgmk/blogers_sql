@@ -32,8 +32,8 @@ export const postsQueryBuilder = (dto: IPostQuery[]): IPostsRequest[] => {
       blogName: el.blogName,
       createdAt: new Date(el.createdAt).toISOString(),
       extendedLikesInfo: {
-        dislikesCount: el.likeCount,
-        likesCount: el.dislikeCount,
+        dislikesCount: el.dislikeCount,
+        likesCount: el.likeCount,
         myStatus: el.UserStatus,
         newestLikes: el.likeInfoUserId
           ? [

@@ -82,19 +82,19 @@ export class SeedDb1613122798443 implements MigrationInterface {
 	('Like', 'b2fd9a53-6ece-4cca-af6b-84ba56de59b8', '2ebe083d-374c-4564-90d8-9ade26b79e94', null),
 	('Like', 'b2fd9a53-6ece-4cca-af6b-84ba56de59b8', '78fa6ee5-1b35-4c67-8ccc-697b036f2f57', null),
 	('Like', 'b2fd9a53-6ece-4cca-af6b-84ba56de59b8', '2ebe083d-374c-4564-90d8-9ade26b79e99', null),
-	('Disike', 'b2fd9a53-6ece-4cca-af6b-84ba56de59b8', '2ebe083d-374c-4564-90d8-9ade26b79e94', null),
-	('Disike', 'b2fd9a53-6ece-4cca-af6b-84ba56de59b8', '2ebe083d-374c-4564-90d8-9ade26b79e94', null),
-	('Disike', 'b2fd9a53-6ece-4cca-af6b-84ba56de59b8', '78fa6ee5-1b35-4c67-8ccc-697b036f2f57', null),
-	('Disike', 'b2fd9a53-6ece-4cca-af6b-84ba56de59b8', '2ebe083d-374c-4564-90d8-9ade26b79e99', null),
+	('Dislike', 'b2fd9a53-6ece-4cca-af6b-84ba56de59b8', '2ebe083d-374c-4564-90d8-9ade26b79e94', null),
+	('Dislike', 'b2fd9a53-6ece-4cca-af6b-84ba56de59b8', '2ebe083d-374c-4564-90d8-9ade26b79e94', null),
+	('Dislike', 'b2fd9a53-6ece-4cca-af6b-84ba56de59b8', '78fa6ee5-1b35-4c67-8ccc-697b036f2f57', null),
+	('Dislike', 'b2fd9a53-6ece-4cca-af6b-84ba56de59b8', '2ebe083d-374c-4564-90d8-9ade26b79e99', null),
 	
 	('Like', null, '2ebe083d-374c-4564-90d8-9ade26b79e94', 'd72392c3-ceb6-4ca5-9877-d054fcf58720' ),
 	('Like', null, '2ebe083d-374c-4564-90d8-9ade26b79e94', 'd72392c3-ceb6-4ca5-9877-d054fcf58720' ),
 	('Like', null, '78fa6ee5-1b35-4c67-8ccc-697b036f2f57', 'd72392c3-ceb6-4ca5-9877-d054fcf58720' ),
 	('Like', null, '2ebe083d-374c-4564-90d8-9ade26b79e99', 'd72392c3-ceb6-4ca5-9877-d054fcf58720' ),
-	('Disike', null, '2ebe083d-374c-4564-90d8-9ade26b79e94', 'd72392c3-ceb6-4ca5-9877-d054fcf58720'),
-	('Disike', null, '2ebe083d-374c-4564-90d8-9ade26b79e94', 'd72392c3-ceb6-4ca5-9877-d054fcf58720'),
-	('Disike', null, '78fa6ee5-1b35-4c67-8ccc-697b036f2f57', 'd72392c3-ceb6-4ca5-9877-d054fcf58720'),
-	('Disike', null, '2ebe083d-374c-4564-90d8-9ade26b79e99', 'd72392c3-ceb6-4ca5-9877-d054fcf58720');
+	('Dislike', null, '2ebe083d-374c-4564-90d8-9ade26b79e94', 'd72392c3-ceb6-4ca5-9877-d054fcf58720'),
+	('Dislike', null, '2ebe083d-374c-4564-90d8-9ade26b79e94', 'd72392c3-ceb6-4ca5-9877-d054fcf58720'),
+	('Dislike', null, '78fa6ee5-1b35-4c67-8ccc-697b036f2f57', 'd72392c3-ceb6-4ca5-9877-d054fcf58720'),
+	('Dislike', null, '2ebe083d-374c-4564-90d8-9ade26b79e99', 'd72392c3-ceb6-4ca5-9877-d054fcf58720');
     `);
   }
 

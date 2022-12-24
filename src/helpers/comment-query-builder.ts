@@ -22,8 +22,8 @@ export const commentsQueryBuilder = (
     userLogin: el.UserName,
     createdAt: new Date(el.created_at).toISOString(),
     likeInfo: {
-      dislikesCount: Number(el.likeCount),
-      likesCount: Number(el.dislikeCount),
+      dislikesCount: Number(el.dislikeCount),
+      likesCount: Number(el.likeCount),
       myStatus: el.UserStatus,
     },
   }));
