@@ -83,7 +83,6 @@ export class CommentsController {
 
   @Get(':id')
   @HttpCode(200)
-  @SkipThrottle()
   async getCommentById(
     @Param('id')
     id: string,

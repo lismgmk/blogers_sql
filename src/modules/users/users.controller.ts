@@ -25,7 +25,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  @UseGuards(AuthGuard('basic'))
+  // @UseGuards(AuthGuard('basic'))
   @UseFilters(new ValidationBodyExceptionFilter())
   async createUser(
     @Ip() userIp: string,
@@ -42,7 +42,7 @@ export class UsersController {
 
   @Delete(':id')
   @HttpCode(204)
-  @UseGuards(AuthGuard('basic'))
+  // @UseGuards(AuthGuard('basic'))
   @UsePipes(new ValidationPipe({ transform: true }))
   async deleteUser(@Param('id') id: string) {
     return await this.usersService.deleteUserByIdClearQuery(id);

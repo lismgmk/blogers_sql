@@ -55,7 +55,7 @@ export class PostsController {
   }
 
   @Post()
-  @UseGuards(AuthGuard('basic'))
+  // @UseGuards(AuthGuard('basic'))
   @UseFilters(new ValidationBodyExceptionFilter())
   async createPost(
     @Body(new CustomValidationPipe())
@@ -107,7 +107,6 @@ export class PostsController {
 
   @Post(':postId/comments')
   @HttpCode(201)
-  @SkipThrottle()
   @UseGuards(JwtAuthGuard)
   @UseFilters(new CommonErrorFilter())
   @UseFilters(new ValidationBodyExceptionFilter())
@@ -141,9 +140,9 @@ export class PostsController {
 
   @Put(':id')
   @HttpCode(204)
-  @UseGuards(AuthGuard('basic'))
+  // @UseGuards(AuthGuard('basic'))
   @UseFilters(new ValidationBodyExceptionFilter())
-  async changeBlog(
+  async changePost(
     @Param('id', ParseUUIDPipe)
     id: string,
     @Body(new CustomValidationPipe())
@@ -154,9 +153,9 @@ export class PostsController {
 
   @Delete(':id')
   @HttpCode(204)
-  @UseGuards(AuthGuard('basic'))
+  // @UseGuards(AuthGuard('basic'))
   @UsePipes(new ValidationPipe({ transform: true }))
-  async deleteBlog(
+  async deletePost(
     @Param('id', ParseUUIDPipe)
     id: string,
   ) {

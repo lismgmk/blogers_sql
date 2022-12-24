@@ -5,7 +5,6 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { RootCommentsRepository } from '../../config/switchers/rootClasses/root.comments.repository';
-import { Post } from '../../entity/post.entity';
 import { LikeInfoRequest } from '../../global-dto/like-info.request';
 import { commentsQueryBuilder } from '../../helpers/comment-query-builder';
 import { paginationBuilder } from '../../helpers/pagination-builder';

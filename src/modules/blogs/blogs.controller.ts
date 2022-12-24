@@ -50,7 +50,7 @@ export class BlogsController {
   }
 
   @Post()
-  @UseGuards(AuthGuard('basic'))
+  // @UseGuards(AuthGuard('basic'))
   @UseFilters(new ValidationBodyExceptionFilter())
   async createUser(
     @Body(new CustomValidationPipe()) createBlogDto: CreateBlogDto,
@@ -70,7 +70,7 @@ export class BlogsController {
 
   @Put(':id')
   @HttpCode(204)
-  @UseGuards(AuthGuard('basic'))
+  // @UseGuards(AuthGuard('basic'))
   @UseFilters(new ValidationBodyExceptionFilter())
   async changeBlog(
     @Param('id', ParseUUIDPipe)
@@ -85,7 +85,7 @@ export class BlogsController {
 
   @Delete(':id')
   @HttpCode(204)
-  @UseGuards(AuthGuard('basic'))
+  // @UseGuards(AuthGuard('basic'))
   @UsePipes(new ValidationPipe({ transform: true }))
   async deleteBlog(
     @Param('id', ParseUUIDPipe)
@@ -118,7 +118,7 @@ export class BlogsController {
 
   @Post(':blogId/posts')
   @HttpCode(201)
-  @UseGuards(AuthGuard('basic'))
+  // @UseGuards(AuthGuard('basic'))
   @UseFilters(new ValidationBodyExceptionFilter())
   async createPostsForBloggerId(
     @Param('blogId', ParseUUIDPipe)
