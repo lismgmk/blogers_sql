@@ -18,7 +18,7 @@ export class PostsQueryRepository extends RootPostsRepository {
 	SELECT  COUNT("id")  FROM  public."post" 
 	where "blogId" =(
 	CASE
-    	WHEN $5 != NULL  THEN $5::uuid 
+    	WHEN $1 != NULL  THEN $1::uuid 
     	ELSE "blogId"::uuid
 	END)
 	`,
@@ -29,7 +29,8 @@ export class PostsQueryRepository extends RootPostsRepository {
     dto: GetAllPostsdDto & { userId: string; blogId?: string; offset: number },
   ): Promise<IPostQuery[]> {
     return await this.dataSource.query(
-      `SELECT "shortDescription", "content", "title", "post"."createdAt", "blogId", "post"."id", "blog"."name" as "blogName",
+      `
+      SELECT "shortDescription", "content", "title", "post"."createdAt", "blogId", "post"."id", "blog"."name" as "blogName",
 (select count("id") from "like" where "like"."postId" = "post"."id" and "like"."status" = 'Like'  ) as "likeCount",
 (select count("id") from "like" where "like"."postId" = "post"."id" and "like"."status" = 'Dislike' ) as "dislikeCount",
 "like"."userId" as "likeInfoUserId",
@@ -49,7 +50,9 @@ END As "UserStatus",
 END
   )
   ORDER BY $1
-      LIMIT $2 OFFSET $3`,
+      LIMIT $2 OFFSET $3
+      
+      `,
       [
         `${dto.sortBy} ${dto.sortDirection}`,
         dto.pageSize,
