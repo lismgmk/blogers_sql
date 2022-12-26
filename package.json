@@ -28,7 +28,7 @@
     "db:seed": "npm run typeorm -- -d ./src/config/migrationSeed.ts migration:run",
     "db:after-test": "npm run typeorm -- -d ./src/config/afterTest.ts migration:run",
     "typeorm:revert-migration": "npm run typeorm -- -d ./src/config/typeOrmConfig.ts migration:revert",
-    "postinstall": "npm run typeorm:run-migration && db:after-test",
+    "postinstall": "npm run typeorm:run-migration && npm run db:after-test",
     "start:pgadmin-container_project_migration_local": "sh ./start_dev_docker.sh & npm run start:localdb-off && npm run typeorm:run-migration"
   },
   "dependencies": {
