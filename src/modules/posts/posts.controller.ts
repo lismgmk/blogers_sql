@@ -69,8 +69,9 @@ export class PostsController {
   @UseFilters(new ValidationBodyExceptionFilter())
   @UseGuards(JwtAuthGuard)
   async addLikeStatusePost(
-    @Param('postId', ParseUUIDPipe)
-    postId: string,
+    @Param('postId')
+    postId: // @Param('postId', ParseUUIDPipe)
+    string,
     @GetUserId()
     userId: string,
     @Body(new CustomValidationPipe())
@@ -86,8 +87,9 @@ export class PostsController {
   @Get(':postId/comments')
   @HttpCode(200)
   async getPostsForBloggerId(
-    @Param('postId', ParseUUIDPipe)
-    postId: string,
+    @Param('postId')
+    postId: // @Param('postId', ParseUUIDPipe)
+    string,
     @Query(
       new ValidationPipe({
         transform: true,
@@ -111,8 +113,9 @@ export class PostsController {
   @UseFilters(new CommonErrorFilter())
   @UseFilters(new ValidationBodyExceptionFilter())
   async createPostsForBloggerId(
-    @Param('postId', ParseUUIDPipe)
-    postId: string,
+    @Param('postId')
+    postId: // @Param('postId', ParseUUIDPipe)
+    string,
     @Body(new CustomValidationPipe())
     content: CreateCommentDto,
     @GetUser() user: User,
@@ -128,8 +131,9 @@ export class PostsController {
   @Get(':id')
   @HttpCode(200)
   async getPostById(
-    @Param('id', ParseUUIDPipe)
-    id: string,
+    @Param('id')
+    id: // @Param('id', ParseUUIDPipe)
+    string,
     @GetUser() user: User,
   ) {
     return this.postsService.getPostById({
@@ -143,8 +147,9 @@ export class PostsController {
   // @UseGuards(AuthGuard('basic'))
   @UseFilters(new ValidationBodyExceptionFilter())
   async changePost(
-    @Param('id', ParseUUIDPipe)
-    id: string,
+    @Param('id')
+    id: // @Param('id', ParseUUIDPipe)
+    string,
     @Body(new CustomValidationPipe())
     createPostDto: CreatePostWithBlogIdDto,
   ) {
@@ -156,8 +161,9 @@ export class PostsController {
   // @UseGuards(AuthGuard('basic'))
   @UsePipes(new ValidationPipe({ transform: true }))
   async deletePost(
-    @Param('id', ParseUUIDPipe)
-    id: string,
+    @Param('id')
+    id: // @Param('id', ParseUUIDPipe)
+    string,
   ) {
     return await this.postsService.deletePostById(id);
   }

@@ -13,7 +13,8 @@ import { Like } from './like.entity';
 
 @Entity()
 export class Post {
-  @PrimaryGeneratedColumn('uuid')
+  // @PrimaryGeneratedColumn('uuid')
+  @Column()
   id: number;
 
   @Column()

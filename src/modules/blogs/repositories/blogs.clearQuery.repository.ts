@@ -41,13 +41,13 @@ LIMIT $3 OFFSET $4
   }
 
   async createBlogClearQuery(dto: CreateBlogDto) {
-    console.log(dto, '!!!!!!!!!!!!!!!createBlog');
-
     try {
       return this.dataSource.query(
         `INSERT INTO public."blog"(
 	 "name", "websiteUrl", "description")
-	VALUES ( $1, $2, $3);`,
+	VALUES ( $1, $2, $3)
+  RETURNING *;
+  `,
         [dto.name, dto.websiteUrl, dto.description],
       );
     } catch (e) {

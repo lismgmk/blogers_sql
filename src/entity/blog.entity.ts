@@ -10,7 +10,8 @@ import { Post } from './post.entity';
 
 @Entity()
 export class Blog {
-  @PrimaryGeneratedColumn('uuid')
+  // @PrimaryGeneratedColumn('uuid')
+  @Column()
   id: string;
 
   @Column()

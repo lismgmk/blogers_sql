@@ -62,8 +62,9 @@ export class BlogsController {
   @HttpCode(200)
   @UsePipes(new ValidationPipe({ transform: true }))
   async getBloggerById(
-    @Param('id', ParseUUIDPipe)
-    blogId: string,
+    @Param('id')
+    blogId: // @Param('id', ParseUUIDPipe)
+    string,
   ) {
     return await this.blogsService.getBlogByIdClearQuery(blogId);
   }
@@ -73,7 +74,9 @@ export class BlogsController {
   // @UseGuards(AuthGuard('basic'))
   @UseFilters(new ValidationBodyExceptionFilter())
   async changeBlog(
-    @Param('id', ParseUUIDPipe)
+    // asyn(
+    // @Param('id', ParseUUIDPipe)
+    @Param('id')
     blogId: string,
     @Body(new CustomValidationPipe()) createBlogDto: CreateBlogDto,
   ) {
@@ -88,8 +91,9 @@ export class BlogsController {
   // @UseGuards(AuthGuard('basic'))
   @UsePipes(new ValidationPipe({ transform: true }))
   async deleteBlog(
-    @Param('id', ParseUUIDPipe)
-    blogId: string,
+    @Param('id')
+    blogId: // @Param('id', ParseUUIDPipe)
+    string,
   ) {
     return await this.blogsService.deleteBlogByIdClearQuery(blogId);
   }
@@ -97,7 +101,8 @@ export class BlogsController {
   @Get(':blogId/posts')
   @HttpCode(200)
   async getPostsForBloggerId(
-    @Param('blogId', ParseUUIDPipe)
+    // @Param('blogId', ParseUUIDPipe)
+    @Param('blogId')
     blogId: string,
     @Query(
       new ValidationPipe({

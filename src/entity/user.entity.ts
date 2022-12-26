@@ -13,7 +13,8 @@ import { Like } from './like.entity';
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn('uuid')
+  // @PrimaryGeneratedColumn('uuid')
+  @Column()
   id: string;
 
   @Column()
