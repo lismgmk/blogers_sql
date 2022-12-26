@@ -2,6 +2,7 @@ import { path } from 'app-root-path';
 import dotenv, { config } from 'dotenv';
 import { DataSource } from 'typeorm';
 import { ormSettings } from './ormsettings';
+
 config();
 
 const env = process.env.NODE_ENV;
@@ -14,6 +15,6 @@ if (result.error) {
 
 export const migrationSeedTypeOrmConfig = new DataSource({
   ...ormSettings,
-  entities: ['dist/**/*.entity{.ts,.js}'],
+  entities: [`${path}/src/entity/*.entity{.ts,.js}`],
   migrations: [`${path}/src/seedMigrations/**/*{.ts,.js}`],
 });

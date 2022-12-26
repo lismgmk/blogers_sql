@@ -8,7 +8,7 @@ import { ConfigModule } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { configRoot } from './config/configuration';
-import { typeOrmConfigAsync } from './config/ormconfig';
+import { typeOrmConfig } from './config/typeOrmConfig';
 import { rootInstanceSwitcher } from './config/switchers/rootSwitcher';
 import { CheckBearerMiddleware } from './middlewares/check-bearer.middleware';
 import { CheckIpStatusMiddleware } from './middlewares/check-ip-status.middleware';
@@ -31,7 +31,8 @@ import { UsersService } from './modules/users/users.service';
 @Module({
   imports: [
     ConfigModule.forRoot(configRoot),
-    TypeOrmModule.forRootAsync(typeOrmConfigAsync),
+    // TypeOrmModule.forRootAsync(typeOrmConfigAsync),
+    TypeOrmModule.forRoot(typeOrmConfig.options),
     BlogsModule,
     PostsModule,
     UsersModule,

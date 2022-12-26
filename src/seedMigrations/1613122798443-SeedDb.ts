@@ -24,7 +24,7 @@ export class SeedDb1613122798443 implements MigrationInterface {
 
     await queryRunner.query(
       `INSERT INTO public.blog(
-	id, name, "websiteUrl", decription)
+	id, name, "websiteUrl", description)
 	VALUES 
   ('2a6c4853-5dcd-4b13-ac35-9350ea5bedc7', 'incub', 'https://cama.com', 'stuff'),	
   ('3d5c3828-da12-41ce-b54a-002b4f620795', 'short', 'https://ulb.com', 'simple speed'),	
