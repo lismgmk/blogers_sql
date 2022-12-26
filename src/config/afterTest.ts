@@ -13,8 +13,8 @@ if (result.error) {
   /* do nothing */
 }
 
-export const migrationSeedTypeOrmConfig = new DataSource({
+export const afterTestConfig = new DataSource({
   ...ormSettings,
   entities: [`${path}/dist/entity/*.entity{.ts,.js}`],
-  migrations: [`${path}/dist/seedMigrations/**/*{.ts,.js}`],
+  migrations: [`${path}/dist/afterTestMigration/**/*{.ts,.js}`],
 });

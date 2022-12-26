@@ -6,6 +6,7 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
+  PrimaryColumn,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Blog } from './blog.entity';
@@ -13,8 +14,7 @@ import { Like } from './like.entity';
 
 @Entity()
 export class Post {
-  // @PrimaryGeneratedColumn('uuid')
-  @Column()
+  @PrimaryColumn()
   id: number;
 
   @Column()

@@ -4,14 +4,14 @@ import {
   Entity,
   JoinColumn,
   OneToMany,
+  PrimaryColumn,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Post } from './post.entity';
 
 @Entity()
 export class Blog {
-  // @PrimaryGeneratedColumn('uuid')
-  @Column()
+  @PrimaryColumn()
   id: string;
 
   @Column()

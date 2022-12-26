@@ -5,6 +5,7 @@ import {
   JoinTable,
   ManyToMany,
   OneToMany,
+  PrimaryColumn,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { PostComment } from './comment.entity';
@@ -13,8 +14,7 @@ import { Like } from './like.entity';
 
 @Entity()
 export class User {
-  // @PrimaryGeneratedColumn('uuid')
-  @Column()
+  @PrimaryColumn()
   id: string;
 
   @Column()
