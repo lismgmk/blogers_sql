@@ -11,7 +11,7 @@ import { Post } from './post.entity';
 
 @Entity()
 export class Blog {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
   id: string;
 
   @Column()
