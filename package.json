@@ -26,7 +26,8 @@
     "typeorm:run-migration": "npm run typeorm -- -d ./src/config/migration.ts migration:run",
     "typeorm:show-migration": "npm run typeorm -- -d ./src/config/migration.ts migration:show",
     "db:seed": "npm run typeorm -- -d ./src/config/migrationSeed.ts migration:run",
-    "typeorm:revert-migration": "npm run typeorm -- -d ./src/config/migration.ts migration:revert"
+    "typeorm:revert-migration": "npm run typeorm -- -d ./src/config/migration.ts migration:revert",
+    "postinstall": "npm run typeorm:run-migration"
   },
   "dependencies": {
     "@nestjs-modules/mailer": "^1.8.1",
