@@ -7,13 +7,12 @@ ENV NODE_ENV=${NODE_ENV}
 WORKDIR /app
 
 # Copy configuration files
-COPY tsconfig*.json ./
-COPY package*.json ./
+COPY ./tsconfig*.json  ./package*.json /app/
 
 RUN npm install
 
 # Copy application sources (.ts, .tsx, js)
-COPY . .
+COPY . /app/
 
 # Build application (produces dist/ folder)
 RUN npm run build
