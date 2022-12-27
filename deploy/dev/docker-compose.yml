@@ -6,9 +6,4 @@ services:
       POSTGRES_USER: 'postgres'
       POSTGRES_PASSWORD: '2156128'
     ports:
-      #!!
       - '5432:5432'
-    # volumes:
-    #   - pgdata:/var/lib/postgresql/data
-    # # volumes:
-    #   - db:/var/lib/postgresql/data
