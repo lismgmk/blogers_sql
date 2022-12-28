@@ -66,6 +66,8 @@ export class BlogsController {
     blogId: // @Param('id', ParseUUIDPipe)
     string,
   ) {
+    blogId;
+    await this.blogsService.checkExistBlog(blogId);
     return await this.blogsService.getBlogByIdClearQuery(blogId);
   }
 

@@ -87,7 +87,18 @@ WHERE id = $1;
       `
       SELECT id, name, "email", "createdAt", "passwordHash", "confirmationCode", "isConfirmed"
 FROM public."user"
-WHERE "name" like $1 and "email" like $2
+WHERE "name" like 
+(
+	CASE
+    	WHEN $1 != NULL  THEN $1 
+    	ELSE "user"."name"
+	END)
+ and "email" like 
+ (
+	CASE
+    	WHEN $2 != NULL  THEN $2 
+    	ELSE "user"."email"
+	END)
 ORDER BY $3
 LIMIT $4 OFFSET $5
 `,

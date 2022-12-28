@@ -46,8 +46,8 @@ export class BlogsService {
   }
 
   async checkExistBlog(id: string) {
-    const post = await this.getBlogByIdClearQuery(id);
-    if (!post) {
+    const blog = await this.getBlogByIdClearQuery(id);
+    if (!blog) {
       throw new NotFoundException();
     }
   }
