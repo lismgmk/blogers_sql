@@ -10,15 +10,15 @@ services:
     ports:
       - '5432:5432'
     # volumes:
-    #   - ./dev:/var/lib/postgresql/data
+    #   - ./local-container:/var/lib/postgresql/data
 
   server:
     build:
       context: .
-      dockerfile: ./Dockerfile
+      dockerfile: Dockerfile
       args:
         - NODE_ENV=dev
-    image: bloggers_sql_nestjs
+    # image: bloggers_sql_nestjs
     container_name: bloggers_sql_nestjs-container
     environment:
       SECRET: secret
@@ -40,7 +40,7 @@ services:
       POSTGRES_PASSWORD: 2156128
       POSTGRES_DB: blog_sql-db
     env_file:
-      - .env.dev
+      - .env
     ports:
       - '8000:8000'
       - '9229:9229'
@@ -51,29 +51,29 @@ services:
       - 'postgres'
     links:
       - postgres:postgres
-    volumes:
-     - .:/app
-     - /app/node_modules
+    # volumes:
+    #  - .:/app
+    #  - /app/node_modules
     # command: ["./wait-for-it.sh", "postgres:5432", "--", "node", "index.js"]
     restart: always
-  pgadmin:
-    image: dpage/pgadmin4
-    restart: always
-    container_name: nest-pgadmin4
-    environment:
-      - PGADMIN_DEFAULT_EMAIL=lismgmk2@gmail.com
-      - PGADMIN_DEFAULT_PASSWORD=2156128
-      - PGADMIN_LISTEN_PORT=5432
-    ports:
-      - '8080:80'
-    volumes:
-      - ./pgadmin-data:/var/lib/pgadmin
-    depends_on:
-      - db
+  # pgadmin:
+  #   image: dpage/pgadmin4
+  #   restart: always
+  #   container_name: nest-pgadmin4
+  #   environment:
+  #     - PGADMIN_DEFAULT_EMAIL=lismgmk2@gmail.com
+  #     - PGADMIN_DEFAULT_PASSWORD=2156128
+  #     - PGADMIN_LISTEN_PORT=5432
+  #   ports:
+  #     - '8080:80'
+  #   volumes:
+  #     - ./pgadmin-data:/var/lib/pgadmin
+  #   depends_on:
+  #     - db
 
 networks:
   webnet:
 
-volumes:
-  pgdata:
-  pgadmin-data:
+# volumes:
+  # local-container:
+  # pgadmin-data:
