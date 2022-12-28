@@ -42,7 +42,7 @@ LIMIT $3 OFFSET $4
 
   async createBlogClearQuery(dto: CreateBlogDto) {
     try {
-      return this.dataSource.query(
+      const blog = this.dataSource.query(
         `INSERT INTO public."blog"(
 	 "name", "websiteUrl", "description")
 	VALUES ( $1, $2, $3)
@@ -50,6 +50,7 @@ LIMIT $3 OFFSET $4
   `,
         [dto.name, dto.websiteUrl, dto.description],
       );
+      return blog[0];
     } catch (e) {
       console.log(e);
     }

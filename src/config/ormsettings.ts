@@ -17,6 +17,6 @@ export const ormSettings: DataSourceOptions = {
   username: process.env.POSTGRES_USER,
   password: process.env.POSTGRES_PASSWORD,
   database: process.env.POSTGRES_DB,
-  synchronize: false,
-  migrationsTableName: 'custom_migration_table',
+  synchronize: true,
+  // migrationsTableName: 'custom_migration_table',
 };
