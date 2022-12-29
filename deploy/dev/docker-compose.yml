@@ -5,6 +5,7 @@ services:
     environment:
       POSTGRES_USER: 'postgres'
       POSTGRES_PASSWORD: '2156128'
+      POSTGRES_DB: 'blog_sql-db'
     ports:
       - '5432:5432'
     volumes:
