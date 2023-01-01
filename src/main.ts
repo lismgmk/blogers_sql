@@ -31,14 +31,14 @@ async function bootstrap() {
   app.enableCors();
   app.use(cookieParser());
   await app.listen(process.env.PORT || 5000);
-  try {
-    // wait on connection to be established
-    await app.get(DataSource);
-    await check();
-  } catch (error) {
-    // log error then throw
-    throw error;
-  }
+  // try {
+  //   // wait on connection to be established
+  //   await app.get(DataSource);
+  //   await check();
+  // } catch (error) {
+  //   // log error then throw
+  //   throw error;
+  // }
   console.log(
     process.env.TYPE_ORM,
     `Start with: ${process.env.NODE_ENV}.env`,
