@@ -10,7 +10,7 @@
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nodemon",
-    "start:localdb-off": "NODE_ENV=dev TYPE_ORM=off nest start --debug --watch",
+    "start:localdb-off": "nest start --debug --watch",
     "start:localdb-on": "NODE_ENV=dev TYPE_ORM=on nest start --debug --watch",
     "start:remotedb": "NODE_ENV=prod nest start --debug --watch",
     "start:prod": "node dist/main",

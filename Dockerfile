@@ -1,4 +1,13 @@
-FROM postgres
+FROM node:alpine
+
 WORKDIR /app
-ENV POSTGRES_USER postgres
-ENV POSTGRES_PASSWORD 2156128
+
+EXPOSE 5000
+
+COPY package*.json ./
+
+RUN npm install
+
+COPY . ./
+
+CMD ["npm", "run", "start:localdb-off"]
