@@ -60,4 +60,3 @@ services:
 volumes:
   pgdata:
   pgadmin-data:
-# "debug": "nodemon -L --config nodemon-docker-debug.json"
