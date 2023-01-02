@@ -52,7 +52,7 @@ export class UsersController {
   @HttpCode(200)
   @UsePipes(new ValidationPipe({ transform: true }))
   async getAllUsers(@Query() queryParams: GetAllUsersQueryDto) {
-    console.log(queryParams);
+    console.log('!!!!!', queryParams);
 
     return await this.usersService.getAllUsersClearQuery(queryParams);
   }
