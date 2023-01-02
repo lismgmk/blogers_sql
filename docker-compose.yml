@@ -1,7 +1,40 @@
 version: '3.9'
 services:
-  postgres:
-    image: postgres:14.6
+  nest:
+    build: .
+    restart: always
+    ports:
+      - '5000:5000'
+      - '9229:9229'
+    depends_on:
+      - db_postgres
+    volumes:
+      - /app/node_modules
+      - ./:/app
+    environment:
+      NODE_ENV: 'dev'
+      TYPE_ORM: 'off'
+      SECRET: 'secret'
+      GMAIL_SERVICE_EMAIL: 'lismgmk2@gmail.com'
+      GMAIL_SERVICE_PASS: 'ttqgml'
+      DECIDE_TIME_ANSWERS: '60000'
+      COUNT_QUESTIONS: '5'
+      HTTP_BASIC_USER: 'admin'
+      HTTP_BASIC_PASS: 'qwerty'
+      SECONDS_LIMIT: '10'
+      ATTEMPTS_LIMIT: '5'
+      EXPIRED_ACCESS: '10000s'
+      EXPIRED_REFRESH: '80000s'
+      CLIENT_PORT: 'localhost'
+      EXPIRED_CONFIRM_CODE: '1000'
+      POSTGRES_HOST: 'db_postgres'
+      POSTGRES_PORT: '5432'
+      POSTGRES_USER: 'postgres'
+      POSTGRES_PASSWORD: '2156128'
+      POSTGRES_DB: 'blog_sql-db'
+  db_postgres:
+    image: postgres
+    restart: always
     environment:
       POSTGRES_USER: 'postgres'
       POSTGRES_PASSWORD: '2156128'
@@ -11,5 +44,18 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
+  pg4:
+    image: dpage/pgadmin4
+    container_name: pgadmin4_container
+    restart: always
+    ports:
+      - '5050:80'
+    environment:
+      PGADMIN_DEFAULT_EMAIL: 'lismgmk2@gmail.com'
+      PGADMIN_DEFAULT_PASSWORD: admin
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+
 volumes:
   pgdata:
+  pgadmin-data:
