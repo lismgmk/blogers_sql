@@ -6,26 +6,13 @@ services:
     ports:
       - '5000:5000'
       - '9229:9229'
-    depends_on:
-      - db_postgres
     volumes:
       - /app/node_modules
       - ./:/app
     environment:
-      NODE_ENV: 'dev'
-      TYPE_ORM: 'off'
+      NODE_ENV: 'prod'
+      TYPE_ORM: 'on'
     command: npm run start:debug
-  db_postgres:
-    image: postgres
-    restart: always
-    environment:
-      POSTGRES_USER: 'postgres'
-      POSTGRES_PASSWORD: '2156128'
-      POSTGRES_DB: 'blog_sql-db'
-    ports:
-      - '5432:5432'
-    volumes:
-      - pgdata:/var/lib/postgresql/data
 
   pg4:
     image: dpage/pgadmin4
@@ -37,8 +24,7 @@ services:
       PGADMIN_DEFAULT_EMAIL: 'lismgmk2@gmail.com'
       PGADMIN_DEFAULT_PASSWORD: admin
     volumes:
-      - pgadmin-data:/var/lib/pgadmin
+      - pgadmin-load:/var/lib/pgadmin
 
 volumes:
-  pgdata:
-  pgadmin-data:
+  pgadmin-load:

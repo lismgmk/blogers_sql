@@ -13,7 +13,7 @@ services:
       - ./:/app
     environment:
       NODE_ENV: 'dev'
-      TYPE_ORM: 'off'
+      TYPE_ORM: 'on'
     command: npm run start:debug
   db_postgres:
     image: postgres

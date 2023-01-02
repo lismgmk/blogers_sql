@@ -10,8 +10,6 @@
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nodemon",
     "start:localdb-off": "nest start --debug --watch",
-    "start:localdb-on": "NODE_ENV=dev TYPE_ORM=on nest start --debug --watch",
-    "start:remotedb": "NODE_ENV=prod nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
@@ -27,7 +25,6 @@
     "db:seed": "npm run typeorm -- -d ./src/config/migrationSeed.ts migration:run",
     "db:after-test": "npm run typeorm -- -d ./src/config/afterTest.ts migration:run",
     "typeorm:revert-migration": "npm run typeorm -- -d ./src/config/typeOrmConfig.ts migration:revert",
-    "start:pgadmin-container_project_migration_local": "sh ./start_dev_docker.sh & npm run start:localdb-off && npm run typeorm:run-migration",
     "start:debug": "nest start --debug 0.0.0.0:9229 --watch"
   },
   "dependencies": {
